@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using ZeroWaste.Models;
+using ZeroWaste.Data.ViewModels;
+
 
 namespace ZeroWaste.Controllers
 {

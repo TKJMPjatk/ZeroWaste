@@ -1,4 +1,4 @@
-namespace ZeroWaste.Models
+namespace ZeroWaste.Data.ViewModels
 {
     public class ErrorViewModel
     {
