@@ -59,6 +59,10 @@ footer{
   }
 }
 
+.view-search{
+  font-size: 1.4rem;
+}
+
 .btn-search{
   background-color: #EDE8E8;
   color: #02223C;
@@ -66,4 +70,9 @@ footer{
   font-size: 40px;
   font-weight: lighter;
   font-style: oblique;
+}
+
+.btn-add{
+  background-color: #FDECD8;
+  color: #152536;
 }
