@@ -24,7 +24,8 @@ nav{
 footer{
   background-color: #02223C;
   color: #FFD6D6;
-  font-family: Thin Italic, cursive;
+  font-weight: lighter;
+  font-style: oblique;
 }
 
 .nav-link, .dropdown-item{
@@ -47,7 +48,13 @@ footer{
 }
 
 .label-home{
-  font-family: Thin Italic, cursive;
+  font-weight: lighter;
+  font-style: oblique;
   font-size: 60px;
   color: #02223C;
+}
+@media (max-width: 1300px) {
+  .image-background{
+    display: none;
+  }
 }
