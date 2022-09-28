@@ -58,3 +58,12 @@ footer{
     display: none;
   }
 }
+
+.btn-search{
+  background-color: #EDE8E8;
+  color: #02223C;
+  text-align: left;
+  font-size: 40px;
+  font-weight: lighter;
+  font-style: oblique;
+}
