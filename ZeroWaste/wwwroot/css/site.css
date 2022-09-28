@@ -16,3 +16,38 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+nav{
+  background-color: #02223C;
+}
+
+footer{
+  background-color: #02223C;
+  color: #FFD6D6;
+  font-family: Thin Italic, cursive;
+}
+
+.nav-link, .dropdown-item{
+  color: #FFD6D6;
+}
+
+.dropdown-menu{
+  background-color: #02223C;
+}
+
+.image-background{
+  background: #EDE8E8;
+  height: 300px;
+}
+
+.image-home{
+  height: 300px;
+  width: 100%;
+  object-fit: none;
+}
+
+.label-home{
+  font-family: Thin Italic, cursive;
+  font-size: 60px;
+  color: #02223C;
+}
