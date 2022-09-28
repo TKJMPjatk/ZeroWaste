@@ -24,4 +24,62 @@ body {
 .form-icon {
     font-size: 1.4rem;
     margin-right: 10px;
+nav{
+  background-color: #02223C;
+}
+
+footer{
+  background-color: #02223C;
+  color: #FFD6D6;
+  font-weight: lighter;
+  font-style: oblique;
+}
+
+.nav-link, .dropdown-item{
+  color: #FFD6D6;
+}
+
+.dropdown-menu{
+  background-color: #02223C;
+}
+
+.image-background{
+  background: #EDE8E8;
+  height: 300px;
+}
+
+.image-home{
+  height: 300px;
+  width: 100%;
+  object-fit: none;
+}
+
+.label-home{
+  font-weight: lighter;
+  font-style: oblique;
+  font-size: 60px;
+  color: #02223C;
+}
+@media (max-width: 1300px) {
+  .image-background{
+    display: none;
+  }
+}
+
+.view-search{
+  font-size: 1.4rem;
+}
+
+.btn-search{
+  background-color: #EDE8E8;
+  color: #02223C;
+  text-align: left;
+  font-size: 40px;
+  font-weight: lighter;
+  font-style: oblique;
+}
+
+.btn-add{
+  background-color: #FDECD8;
+  color: #152536;
 }
