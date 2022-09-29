@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZeroWaste.Data;
 
@@ -11,9 +12,10 @@ using ZeroWaste.Data;
 namespace ZeroWaste.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220929170126_add_ingredient_types")]
+    partial class add_ingredient_types
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,9 +241,8 @@ namespace ZeroWaste.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -368,36 +369,6 @@ namespace ZeroWaste.Migrations
                     b.ToTable("IngredientTypes");
                 });
 
-            modelBuilder.Entity("ZeroWaste.Models.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PhotoBinary")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RecipeReviewId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("RecipeReviewId");
-
-                    b.ToTable("Photos");
-                });
-
             modelBuilder.Entity("ZeroWaste.Models.Recipe", b =>
                 {
                     b.Property<int>("Id")
@@ -468,6 +439,31 @@ namespace ZeroWaste.Migrations
                     b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeIngredients");
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.RecipePhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhotoBinary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecipeReviewId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeReviewId");
+
+                    b.ToTable("RecipePhotos");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.RecipeReview", b =>
@@ -753,21 +749,6 @@ namespace ZeroWaste.Migrations
                     b.Navigation("UnitOfMeasure");
                 });
 
-            modelBuilder.Entity("ZeroWaste.Models.Photo", b =>
-                {
-                    b.HasOne("ZeroWaste.Models.Recipe", "Recipe")
-                        .WithMany()
-                        .HasForeignKey("RecipeId");
-
-                    b.HasOne("ZeroWaste.Models.RecipeReview", "RecipeReview")
-                        .WithMany()
-                        .HasForeignKey("RecipeReviewId");
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("RecipeReview");
-                });
-
             modelBuilder.Entity("ZeroWaste.Models.Recipe", b =>
                 {
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
@@ -812,6 +793,17 @@ namespace ZeroWaste.Migrations
                     b.Navigation("Ingredient");
 
                     b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.RecipePhoto", b =>
+                {
+                    b.HasOne("ZeroWaste.Models.RecipeReview", "RecipeReview")
+                        .WithMany()
+                        .HasForeignKey("RecipeReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RecipeReview");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.RecipeReview", b =>
