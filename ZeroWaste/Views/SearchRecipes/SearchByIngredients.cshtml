@@ -86,10 +86,12 @@
                         data: JSON.stringify(postData),
                         contentType: "application/json; charset=utf-8",
                         success: function(data){
+                            console.log("Dupa");
                             alert(data.Result);
                             },
                         dataType: "json"
-                    });
+                    })
+            window.location.href = '/SearchRecipes/SearchByIngredientsResult'
                 })
     </script>
 }

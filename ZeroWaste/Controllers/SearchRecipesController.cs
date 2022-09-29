@@ -13,9 +13,9 @@ public class SearchRecipesController : Controller
     [HttpPost]
     public IActionResult SearchByIngredients([FromBody]SearchByIngredientsVm ingredientsForSearch)
     {
-        return RedirectToAction();
+        return RedirectToAction(nameof(SearchByIngredientsResult));
     }
-    public IActionResult SearchResult()
+    public IActionResult SearchByIngredientsResult()
     {
         return View();
     }
