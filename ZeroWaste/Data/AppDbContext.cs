@@ -18,12 +18,13 @@ namespace ZeroWaste.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recipe> Recipies { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
-        public DbSet<RecipePhoto> RecipePhotos { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         public DbSet<RecipeReview> RecipeReviews { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
         public DbSet<ShoppingListIngredient> ShoppingListIngredients { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
+        public DbSet<IngredientType> IngredientTypes { get; set; }
     }
 }
