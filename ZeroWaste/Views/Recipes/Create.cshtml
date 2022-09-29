@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-12">
                 <i class="bi bi-camera form-icon"></i><label asp-for="Photos" class="control-label form-label"></label>
-                <input type="file" class="form-control" asp-for="Photos"/>
+                <input type="file" class="form-control" asp-for="Photos" value="Model.Photos"/>
                 <span asp-validation-for="Photos" class="text-danger"></span>
             </div>
             <div class="col-md-12">
@@ -39,21 +39,25 @@
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
-                    @if (Model.Photos != null && Model.Photos.Count == 0)
+                    @if (Model != null)
                   {
 
-                  }
                   <div class="carousel-inner">
+                      @foreach(var photo in Model.Photos)
+                      {
+                                <div class="carousel-item">
+                                    <img src="data:image;base64,@System.Convert.ToBase64String(photo)" class="d-block w-100" alt="...">
+                                </div>
+                      }
                     @*<div class="carousel-item active">
                       <img src="..." class="d-block w-100" alt="...">
                     </div>
-                    <div class="carousel-item">
-                      <img src="..." class="d-block w-100" alt="...">
-                    </div>
+                    
                     <div class="carousel-item">
                       <img src="..." class="d-block w-100" alt="...">
                     </div>*@
                   </div>
+                  }
                   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -70,13 +74,39 @@
 
 @section Scripts{
     <script>
-      var loadFile = function(event) {
-        var reader = new FileReader();
-        reader.onload = function(){
-          var output = document.getElementById('output');
-          output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-      };
+      //var loadFile = function(event) {
+      //  var reader = new FileReader();
+      //  reader.onload = function(){
+      //    var output = document.getElementById('output');
+      //    output.src = reader.result;
+      //  };
+      //  reader.readAsDataURL(event.target.files[0]);
+      //};
+
+        //function previewFiles() {
+        //    const preview = document.querySelector('#preview');
+        //    const files = document.querySelector('input[type=file]').files;
+        //    Model.Photos = files;
+        //    function readAndPreview(file) {
+        //        // Make sure `file.name` matches our extensions criteria
+        //        if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        //            const reader = new FileReader();
+
+        //            reader.addEventListener("load", () => {
+        //                const image = new Image();
+        //                image.height = 100;
+        //                image.title = file.name;
+        //                image.src = this.result;
+        //                preview.appendChild(image);
+        //            }, false);
+
+        //            reader.readAsDataURL(file);
+        //        }
+        //    }
+
+        //    if (files) {
+        //        Array.prototype.forEach.call(files, readAndPreview);
+        //    }
+        //}
     </script>
 }
