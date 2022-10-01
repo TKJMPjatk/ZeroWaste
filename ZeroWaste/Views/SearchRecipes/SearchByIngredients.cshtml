@@ -75,23 +75,14 @@
             $("#quantityInput").val('');
         })
         $("#searchRecipes").click(function (){
-            var lista = new Array();
-            lista.push('AAAA');
-            lista.push('BBBB');
-            var postData = {IngredientsList: ingredientsList};
-            console.log(JSON.stringify(postData));
-                    $.ajax({
-                        type: "POST",
-                        url: "/SearchRecipes/SearchByIngredients",
-                        data: JSON.stringify(postData),
-                        contentType: "application/json; charset=utf-8",
-                        success: function(data){
-                            console.log("Dupa");
-                            alert(data.Result);
-                            },
-                        dataType: "json"
-                    })
-            window.location.href = '/SearchRecipes/SearchByIngredientsResult'
-                })
+            var array = new Array();
+            for (var i = 0, l = ingredientsList.length;i < l; i++){
+                array.push(ingredientsList[i].name);
+                array.push(ingredientsList[i].quantity);
+            }
+            var queryString = array.join(',');
+            console.log("@Url.Action("SearchByIngredientsResult", "SearchRecipes")" + '?ingredientsVm='+queryString);
+            window.location.href = "@Url.Action("SearchByIngredientsResult", "SearchRecipes")" + '?ingredientsVm='+queryString;
+        })
     </script>
 }

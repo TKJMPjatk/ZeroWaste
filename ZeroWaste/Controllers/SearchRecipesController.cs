@@ -15,7 +15,7 @@ public class SearchRecipesController : Controller
     {
         return RedirectToAction(nameof(SearchByIngredientsResult));
     }
-    public IActionResult SearchByIngredientsResult()
+    public IActionResult SearchByIngredientsResult(List<string> ingredientsVm)
     {
         return View();
     }
