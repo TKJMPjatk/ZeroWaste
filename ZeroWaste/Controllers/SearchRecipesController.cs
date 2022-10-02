@@ -17,7 +17,9 @@ public class SearchRecipesController : Controller
     }
     public IActionResult SearchByIngredientsResult(string ingredientsVm)
     {
-        List<IngredientsForSearchVM> ingredientsForSearchList = _urlQueryHelper.GetIngredientsFromUrl(ingredientsVm);
+        List<IngredientsForSearchVM> ingredientsForSearchList;
+        if(ingredientsVm != null)
+            ingredientsForSearchList = _urlQueryHelper.GetIngredientsFromUrl(ingredientsVm);
         return View();
     }
 }

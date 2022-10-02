@@ -14,9 +14,11 @@
         <div class="row">
             <div class="col-md-6">
                 <input type="text" id="nameInput" placeholder="składnik"/>
+                <span class="text-danger" id="nameInputError" style="visibility: hidden">Pole jest wymagane</span>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <input type="number" id="quantityInput" placeholder="ilość"/>
+                <span class="text-danger small" id="quantityInputError" style="visibility: hidden">Pole jest wymagane</span>
             </div>
         </div>
         <br/>
@@ -59,22 +61,44 @@
         var ingredientsList = new Array();
         var index = 1;
         $("#addIngredient").click(function (){
+            var isValid = true;
             var ingredientName = $("#nameInput").val();
+            if (ingredientName.length === 0)
+            {
+                $("#nameInputError").css("visibility", "visible");
+                isValid = false;
+            }
+            else
+            {
+                $("#nameInputError").css("visibility", "hidden");
+                isValid = true;
+            }
             var ingredientQuantity = $("#quantityInput").val();
-            console.log(ingredientName);
-            console.log(ingredientQuantity);
-            ingredientsList.push({'name' : ingredientName, 'quantity' : ingredientQuantity});
-            $("#tbody").append("<tr><td>" 
-                +index
-                +"</td><td>"
-                +ingredientName
-                +"</td><td>"
-                +ingredientQuantity
-                +"</p></td></tr>");
-            $("#nameInput").val('');
-            $("#quantityInput").val('');
+            if (ingredientQuantity.length === 0)
+            {
+                $("#quantityInputError").css("visibility", "visible");
+                isValid = false;
+            }
+            else
+            {
+                $("#quantityInputError").css("visibility", "hidden");
+                isValid = true;
+            }
+            if (isValid === true){
+                ingredientsList.push({'name' : ingredientName, 'quantity' : ingredientQuantity});
+                $("#tbody").append("<tr><td>" 
+                    +index
+                    +"</td><td>"
+                    +ingredientName
+                    +"</td><td>"
+                    +ingredientQuantity
+                    +"</p></td></tr>");
+                $("#nameInput").val('');
+                $("#quantityInput").val('');
+            }
         })
         $("#searchRecipes").click(function (){
+            
             var array = new Array();
             for (var i = 0, l = ingredientsList.length;i < l; i++){
                 array.push(ingredientsList[i].name);

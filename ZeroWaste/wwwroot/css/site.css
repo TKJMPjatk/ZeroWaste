@@ -92,6 +92,15 @@ footer{
   width: 100%;
 }
 
+.btn-recipe-option{
+  background-color: #FFD6D6;
+  width: 100%;
+}
+
 .input-search{
   width: 100%;
+}
+
+.bg-recipe-card{
+  background-color: #EDE8E8;
 }
