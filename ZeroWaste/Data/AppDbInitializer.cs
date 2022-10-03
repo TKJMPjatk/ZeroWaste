@@ -327,7 +327,7 @@ namespace ZeroWaste.Data
                             Name = "Ryż biały",
                             Description = "Ryż biały to ryż bielony, z którego usunięto łuskę, otręby i zarodki.",
                             IngredientTypeId = 13,
-                            UnitOfMeasureId = 25
+                            UnitOfMeasureId = 2
                         },
                         new Ingredient()
                         {
