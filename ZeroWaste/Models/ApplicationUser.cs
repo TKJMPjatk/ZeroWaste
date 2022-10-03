@@ -8,9 +8,6 @@ namespace ZeroWaste.Models
         public DateTime CreatedAt { get; set; }
         public bool Banned { get; set; }
 
-        public int RoleId { get; set; }
-        [ForeignKey(nameof(RoleId))]
-        public Role Role { get; set; }
 
         public List<Recipe> Recipes { get; set; }
         public List<FavouriteRecipe> FavouriteRecipes { get; set; }
