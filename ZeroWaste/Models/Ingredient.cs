@@ -16,8 +16,9 @@ namespace ZeroWaste.Models
         [ForeignKey(nameof(UnitOfMeasureId))]
         public UnitOfMeasure UnitOfMeasure { get; set; }
 
-        public List<RecipeIngredient> RecipiesIngredients { get; set; }
+        public List<RecipeIngredient> RecipesIngredients { get; set; }
 
         public List<ShoppingListIngredient> ShoppingListIngredients { get; set; }
+        public List<HarmfulIngredient> HarmfulIngredients { get; set; }
     }
 }

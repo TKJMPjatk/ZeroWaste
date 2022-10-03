@@ -23,6 +23,10 @@ namespace ZeroWaste.Models
         [ForeignKey(nameof(StatusId))]
         public Status Status { get; set; }
 
-        public List<RecipeIngredient> RecipiesIngredients { get; set; }
+        public List<RecipeIngredient> RecipesIngredients { get; set; }
+        public List<Photo> Photos { get; set; }
+        public List<RecipeReview> RecipeReviews { get; set; }
+        public List<HatedRecipe> HatedRecipes { get; set; }
+        public List<FavouriteRecipe> FavouriteRecipes { get; set; }
     }
 }

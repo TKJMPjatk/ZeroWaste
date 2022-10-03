@@ -12,11 +12,11 @@ namespace ZeroWaste.Data
 
 
         public DbSet<Category> Categories { get; set; }
-        public DbSet<FavouriteRecipie> FavouriteRecipies { get; set; }
+        public DbSet<FavouriteRecipe> FavouriteRecipes { get; set; }
         public DbSet<HarmfulIngredient> HarmfulIngredients { get; set; }
-        public DbSet<HatedRecipie> HatedRecipies { get; set; }
+        public DbSet<HatedRecipe> HatedRecipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
-        public DbSet<Recipe> Recipies { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<RecipeReview> RecipeReviews { get; set; }
