@@ -2,7 +2,7 @@
 
 namespace ZeroWaste.Models
 {
-    public class HatedRecipie
+    public class FavouriteRecipe
     {
         public int Id { get; set; }
 

@@ -16,5 +16,7 @@ namespace ZeroWaste.Models
         public int RecipeId { get; set; }
         [ForeignKey(nameof(RecipeId))]
         public Recipe Recipe { get; set; }
+
+        public List<Photo> Photos { get; set; }
     }
 }

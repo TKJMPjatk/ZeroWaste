@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZeroWaste.Data;
 
@@ -11,9 +12,10 @@ using ZeroWaste.Data;
 namespace ZeroWaste.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221003173408_connectionAndTypos")]
+    partial class connectionAndTypos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,10 +182,6 @@ namespace ZeroWaste.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -207,6 +205,9 @@ namespace ZeroWaste.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -226,6 +227,8 @@ namespace ZeroWaste.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -503,6 +506,28 @@ namespace ZeroWaste.Migrations
                     b.ToTable("RecipeReviews");
                 });
 
+            modelBuilder.Entity("ZeroWaste.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("ZeroWaste.Models.ShoppingList", b =>
                 {
                     b.Property<int>("Id")
@@ -646,6 +671,17 @@ namespace ZeroWaste.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("ZeroWaste.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.FavouriteRecipe", b =>
@@ -804,6 +840,13 @@ namespace ZeroWaste.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("ZeroWaste.Models.Role", b =>
+                {
+                    b.HasOne("ZeroWaste.Models.Role", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("RoleId");
+                });
+
             modelBuilder.Entity("ZeroWaste.Models.ShoppingList", b =>
                 {
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
@@ -884,6 +927,11 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.RecipeReview", b =>
                 {
                     b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.Role", b =>
+                {
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.ShoppingList", b =>

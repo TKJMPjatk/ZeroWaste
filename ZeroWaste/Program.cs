@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Helpers;
@@ -12,6 +13,7 @@ builder.Services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -19,6 +21,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -31,4 +34,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+AppDbInitializer.SeedRolesAndUsersAsync(app).Wait();
+AppDbInitializer.Seed(app);
+
 app.Run();
+
