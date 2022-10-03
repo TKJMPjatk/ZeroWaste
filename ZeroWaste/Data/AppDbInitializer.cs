@@ -317,7 +317,7 @@ namespace ZeroWaste.Data
                         },
                         new Ingredient()
                         {
-                            Name = "Chleb pszenny",
+                            Name = "Chleb żytni",
                             Description = "Odmiana chleba wypiekanego z pszennej, żytniej lub mieszanej mąki razowej.",
                             IngredientTypeId = 9,
                             UnitOfMeasureId = 5
@@ -405,6 +405,20 @@ namespace ZeroWaste.Data
                             Description = "Gatunek rośliny jednorocznej z rodziny jasnotowatych.",
                             IngredientTypeId = 1,
                             UnitOfMeasureId = 5
+                        },
+                        new Ingredient()
+                        {
+                            Name = "Jogurt naturalny",
+                            Description = "Jogurt naturalny otrzymuje się z mleka pasteryzowanego w procesie fermentacji mlekowej.",
+                            IngredientTypeId = 1,
+                            UnitOfMeasureId = 2
+                        },
+                        new Ingredient()
+                        {
+                            Name = "Cukier biały",
+                            Description = "Rodzaj cukru buraczanego, wyróżniany na podstawie cech i sposobu produkcji.",
+                            IngredientTypeId = 2,
+                            UnitOfMeasureId = 2
                         }
                     });
                     context.SaveChanges();
@@ -482,7 +496,404 @@ namespace ZeroWaste.Data
                     context.SaveChanges();
                 }
 
-                //if(!context.Recipes)
+                if (!context.Recipes.Any())
+                {
+                    context.Recipes.AddRange(new List<Recipe>()
+                    {
+                        new Recipe()
+                        {
+                            Title = "Spaghetti bolognese",
+                            Description = "1.Na głębokiej patelni rozgrzej około 2 łyżki oliwy z oliwek.\n2.Na rozgrzaną patelnię wrzuć czosnek, a po chwili dodaj mięso, rozdrabniaj je np. widelcem, tak aby nie powstały grube mięsne grudki.\n3.Do mięsa dodaj zioła oraz koncentrat. Całość podgrzewaj przez chwilę, dodaj passatę (przecier pomidorowy), gotuj na małym ogniu około 30 minut.\nMakaron ugotuj al dente, podawaj go z sosem, serem, i bazylią.",
+                            EstimatedTime = 45,
+                            DifficultyLevel = 2,
+                            CreatedAt = DateTime.Now,
+                            CategoryId = 1,
+                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            StatusId = 1,
+                        },
+                        new Recipe()
+                        {
+                            Title = "Spaghetti bolognese",
+                            Description = "*Niecenzuralne słowa*",
+                            EstimatedTime = 45,
+                            DifficultyLevel = 1,
+                            CreatedAt = DateTime.Now,
+                            CategoryId = 1,
+                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            StatusId = 2,
+                        },
+                        new Recipe()
+                        {
+                            Title = "Makaron z truskawkami i serem",
+                            Description = "Makaron gotujemy al dente. Odcedzamy \r\nna sicie, przelewamy zimną wodą. Twaróg \r\nrozgniatamy w misce widelcem. Dodajemy \r\njogurt naturalny i 30 gram cukru (ewentualnie \r\nzamiennik cukru, np. erytrol). Mieszamy. \r\nPołowę truskawek kroimy w kostkę, resztę \r\nz kolei rozgniatamy widelcem i mieszamy \r\nz 15 gram cukru. Zimny makaron \r\npolewamy sosem twarogowym, musem \r\ntruskawkowym z cukrem. Przekładamy do \r\nbento. Dekorujemy pozostałymi truskaw- \r\nkami i listkami mięty. Makaron jemy na \r\nzimno. Dobrze sprawdza się jako posiłek \r\nw upalne dni.",
+                            EstimatedTime = 20,
+                            DifficultyLevel = 2,
+                            CreatedAt = DateTime.Now,
+                            CategoryId = 1,
+                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            StatusId = 1,
+                        },
+                        new Recipe()
+                        {
+                            Title = "Smoothie tropikalne",
+                            Description = "Połączenie banana i ananasa daje tropikalne połączenie a marchew nadaje polskiej nuty. Obierz marchewki, banany, przygotuj ananasa, dodaj wody na oko. Zmixuj. Gotowe.",
+                            EstimatedTime = 5,
+                            DifficultyLevel = 2,
+                            CreatedAt = DateTime.Now,
+                            CategoryId = 5,
+                            AuthorId = "00b71499-b59e-4374-bf38-c0e428a0072f",
+                            StatusId = 1,
+                        },
+                        new Recipe()
+                        {
+                            Title = "Chleb w jajku",
+                            Description = "1.Lekko ubić jajka z vegetą, wymoczyć pokrojony w kromki chleb w jajku, włożyć na rozgrzaną patelnię, podsmażyć, podawać z pomidorami.",
+                            EstimatedTime = 15,
+                            DifficultyLevel = 3,
+                            CreatedAt = DateTime.Now,
+                            CategoryId = 3,
+                            AuthorId = "00b71499-b59e-4374-bf38-c0e428a0072f",
+                            StatusId = 1,
+                        },
+                    });
+                    context.SaveChanges();
+                }
+
+                if (!context.RecipeIngredients.Any())
+                {
+                    context.RecipeIngredients.AddRange(new List<RecipeIngredient>()
+                    {
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 19,
+                            Quantity = 300
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 27,
+                            Quantity = 300
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 26,
+                            Quantity = 300
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 32,
+                            Quantity = 30
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 20,
+                            Quantity = 15
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 33,
+                            Quantity = 1
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 34,
+                            Quantity = 2.5
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 35,
+                            Quantity = 2.5
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 12,
+                            Quantity = 3
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 13,
+                            Quantity = 3
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 1,
+                            IngredientId = 36,
+                            Quantity = 4
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 19,
+                            Quantity = 300
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 27,
+                            Quantity = 300
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 26,
+                            Quantity = 300
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 32,
+                            Quantity = 30
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 20,
+                            Quantity = 15
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 33,
+                            Quantity = 1
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 34,
+                            Quantity = 2.5
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 35,
+                            Quantity = 2.5
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 12,
+                            Quantity = 3
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 13,
+                            Quantity = 3
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 2,
+                            IngredientId = 36,
+                            Quantity = 4
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 3,
+                            IngredientId = 29,
+                            Quantity = 200
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 3,
+                            IngredientId = 30,
+                            Quantity = 200
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 3,
+                            IngredientId = 37,
+                            Quantity = 140
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 3,
+                            IngredientId = 38,
+                            Quantity = 45
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 3,
+                            IngredientId = 7,
+                            Quantity = 250
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 3,
+                            IngredientId = 31,
+                            Quantity = 6
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 4,
+                            IngredientId = 2,
+                            Quantity = 2
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 4,
+                            IngredientId = 9,
+                            Quantity = 3
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 4,
+                            IngredientId =10,
+                            Quantity = 1
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 5,
+                            IngredientId =22,
+                            Quantity = 10
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 5,
+                            IngredientId =21,
+                            Quantity = 4
+                        },
+                        new RecipeIngredient()
+                        {
+                            RecipeId = 5,
+                            IngredientId =23,
+                            Quantity = 1
+                        },
+                    });
+                    context.SaveChanges();
+                }
+
+                if (!context.RecipeReviews.Any())
+                {
+                    context.RecipeReviews.AddRange(new List<RecipeReview>()
+                    {
+                        new RecipeReview()
+                        {
+                            Stars = 4,
+                            Description = "Dobre.",
+                            AuthorId = "111ca388-98af-4272-87a1-54beb43b4f4a",
+                            CreatedAt = DateTime.Now,
+                            RecipeId = 1,
+                        },
+                        new RecipeReview()
+                        {
+                            Stars = 5,
+                            Description = "Rewelacja! Dzieci uwielbiają!",
+                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            CreatedAt = DateTime.Now,
+                            RecipeId = 3,
+                        },
+                        new RecipeReview()
+                        {
+                            Stars = 1,
+                            Description = "Na oko to chłop w szpitalu umarl!",
+                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            CreatedAt = DateTime.Now,
+                            RecipeId = 4,
+                        },
+                        new RecipeReview()
+                        {
+                            Stars = 5,
+                            Description = "Mógłbym jeść to codziennie :)",
+                            AuthorId = "e1ef46c1-c6f6-4379-bc8f-d7fd12bf9ea9",
+                            CreatedAt = DateTime.Now,
+                            RecipeId = 5,
+                        },
+                    });
+                    context.SaveChanges();
+                }
+
+                if (!context.ShoppingLists.Any())
+                {
+                    context.ShoppingLists.AddRange(new List<ShoppingList>()
+                    {
+                        new ShoppingList()
+                        {
+                            UserId = "00b71499-b59e-4374-bf38-c0e428a0072f",
+                            Title = "Chleb w jajku - lista zakupów",
+                            Note = "pamiętać o pomidorach",
+                            CreatedAt = DateTime.Now
+                        },
+                        new ShoppingList()
+                        {
+                            UserId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            Title = "Makaron z truskawkami - lista zakupów",
+                            Note = "",
+                            CreatedAt = DateTime.Now
+                        }
+                    });
+                    context.SaveChanges();
+                }
+
+                if (!context.ShoppingListIngredients.Any())
+                {
+                    context.ShoppingListIngredients.AddRange(new List<ShoppingListIngredient>()
+                    {
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 1,
+                            IngredientId = 22,
+                            Quantity = 10
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 1,
+                            IngredientId =21,
+                            Quantity = 4
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 1,
+                            IngredientId =23,
+                            Quantity = 1
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 2,
+                            IngredientId = 29,
+                            Quantity = 200
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 2,
+                            IngredientId = 30,
+                            Quantity = 200
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 2,
+                            IngredientId = 37,
+                            Quantity = 140
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 2,
+                            IngredientId = 38,
+                            Quantity = 45
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 2,
+                            IngredientId = 7,
+                            Quantity = 250
+                        },
+                        new ShoppingListIngredient()
+                        {
+                            ShoppingListId = 2,
+                            IngredientId = 31,
+                            Quantity = 6
+                        },
+                    });
+                    context.SaveChanges();
+                }
             }
         }
 
@@ -505,11 +916,14 @@ namespace ZeroWaste.Data
                 {
                     var newS20034AdminUser = new ApplicationUser()
                     {
-                        UserName = "Jakub Michalak",
+                        UserName = "jakub-michalak",
+                        FullName = "Jakub Michalak",
                         Email = admins20034Email,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        CreatedAt = DateTime.Now,
+                        Banned = false
                     };
-                    await userManager.CreateAsync(newS20034AdminUser, "RUCH200nowe");
+                    await userManager.CreateAsync(newS20034AdminUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newS20034AdminUser, UserRoles.Admin);
                 }
 
@@ -519,11 +933,14 @@ namespace ZeroWaste.Data
                 {
                     var newS19424AdminUser = new ApplicationUser()
                     {
-                        UserName = "Tomasz Krasieńko",
+                        UserName = "tomasz-krasienko",
+                        FullName = "Tomasz Krasieńko",
                         Email = admins19424Email,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        CreatedAt = DateTime.Now,
+                        Banned = false
                     };
-                    await userManager.CreateAsync(newS19424AdminUser, "RUCH200nowe");
+                    await userManager.CreateAsync(newS19424AdminUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newS19424AdminUser, UserRoles.Admin);
                 }
 
@@ -533,11 +950,14 @@ namespace ZeroWaste.Data
                 {
                     var newAppUser = new ApplicationUser()
                     {
-                        UserName = "Jan Kowalski",
+                        UserName = "jan-kowalski",
+                        FullName = "Jan Kowalski",
                         Email = appUserEmail,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        CreatedAt = DateTime.Now,
+                        Banned = false
                     };
-                    await userManager.CreateAsync(newAppUser, "RUCH200nowe");
+                    await userManager.CreateAsync(newAppUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
                 }
 
@@ -547,11 +967,14 @@ namespace ZeroWaste.Data
                 {
                     var newAnotherAppUser = new ApplicationUser()
                     {
-                        UserName = "Adam Nowak",
-                        Email = appUserEmail,
-                        EmailConfirmed = true
+                        UserName = "adam-nowak",
+                        FullName = "Adam Nowak",
+                        Email = anotherAppUserEmail,
+                        EmailConfirmed = true,
+                        CreatedAt = DateTime.Now,
+                        Banned = false
                     };
-                    await userManager.CreateAsync(newAnotherAppUser, "RUCH200nowe");
+                    await userManager.CreateAsync(newAnotherAppUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newAnotherAppUser, UserRoles.User);
                 }
             }
