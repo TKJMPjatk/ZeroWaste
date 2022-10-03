@@ -104,3 +104,12 @@ footer{
 .bg-recipe-card{
   background-color: #EDE8E8;
 }
+
+.shopping-list{
+  background-color: #EDE8E8;
+  height: 150px;
+}
+
+.shopping-list-align{
+  top: 50%
+}
