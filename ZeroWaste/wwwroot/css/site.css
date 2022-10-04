@@ -126,3 +126,15 @@ footer{
   background-color: #FFD6D6;
   color: #000000;
 }
+
+.mt-2rem {
+    margin-top: 2rem;
+}
+
+.mt-1rem {
+    margin-top: 1rem;
+}
+
+.fr {
+    float: right !important;
+}
