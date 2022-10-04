@@ -21,4 +21,9 @@ public class ShoppingListsController : Controller
     {
         return View();
     }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        return RedirectToAction(nameof(Index));
+    }
 }

@@ -32,10 +32,10 @@
                                 <div class="col-md-6"></div>
                                 <div class="col-md-5">
                                     <br/>
-                                    <a class="btn btn-recipe-option">Button</a>
+                                    <a class="btn btn-recipe-option" asp-controller="ShoppingLists" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-search"></i></a>
                                     <br/>
                                     <br/>
-                                    <a class="btn btn-recipe-option">Button</a>
+                                    <a class="btn btn-recipe-option"><i class="bi bi-trash"></i></a>
                                 </div>
                                 <div class="col-md-1"></div>
                             </div>
@@ -44,5 +44,6 @@
                 </div>
             </div>
         </div>
+        <br/>
     }
 </div>
