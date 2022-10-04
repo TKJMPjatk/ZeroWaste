@@ -7,9 +7,11 @@ namespace ZeroWaste.Controllers;
 public class ShoppingListsController : Controller
 {
     private readonly IShoppingListsService _shoppingListsService;
-    public ShoppingListsController(IShoppingListsService shoppingListsService)
+    private readonly IIngredientsService _ingredientsService;
+    public ShoppingListsController(IShoppingListsService shoppingListsService, IIngredientsService ingredientsService)
     {
         _shoppingListsService = shoppingListsService;
+        _ingredientsService = ingredientsService;
     }
     public async Task<IActionResult> Index()
     {
@@ -31,6 +33,7 @@ public class ShoppingListsController : Controller
     }
     public async Task<IActionResult> AddIngredientToShoppingList(int id)
     {
-        return View();
+        var ingredientList = await _ingredientsService.GetAllAsync();
+        return View(ingredientList);
     }
 }
