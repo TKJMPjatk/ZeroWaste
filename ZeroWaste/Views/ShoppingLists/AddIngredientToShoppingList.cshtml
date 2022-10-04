@@ -1,5 +1,5 @@
-@using ZeroWaste.Models
-@model IEnumerable<Ingredient>
+@using ZeroWaste.Data.ViewModels.ShoppingList;
+@model ShoppingListIngredientsVM;
 
 @{
     ViewData["Title"] = "Lista składników";
@@ -27,14 +27,14 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.UnitOfMeasure.Shortcut)</th>
-                    <th>@Html.DisplayNameFor(model => model.IngredientType.Name)</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.IngredientShoppingListVms)
             {
                 <tr>
                     <td >
