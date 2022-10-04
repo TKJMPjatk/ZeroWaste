@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace ZeroWaste.Models
 {
     public class Ingredient
     {
         public int Id { get; set; }
+        [Display(Name = "Nazwa produktu")]
         public string Name { get; set; }
         public string Description { get; set; }
 

@@ -14,6 +14,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IShoppingListsService, ShoppingListsService>();
+builder.Services.AddScoped<IIngredientsService, IngredientsService>();
 var app = builder.Build();
 
 
