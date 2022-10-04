@@ -126,3 +126,7 @@ footer{
   background-color: #FFD6D6;
   color: #000000;
 }
+
+.mt-2rem {
+    margin-top: 2rem;
+}

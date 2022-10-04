@@ -7,26 +7,28 @@
 
 <div class="row">
 
-    <div class="col-md-4 offset-md-8">
+    <div class="col-md-4 offset-md-7">
         <form asp-controller="Ingredients" asp-action="Index">
-            <p>
-                <input name="searchString" type="text" class="form-control" placeholder="Szukaj składnika..." aria-label="Recipient's username" aria-describedby="button-addon2">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
-            </p>
+            <div class="input-group rounded">
+                <input type="search" class="form-control rounded" placeholder="Szukaj składnika" name="searchString" aria-label="Search" aria-describedby="search-addon" />
+                <button class="btn btn-default" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
         </form>
     </div>
 
-    <div class="col-md-8 offset-md-2">
+    <div class="col-md-8 offset-md-2 mt-2rem">
         <table class="table">
             <thead>
                 <tr>
                     <th>@Html.DisplayNameFor(model => model.Name)</th>
                     <th>@Html.DisplayNameFor(model => model.UnitOfMeasure.Shortcut)</th>
                     <th>@Html.DisplayNameFor(model => model.IngredientType.Name)</th>
-                    @*@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                    {*@
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
                         <th>Actions</th>
-                    @*}*@
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -42,8 +44,8 @@
                         <td >
                             @Html.DisplayFor(modelItem => item.IngredientType.Name)
                         </td>
-                       @* @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                        {*@
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
                             <td class="align-middle">
                                 <a class="btn btn-default" type="button" asp-action="Edit" asp-route-id="@item.Id">
                                     <i class="bi bi-pencil"></i>
@@ -52,7 +54,7 @@
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
-                        @*}*@
+                        }
                     </tr>
                 }
             </tbody>
