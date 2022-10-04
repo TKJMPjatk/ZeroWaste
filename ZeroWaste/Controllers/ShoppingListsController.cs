@@ -16,14 +16,22 @@ public class ShoppingListsController : Controller
         List<ShoppingList> shoppingLists = await _shoppingListsService.GetAllAsync();
         return View(shoppingLists);
     }
-
     public async Task<IActionResult> Edit(int id)
     {
-        return View();
+        var shoppingList = await _shoppingListsService.GetByIdAsync(id);
+        return View(shoppingList);
     }
-
     public async Task<IActionResult> Delete(int id)
     {
         return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> ConfirmShoppingList(int id)
+    {
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> AddIngredientToShoppingList(int id)
+    {
+        return View();
     }
 }

@@ -14,23 +14,33 @@
     {
         <div class="row">
             <div class="col-md-12">
-                <div class="card shopping-list">
-                    <div class="col-md-4 d-flex align-items-center justify-content-center">
-                        <div>
-                            <h5>@item.Ingredient.Name</h5>
+                <div class="card shopping-list-edit">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    
+                                </div>
+                                <div class="col-md-10">
+                                    <h5>@item.Ingredient.Name</h5>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 d-flex align-items-center justify-content-center">
-                        <div>
-                            <h5>@item.Quantity</h5>
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                            <div>
+                                <h5>@item.Quantity</h5>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div>
+                        <div class="col-md-4">
+                            <div class="col-md-4 offset-4">
+                                <a class="btn btn-trash-shopping-list"><i class="bi bi-trash"></i></a>
+                            </div>    
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <br/>
     }
+    @await Html.PartialAsync("_CreateShoppingListItemButton")
 </div>

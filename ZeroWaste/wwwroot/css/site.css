@@ -110,6 +110,19 @@ footer{
   height: 150px;
 }
 
-.shopping-list-align{
-  top: 50%
+.shopping-list-edit{
+  background-color: #EDE8E8;
+  height: 40px;
+}
+
+.btn-trash-shopping-list{
+  background-color: #02223C;
+  color: #FFFFFF;
+  width: 100%;
+  height: 100%;
+}
+
+.btn-shopping-list-options{
+  background-color: #FFD6D6;
+  color: #000000;
 }

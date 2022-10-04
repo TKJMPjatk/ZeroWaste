@@ -23,6 +23,7 @@ public class ShoppingListsService : IShoppingListsService
         return await _context
             .ShoppingLists
             .Include(x => x.ShoppingListIngredients)
+            .ThenInclude(x => x.Ingredient)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
     }
