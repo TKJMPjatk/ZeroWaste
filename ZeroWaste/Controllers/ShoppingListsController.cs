@@ -29,7 +29,6 @@ public class ShoppingListsController : Controller
     {
         return RedirectToAction(nameof(Index));
     }
-
     public async Task<IActionResult> AddIngredientToShoppingList(int id)
     {
         return View();
