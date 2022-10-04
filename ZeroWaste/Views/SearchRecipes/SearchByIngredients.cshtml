@@ -1,0 +1,112 @@
+@model SearchByIngredientsVm
+@using ZeroWaste.Data.ViewModels.Recipes;
+@{
+    ViewData["Title"] = "Search by ingredients";
+}
+<div class="view-search">
+    <div class="col-md-4 offset-4">
+        <div class="row">
+            <div class="text-center">
+                <h3>Wyszukaj przepis</h3>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" id="nameInput" placeholder="składnik"/>
+                <span class="text-danger" id="nameInputError" style="visibility: hidden">Pole jest wymagane</span>
+            </div>
+            <div class="col-md-4">
+                <input type="number" id="quantityInput" placeholder="ilość"/>
+                <span class="text-danger small" id="quantityInputError" style="visibility: hidden">Pole jest wymagane</span>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-add float-end" id="addIngredient">Dodaj</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <button class="btn btn-search" id="searchRecipes">Wyszukaj</button>
+            </div>
+        </div>
+        <br/>
+    </div>
+    <div class="col-md-6 offset-3">
+        <div class="row">
+            <div class="text-center">
+                <p>Składnik</p>
+            </div>
+        </div>
+        <div class="row">
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Produkt</th>
+                    <th>Ilość</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        var ingredientsList = new Array();
+        var index = 1;
+        $("#addIngredient").click(function (){
+            var isValid = true;
+            var ingredientName = $("#nameInput").val();
+            if (ingredientName.length === 0)
+            {
+                $("#nameInputError").css("visibility", "visible");
+                isValid = false;
+            }
+            else
+            {
+                $("#nameInputError").css("visibility", "hidden");
+                isValid = true;
+            }
+            var ingredientQuantity = $("#quantityInput").val();
+            if (ingredientQuantity.length === 0)
+            {
+                $("#quantityInputError").css("visibility", "visible");
+                isValid = false;
+            }
+            else
+            {
+                $("#quantityInputError").css("visibility", "hidden");
+                isValid = true;
+            }
+            if (isValid === true){
+                ingredientsList.push({'name' : ingredientName, 'quantity' : ingredientQuantity});
+                $("#tbody").append("<tr><td>" 
+                    +index
+                    +"</td><td>"
+                    +ingredientName
+                    +"</td><td>"
+                    +ingredientQuantity
+                    +"</p></td></tr>");
+                $("#nameInput").val('');
+                $("#quantityInput").val('');
+            }
+        })
+        $("#searchRecipes").click(function (){
+            
+            var array = new Array();
+            for (var i = 0, l = ingredientsList.length;i < l; i++){
+                array.push(ingredientsList[i].name);
+                array.push(ingredientsList[i].quantity);
+            }
+            var queryString = array.join(',');
+            console.log("@Url.Action("SearchByIngredientsResult", "SearchRecipes")" + '?ingredientsVm='+queryString);
+            window.location.href = "@Url.Action("SearchByIngredientsResult", "SearchRecipes")" + '?ingredientsVm='+queryString;
+        })
+    </script>
+}

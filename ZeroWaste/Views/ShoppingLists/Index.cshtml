@@ -1,0 +1,48 @@
+@using ZeroWaste.Models;
+@model List<ShoppingList>
+@{
+    ViewData["Title"] = "Shopping Lists";
+}
+<div class="col-md-10 offset-1">
+    <div class="row">
+        <div class="col-md-5">
+            <h3>Listy zakupów</h3>
+            <br/>
+        </div>
+    </div>
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shopping-list">
+                    <div class="row">
+                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                            <div>
+                                <h5>@item.Title</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <br/>
+                            <p class="card-text">Ilość składników: @item.ShoppingListIngredients.Count()</p>
+                            <hr/>
+                            <p class="card-text">Notatka: @item.Note</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-5">
+                                    <br/>
+                                    <a class="btn btn-recipe-option">Button</a>
+                                    <br/>
+                                    <br/>
+                                    <a class="btn btn-recipe-option">Button</a>
+                                </div>
+                                <div class="col-md-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
