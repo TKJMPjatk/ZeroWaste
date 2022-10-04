@@ -130,3 +130,11 @@ footer{
 .mt-2rem {
     margin-top: 2rem;
 }
+
+.mt-1rem {
+    margin-top: 1rem;
+}
+
+.fr {
+    float: right !important;
+}
