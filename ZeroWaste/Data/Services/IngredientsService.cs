@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services
@@ -27,6 +28,16 @@ namespace ZeroWaste.Data.Services
                 .Include(i => i.IngredientType)
                 .Include(i => i.UnitOfMeasure)
                 .ToListAsync();
+        }
+
+        public async Task<NewIngredientDropdownsWM> GetNewIngredientDropdownsWM()
+        {
+            var response = new NewIngredientDropdownsWM()
+            {
+                IngredientTypes = await _context.IngredientTypes.OrderBy(n => n.Name).ToListAsync(),
+                UnitOfMeasures = await _context.UnitOfMeasures.OrderBy(n => n.Name).ToListAsync()
+            };
+            return response;
         }
     }
 }

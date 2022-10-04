@@ -23,12 +23,6 @@ namespace ZeroWaste.Controllers
         }
 
         // GET: Ingredients
-        //public async Task<IActionResult> Index()
-        //{
-        //    var appDbContext = _context.Ingredients.Include(i => i.IngredientType).Include(i => i.UnitOfMeasure);
-        //    return View(await appDbContext.ToListAsync());
-        //}
-
         public async Task<IActionResult> Index(string searchString)
         {
             List<Ingredient> ingredients;
@@ -64,10 +58,12 @@ namespace ZeroWaste.Controllers
         }
 
         // GET: Ingredients/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id");
-            ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id");
+            var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
+            ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
+            ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
+
             return View();
         }
 
