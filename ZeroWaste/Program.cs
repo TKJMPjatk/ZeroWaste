@@ -1,24 +1,23 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using ZeroWaste;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var servicesConfiguration = ServicesConfiguration.GetInstance();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
-builder.Services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredientsHelper>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IShoppingListsService, ShoppingListsService>();
-builder.Services.AddScoped<IIngredientsService, IngredientsService>();
+
+servicesConfiguration.Configure(builder.Services);
 var app = builder.Build();
 
 

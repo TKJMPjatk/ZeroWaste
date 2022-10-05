@@ -82,7 +82,7 @@ namespace ZeroWaste.Controllers
             }
             ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
             ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
-            return View(ingredient);
+            return View();
         }
 
         // GET: Ingredients/Edit/5
@@ -100,7 +100,7 @@ namespace ZeroWaste.Controllers
             }
             ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
             ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
-            return View(ingredient);
+            return View();
         }
 
         // POST: Ingredients/Edit/5

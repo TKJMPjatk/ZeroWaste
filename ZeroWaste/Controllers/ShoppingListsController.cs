@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
@@ -10,11 +11,13 @@ public class ShoppingListsController : Controller
     private readonly IShoppingListsService _shoppingListsService;
     private readonly IIngredientsService _ingredientsService;
     private readonly IShoppingListIngredientsHelper _shoppingListIngredientsHelper;
-    public ShoppingListsController(IShoppingListsService shoppingListsService, IIngredientsService ingredientsService, IShoppingListIngredientsHelper shoppingListIngredientsHelper)
+    private readonly IShoppingListIngredientService _shoppingListIngredientService;
+    public ShoppingListsController(IShoppingListsService shoppingListsService, IIngredientsService ingredientsService, IShoppingListIngredientsHelper shoppingListIngredientsHelper, IShoppingListIngredientService shoppingListIngredientService)
     {
         _shoppingListsService = shoppingListsService;
         _ingredientsService = ingredientsService;
         _shoppingListIngredientsHelper = shoppingListIngredientsHelper;
+        _shoppingListIngredientService = shoppingListIngredientService;
     }
     public async Task<IActionResult> Index()
     {
@@ -42,7 +45,7 @@ public class ShoppingListsController : Controller
 
     public async Task<IActionResult> AddIngredientToShoppingList(int id, int shoppingListId)
     {
-        //Dodanie do list
+        await _shoppingListIngredientService.AddIngredientToShoppingList(shoppingListId, id);
         return RedirectToAction(nameof(IngredientForShoppingList), new {id = shoppingListId});
     }
 }
