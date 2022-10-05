@@ -6,6 +6,7 @@ namespace ZeroWaste.Data
 {
     public class AppDbInitializer
     {
+        private static List<String> userIds = new();
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
@@ -508,7 +509,7 @@ namespace ZeroWaste.Data
                             DifficultyLevel = 2,
                             CreatedAt = DateTime.Now,
                             CategoryId = 1,
-                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            AuthorId = userIds[0],
                             StatusId = 1,
                         },
                         new Recipe()
@@ -519,7 +520,7 @@ namespace ZeroWaste.Data
                             DifficultyLevel = 1,
                             CreatedAt = DateTime.Now,
                             CategoryId = 1,
-                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            AuthorId = userIds[0],
                             StatusId = 2,
                         },
                         new Recipe()
@@ -530,7 +531,7 @@ namespace ZeroWaste.Data
                             DifficultyLevel = 2,
                             CreatedAt = DateTime.Now,
                             CategoryId = 1,
-                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            AuthorId = userIds[0],
                             StatusId = 1,
                         },
                         new Recipe()
@@ -541,7 +542,7 @@ namespace ZeroWaste.Data
                             DifficultyLevel = 2,
                             CreatedAt = DateTime.Now,
                             CategoryId = 5,
-                            AuthorId = "00b71499-b59e-4374-bf38-c0e428a0072f",
+                            AuthorId = userIds[1],
                             StatusId = 1,
                         },
                         new Recipe()
@@ -552,7 +553,7 @@ namespace ZeroWaste.Data
                             DifficultyLevel = 3,
                             CreatedAt = DateTime.Now,
                             CategoryId = 3,
-                            AuthorId = "00b71499-b59e-4374-bf38-c0e428a0072f",
+                            AuthorId = userIds[1],
                             StatusId = 1,
                         },
                     });
@@ -779,7 +780,7 @@ namespace ZeroWaste.Data
                         {
                             Stars = 4,
                             Description = "Dobre.",
-                            AuthorId = "111ca388-98af-4272-87a1-54beb43b4f4a",
+                            AuthorId = userIds[0],
                             CreatedAt = DateTime.Now,
                             RecipeId = 1,
                         },
@@ -787,7 +788,7 @@ namespace ZeroWaste.Data
                         {
                             Stars = 5,
                             Description = "Rewelacja! Dzieci uwielbiają!",
-                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            AuthorId = userIds[0],
                             CreatedAt = DateTime.Now,
                             RecipeId = 3,
                         },
@@ -795,7 +796,7 @@ namespace ZeroWaste.Data
                         {
                             Stars = 1,
                             Description = "Na oko to chłop w szpitalu umarl!",
-                            AuthorId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            AuthorId = userIds[0],
                             CreatedAt = DateTime.Now,
                             RecipeId = 4,
                         },
@@ -803,7 +804,7 @@ namespace ZeroWaste.Data
                         {
                             Stars = 5,
                             Description = "Mógłbym jeść to codziennie :)",
-                            AuthorId = "e1ef46c1-c6f6-4379-bc8f-d7fd12bf9ea9",
+                            AuthorId = userIds[1],
                             CreatedAt = DateTime.Now,
                             RecipeId = 5,
                         },
@@ -817,14 +818,14 @@ namespace ZeroWaste.Data
                     {
                         new ShoppingList()
                         {
-                            UserId = "00b71499-b59e-4374-bf38-c0e428a0072f",
+                            UserId = userIds[1],
                             Title = "Chleb w jajku - lista zakupów",
                             Note = "pamiętać o pomidorach",
                             CreatedAt = DateTime.Now
                         },
                         new ShoppingList()
                         {
-                            UserId = "0ce98560-161f-4218-b04c-58b2920cb2e4",
+                            UserId = userIds[0],
                             Title = "Makaron z truskawkami - lista zakupów",
                             Note = "",
                             CreatedAt = DateTime.Now
@@ -959,6 +960,11 @@ namespace ZeroWaste.Data
                     };
                     await userManager.CreateAsync(newAppUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
+                    userIds.Add(newAppUser.Id);
+                }
+                else
+                {
+                    userIds.Add(appUser.Id);
                 }
 
                 string anotherAppUserEmail = "user2@gmail.com";
@@ -976,6 +982,11 @@ namespace ZeroWaste.Data
                     };
                     await userManager.CreateAsync(newAnotherAppUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newAnotherAppUser, UserRoles.User);
+                    userIds.Add(newAnotherAppUser.Id);
+                }
+                else
+                {
+                    userIds.Add(anotherAppUser.Id);
                 }
             }
         }
