@@ -14,6 +14,7 @@ public class ShoppingListIngredientsHelper : IShoppingListIngredientsHelper
     public ShoppingListIngredientsHelper(IIngredientsService ingredientsService, IShoppingListsService shoppingListsService, IMapper mapper)
     {
         _ingredientsService = ingredientsService;
+        _shoppingListsService = shoppingListsService;
         _mapper = mapper;
     }
     public async Task<ShoppingListIngredientsVM> GetShoppingListIngredients(int id)
