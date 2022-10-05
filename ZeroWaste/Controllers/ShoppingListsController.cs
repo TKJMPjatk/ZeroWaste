@@ -34,9 +34,15 @@ public class ShoppingListsController : Controller
     {
         return RedirectToAction(nameof(Index));
     }
-    public async Task<IActionResult> AddIngredientToShoppingList(int id)
+    public async Task<IActionResult> IngredientForShoppingList(int id)
     {
         var item = await _shoppingListIngredientsHelper.GetShoppingListIngredients(id);
         return View(item);
+    }
+
+    public async Task<IActionResult> AddIngredientToShoppingList(int id, int shoppingListId)
+    {
+        //Dodanie do list
+        return RedirectToAction(nameof(IngredientForShoppingList), new {id = shoppingListId});
     }
 }
