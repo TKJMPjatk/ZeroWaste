@@ -19,6 +19,7 @@ builder.Services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredien
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IShoppingListsService, ShoppingListsService>();
 builder.Services.AddScoped<IIngredientsService, IngredientsService>();
+builder.Services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
 var app = builder.Build();
 
 

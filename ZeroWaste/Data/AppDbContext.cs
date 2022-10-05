@@ -10,6 +10,27 @@ namespace ZeroWaste.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Category>()
+                .Property(c => c.Name)
+                .HasMaxLength(400);
+            builder.Entity<Ingredient>()
+                .Property(c => c.Name)
+                .HasMaxLength(400);
+            builder.Entity<IngredientType>()
+                .Property(c => c.Name)
+                .HasMaxLength(400);
+            builder.Entity<UnitOfMeasure>()
+                .Property(c => c.Name)
+                .HasMaxLength(400);
+            builder.Entity<Status>()
+                .Property(c => c.Name)
+                .HasMaxLength(400);
+
+
+            base.OnModelCreating(builder);
+        }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<FavouriteRecipe> FavouriteRecipes { get; set; }

@@ -1,47 +1,51 @@
-﻿@model ZeroWaste.Models.Ingredient
+﻿@model ZeroWaste.Data.ViewModels.NewIngredient.NewIngredientVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edycja produtu";
 }
 
-<h1>Edit</h1>
-
-<h4>Ingredient</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8 offset-md-1">
+        <p>
+            <h3>Edycja produtu</h3>
+        </p>
+    </div>
+    <hr />
+    <div class="col-md-8 offset-md-2">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <i class="bi bi-award form-icon"></i><label asp-for="Name" class="control-label form-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+
+            <div class="form-group mt-1rem">
+                <i class="bi bi-card-text form-icon"></i><label asp-for="Description" class="control-label form-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IngredientTypeId" class="control-label"></label>
-                <select asp-for="IngredientTypeId" class="form-control" asp-items="ViewBag.IngredientTypeId"></select>
+
+            <div class="form-group mt-1rem">
+                <i class="bi bi-ui-radios form-icon"></i><label asp-for="IngredientTypeId" class="control-label form-label"></label>
+                <select asp-for="IngredientTypeId" class="form-control" asp-items="ViewBag.IngredientTypes"></select>
                 <span asp-validation-for="IngredientTypeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="UnitOfMeasureId" class="control-label"></label>
-                <select asp-for="UnitOfMeasureId" class="form-control" asp-items="ViewBag.UnitOfMeasureId"></select>
+
+            <div class="form-group mt-1rem">
+                <i class="bi bi-rulers form-icon"></i><label asp-for="UnitOfMeasureId" class="control-label form-label"></label>
+                <select asp-for="UnitOfMeasureId" class="form-control" asp-items="ViewBag.UnitOfMeasures"></select>
                 <span asp-validation-for="UnitOfMeasureId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-group mt-2rem">
+                <a asp-action="Index" class="btn btn-default btn-add float-left">Powrót</a>
+                <input type="submit" value="Zapisz" class="btn btn-default btn-add fr" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

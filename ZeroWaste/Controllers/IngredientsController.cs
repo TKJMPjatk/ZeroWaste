@@ -7,22 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers
 {
     public class IngredientsController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly IIngredientsService _ingredientsService;
 
-        public IngredientsController(AppDbContext context, IIngredientsService ingredientsService)
+        public IngredientsController(IIngredientsService ingredientsService)
         {
-            _context = context;
             _ingredientsService = ingredientsService;
         }
 
-        // GET: Ingredients
         public async Task<IActionResult> Index(string searchString)
         {
             List<Ingredient> ingredients;
@@ -37,27 +35,16 @@ namespace ZeroWaste.Controllers
             return View(ingredients);
         }
 
-        // GET: Ingredients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Ingredients == null)
+            var ingredientDetails = await _ingredientsService.GetByIdAsync(id);
+            if (ingredientDetails is null)
             {
                 return NotFound();
             }
-
-            var ingredient = await _context.Ingredients
-                .Include(i => i.IngredientType)
-                .Include(i => i.UnitOfMeasure)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ingredient == null)
-            {
-                return NotFound();
-            }
-
-            return View(ingredient);
+            return View(ingredientDetails);
         }
 
-        // GET: Ingredients/Create
         public async Task<IActionResult> Create()
         {
             var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
@@ -67,121 +54,80 @@ namespace ZeroWaste.Controllers
             return View();
         }
 
-        // POST: Ingredients/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,IngredientTypeId,UnitOfMeasureId")] Ingredient ingredient)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,IngredientTypeId,UnitOfMeasureId")] NewIngredientVM ingredient)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(ingredient);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
+                ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
+                ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
+
+                return View(ingredient);
             }
-            ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
-            ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
-            return View(ingredient);
+
+            await _ingredientsService.AddNewAsync(ingredient);
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Ingredients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Ingredients == null)
+            var ingredientDetail = await _ingredientsService.GetVmByIdAsync(id);
+            if (ingredientDetail is null)
             {
                 return NotFound();
             }
 
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            if (ingredient == null)
-            {
-                return NotFound();
-            }
-            ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
-            ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
-            return View(ingredient);
+            var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
+            ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
+            ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
+
+            return View(ingredientDetail);
         }
 
-        // POST: Ingredients/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,IngredientTypeId,UnitOfMeasureId")] Ingredient ingredient)
+        public async Task<IActionResult> Edit(int id, NewIngredientVM ingredient)
         {
             if (id != ingredient.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(ingredient);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!IngredientExists(ingredient.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
+                ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
+                ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
+                return View(ingredient);
             }
-            ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
-            ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
-            return View(ingredient);
+
+            await _ingredientsService.UpdateAsync(ingredient);
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Ingredients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Ingredients == null)
+            var ingredientDetails = await _ingredientsService.GetByIdAsync(id);
+            if (ingredientDetails is null)
             {
                 return NotFound();
             }
-
-            var ingredient = await _context.Ingredients
-                .Include(i => i.IngredientType)
-                .Include(i => i.UnitOfMeasure)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ingredient == null)
-            {
-                return NotFound();
-            }
-
-            return View(ingredient);
+            return View(ingredientDetails);
         }
 
-        // POST: Ingredients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Ingredients == null)
+            var ingredientDetails = await _ingredientsService.GetByIdAsync(id);
+            if (ingredientDetails is null)
             {
-                return Problem("Entity set 'AppDbContext.Ingredients'  is null.");
+                return NotFound();
             }
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            if (ingredient != null)
-            {
-                _context.Ingredients.Remove(ingredient);
-            }
-            
-            await _context.SaveChangesAsync();
+            await _ingredientsService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool IngredientExists(int id)
-        {
-          return _context.Ingredients.Any(e => e.Id == id);
         }
     }
 }

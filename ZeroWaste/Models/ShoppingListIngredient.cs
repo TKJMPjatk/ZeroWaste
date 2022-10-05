@@ -6,7 +6,7 @@ namespace ZeroWaste.Models
     {
         public int Id { get; set; }
         public double Quantity { get; set; }
-
+        public bool Selected { get; set; }
         public int ShoppingListId { get; set; }
         [ForeignKey(nameof(ShoppingListId))]
         public ShoppingList ShoppingList { get; set; }

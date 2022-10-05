@@ -12,8 +12,8 @@ using ZeroWaste.Data;
 namespace ZeroWaste.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220929185903_categoryFieldTypeFix")]
-    partial class categoryFieldTypeFix
+    [Migration("20221005191311_initialSecond")]
+    partial class initialSecond
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -182,6 +182,10 @@ namespace ZeroWaste.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -205,9 +209,6 @@ namespace ZeroWaste.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -228,8 +229,6 @@ namespace ZeroWaste.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -243,14 +242,15 @@ namespace ZeroWaste.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("ZeroWaste.Models.FavouriteRecipie", b =>
+            modelBuilder.Entity("ZeroWaste.Models.FavouriteRecipe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -271,7 +271,7 @@ namespace ZeroWaste.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FavouriteRecipies");
+                    b.ToTable("FavouriteRecipes");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.HarmfulIngredient", b =>
@@ -298,7 +298,7 @@ namespace ZeroWaste.Migrations
                     b.ToTable("HarmfulIngredients");
                 });
 
-            modelBuilder.Entity("ZeroWaste.Models.HatedRecipie", b =>
+            modelBuilder.Entity("ZeroWaste.Models.HatedRecipe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -319,7 +319,7 @@ namespace ZeroWaste.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("HatedRecipies");
+                    b.ToTable("HatedRecipes");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.Ingredient", b =>
@@ -339,7 +339,8 @@ namespace ZeroWaste.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<int>("UnitOfMeasureId")
                         .HasColumnType("int");
@@ -363,7 +364,8 @@ namespace ZeroWaste.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.HasKey("Id");
 
@@ -443,7 +445,7 @@ namespace ZeroWaste.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Recipies");
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.RecipeIngredient", b =>
@@ -506,23 +508,6 @@ namespace ZeroWaste.Migrations
                     b.ToTable("RecipeReviews");
                 });
 
-            modelBuilder.Entity("ZeroWaste.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("ZeroWaste.Models.ShoppingList", b =>
                 {
                     b.Property<int>("Id")
@@ -567,6 +552,9 @@ namespace ZeroWaste.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
 
+                    b.Property<bool>("Selected")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ShoppingListId")
                         .HasColumnType("int");
 
@@ -589,7 +577,8 @@ namespace ZeroWaste.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.HasKey("Id");
 
@@ -606,7 +595,8 @@ namespace ZeroWaste.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Shortcut")
                         .IsRequired()
@@ -668,27 +658,16 @@ namespace ZeroWaste.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ZeroWaste.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("ZeroWaste.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("ZeroWaste.Models.FavouriteRecipie", b =>
+            modelBuilder.Entity("ZeroWaste.Models.FavouriteRecipe", b =>
                 {
                     b.HasOne("ZeroWaste.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("FavouriteRecipes")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("FavouriteRecipes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -701,13 +680,13 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.HarmfulIngredient", b =>
                 {
                     b.HasOne("ZeroWaste.Models.Ingredient", "Ingredient")
-                        .WithMany()
+                        .WithMany("HarmfulIngredients")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("HarmfulIngredients")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -717,16 +696,16 @@ namespace ZeroWaste.Migrations
                     b.Navigation("Ingredient");
                 });
 
-            modelBuilder.Entity("ZeroWaste.Models.HatedRecipie", b =>
+            modelBuilder.Entity("ZeroWaste.Models.HatedRecipe", b =>
                 {
                     b.HasOne("ZeroWaste.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("HatedRecipes")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("HatedRecipes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -739,13 +718,13 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.Ingredient", b =>
                 {
                     b.HasOne("ZeroWaste.Models.IngredientType", "IngredientType")
-                        .WithMany()
+                        .WithMany("Ingredients")
                         .HasForeignKey("IngredientTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.UnitOfMeasure", "UnitOfMeasure")
-                        .WithMany()
+                        .WithMany("Ingredients")
                         .HasForeignKey("UnitOfMeasureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -758,11 +737,11 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.Photo", b =>
                 {
                     b.HasOne("ZeroWaste.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("Photos")
                         .HasForeignKey("RecipeId");
 
                     b.HasOne("ZeroWaste.Models.RecipeReview", "RecipeReview")
-                        .WithMany()
+                        .WithMany("Photos")
                         .HasForeignKey("RecipeReviewId");
 
                     b.Navigation("Recipe");
@@ -773,19 +752,19 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.Recipe", b =>
                 {
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("Recipes")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Recipes")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.Status", "Status")
-                        .WithMany()
+                        .WithMany("Recipes")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -800,13 +779,13 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.RecipeIngredient", b =>
                 {
                     b.HasOne("ZeroWaste.Models.Ingredient", "Ingredient")
-                        .WithMany("RecipiesIngredients")
+                        .WithMany("RecipesIngredients")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.Recipe", "Recipe")
-                        .WithMany("RecipiesIngredients")
+                        .WithMany("RecipesIngredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -819,13 +798,13 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.RecipeReview", b =>
                 {
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("RecipeReviews")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZeroWaste.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("RecipeReviews")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -838,7 +817,7 @@ namespace ZeroWaste.Migrations
             modelBuilder.Entity("ZeroWaste.Models.ShoppingList", b =>
                 {
                     b.HasOne("ZeroWaste.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("ShoppingLists")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -865,21 +844,71 @@ namespace ZeroWaste.Migrations
                     b.Navigation("ShoppingList");
                 });
 
+            modelBuilder.Entity("ZeroWaste.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("FavouriteRecipes");
+
+                    b.Navigation("HarmfulIngredients");
+
+                    b.Navigation("HatedRecipes");
+
+                    b.Navigation("RecipeReviews");
+
+                    b.Navigation("Recipes");
+
+                    b.Navigation("ShoppingLists");
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.Category", b =>
+                {
+                    b.Navigation("Recipes");
+                });
+
             modelBuilder.Entity("ZeroWaste.Models.Ingredient", b =>
                 {
-                    b.Navigation("RecipiesIngredients");
+                    b.Navigation("HarmfulIngredients");
+
+                    b.Navigation("RecipesIngredients");
 
                     b.Navigation("ShoppingListIngredients");
                 });
 
+            modelBuilder.Entity("ZeroWaste.Models.IngredientType", b =>
+                {
+                    b.Navigation("Ingredients");
+                });
+
             modelBuilder.Entity("ZeroWaste.Models.Recipe", b =>
                 {
-                    b.Navigation("RecipiesIngredients");
+                    b.Navigation("FavouriteRecipes");
+
+                    b.Navigation("HatedRecipes");
+
+                    b.Navigation("Photos");
+
+                    b.Navigation("RecipeReviews");
+
+                    b.Navigation("RecipesIngredients");
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.RecipeReview", b =>
+                {
+                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("ZeroWaste.Models.ShoppingList", b =>
                 {
                     b.Navigation("ShoppingListIngredients");
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.Status", b =>
+                {
+                    b.Navigation("Recipes");
+                });
+
+            modelBuilder.Entity("ZeroWaste.Models.UnitOfMeasure", b =>
+                {
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }
