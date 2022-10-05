@@ -9,6 +9,7 @@ namespace ZeroWaste.Models
         public int Id { get; set; }
         [Display(Name = "Nazwa produktu")]
         public string Name { get; set; }
+        [Display(Name = "Opis")]
         public string Description { get; set; }
 
         public int IngredientTypeId { get; set; }
