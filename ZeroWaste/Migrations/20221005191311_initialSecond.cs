@@ -49,6 +49,7 @@ namespace ZeroWaste.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.UniqueConstraint("Unique_AspNetUsers_Email", x => x.Email);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,6 +63,7 @@ namespace ZeroWaste.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.UniqueConstraint("Unique_Categories_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
