@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Models;
 
-namespace ZeroWaste.Data.Services;
+namespace ZeroWaste.Data.Services.ShoppingLists;
 
 public class ShoppingListsService : IShoppingListsService
 {

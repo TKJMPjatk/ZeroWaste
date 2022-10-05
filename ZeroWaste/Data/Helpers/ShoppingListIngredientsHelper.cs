@@ -1,5 +1,6 @@
 using AutoMapper;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Data.ViewModels.Ingredients;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.Models;

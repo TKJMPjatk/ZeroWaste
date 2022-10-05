@@ -1,7 +1,6 @@
 using ZeroWaste.Models;
 
-namespace ZeroWaste.Data.Services;
-
+namespace ZeroWaste.Data.Services.ShoppingLists;
 public interface IShoppingListsService
 {
     Task<List<ShoppingList>> GetAllAsync();
