@@ -10,14 +10,10 @@ public class ShoppingListsController : Controller
 {
     private readonly IShoppingListsService _shoppingListsService;
     private readonly IIngredientsService _ingredientsService;
-    private readonly IShoppingListIngredientsHelper _shoppingListIngredientsHelper;
-    private readonly IShoppingListIngredientService _shoppingListIngredientService;
-    public ShoppingListsController(IShoppingListsService shoppingListsService, IIngredientsService ingredientsService, IShoppingListIngredientsHelper shoppingListIngredientsHelper, IShoppingListIngredientService shoppingListIngredientService)
+    public ShoppingListsController(IShoppingListsService shoppingListsService, IIngredientsService ingredientsService)
     {
         _shoppingListsService = shoppingListsService;
         _ingredientsService = ingredientsService;
-        _shoppingListIngredientsHelper = shoppingListIngredientsHelper;
-        _shoppingListIngredientService = shoppingListIngredientService;
     }
     public async Task<IActionResult> Index()
     {
@@ -37,15 +33,8 @@ public class ShoppingListsController : Controller
     {
         return RedirectToAction(nameof(Index));
     }
-    public async Task<IActionResult> IngredientForShoppingList(int id)
+    public async Task<IActionResult> Create()
     {
-        var item = await _shoppingListIngredientsHelper.GetShoppingListIngredients(id);
-        return View(item);
-    }
-
-    public async Task<IActionResult> AddIngredientToShoppingList(int id, int shoppingListId)
-    {
-        await _shoppingListIngredientService.AddIngredientToShoppingList(shoppingListId, id);
-        return RedirectToAction(nameof(IngredientForShoppingList), new {id = shoppingListId});
+        return View();
     }
 }

@@ -32,15 +32,16 @@ public class ShoppingListIngredientsHelper : IShoppingListIngredientsHelper
         List<Ingredient> ingredients = await _ingredientsService.GetAllAsync();
         List<NewIngredientShoppingListVM> ingredientShoppingListVms = new List<NewIngredientShoppingListVM>();
         ShoppingList shoppingListWithIngredients = await _shoppingListsService.GetAllIngredientsAsync(id);
+        List<int> listOfIds = shoppingListWithIngredients.ShoppingListIngredients.Select(x => x.Ingredient.Id).ToList();
         foreach (var item in ingredients)
         {
             NewIngredientShoppingListVM shoppingListVm = _mapper.Map<NewIngredientShoppingListVM>(item);
-            shoppingListVm.IsAdded = shoppingListWithIngredients
-                .ShoppingListIngredients
-                .Select(x => x.Id)
-                .ToList().Contains(item.Id);
+
+            shoppingListVm.IsAdded = listOfIds.Contains(item.Id);
             ingredientShoppingListVms.Add(shoppingListVm);
         }
-        return ingredientShoppingListVms;
+        return ingredientShoppingListVms
+            .OrderBy(x => x.IsAdded)
+            .ToList();
     }
 }
