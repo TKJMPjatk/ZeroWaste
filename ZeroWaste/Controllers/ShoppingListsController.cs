@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.ShoppingLists;
+using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
@@ -36,5 +37,10 @@ public class ShoppingListsController : Controller
     public async Task<IActionResult> Create()
     {
         return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> Create(NewShoppingListVM shoppingListVm)
+    {
+        
     }
 }

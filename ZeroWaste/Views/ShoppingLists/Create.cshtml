@@ -1,4 +1,34 @@
+@using ZeroWaste.Data.ViewModels.ShoppingList
+@model NewShoppingListVM
 @{
     ViewData["Title"] = "Dodaj listę";
 }
-<p>Dodaj przepis</p>
+<div class="col-md-10 offset-1">
+    <div class="row">
+        <div class="col-md-4 offset-4 text-center">
+            <h3>Nowa lista zakupów</h3>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form asp-controller="ShoppingLists" asp-action="Create">
+                <div class="form-group text-center">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control"/>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <br/>
+                <div class="form-group text-center">
+                    <label asp-for="Note" class="control-label"></label>
+                    <input asp-for="Note" class="form-control"/>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <input type="submit" value="Zapisz" class="btn btn-add"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -138,3 +138,7 @@ footer{
 .fr {
     float: right !important;
 }
+
+.control-label{
+  font-size: 22px;
+}
