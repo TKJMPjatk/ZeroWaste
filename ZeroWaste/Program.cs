@@ -16,24 +16,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 builder.Services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
 builder.Services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredientsHelper>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IShoppingListsService, ShoppingListsService>();
 builder.Services.AddScoped<IIngredientsService, IngredientsService>();
 builder.Services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
-=======
-
-=======
->>>>>>> a0701c7 (Added View and methods to add products to shopping list)
 servicesConfiguration.Configure(builder.Services);
->>>>>>> fe03965 (Added service for ingredients in shopping list and added configuration class to DI)
-=======
 servicesConfiguration.Configure(builder.Services);
->>>>>>> a0701c7b131637b7c8c4cc32b592cc392d6c1808
 var app = builder.Build();
 
 

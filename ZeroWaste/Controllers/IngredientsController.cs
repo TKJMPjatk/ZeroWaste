@@ -66,18 +66,8 @@ namespace ZeroWaste.Controllers
 
                 return View(ingredient);
             }
-<<<<<<< HEAD
-
             await _ingredientsService.AddNewAsync(ingredient);
             return RedirectToAction(nameof(Index));
-=======
-            ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
-            ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
-            return View();
-<<<<<<< HEAD
->>>>>>> fe03965 (Added service for ingredients in shopping list and added configuration class to DI)
-=======
->>>>>>> a0701c7b131637b7c8c4cc32b592cc392d6c1808
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -87,26 +77,11 @@ namespace ZeroWaste.Controllers
             {
                 return NotFound();
             }
-
-<<<<<<< HEAD
             var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
             ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
             ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
 
             return View(ingredientDetail);
-=======
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            if (ingredient == null)
-            {
-                return NotFound();
-            }
-            ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
-            ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
-            return View();
-<<<<<<< HEAD
->>>>>>> fe03965 (Added service for ingredients in shopping list and added configuration class to DI)
-=======
->>>>>>> a0701c7b131637b7c8c4cc32b592cc392d6c1808
         }
 
         [HttpPost]
