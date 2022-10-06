@@ -74,7 +74,10 @@ namespace ZeroWaste.Controllers
             ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
             ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
             return View();
+<<<<<<< HEAD
 >>>>>>> fe03965 (Added service for ingredients in shopping list and added configuration class to DI)
+=======
+>>>>>>> a0701c7b131637b7c8c4cc32b592cc392d6c1808
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -100,7 +103,10 @@ namespace ZeroWaste.Controllers
             ViewData["IngredientTypeId"] = new SelectList(_context.IngredientTypes, "Id", "Id", ingredient.IngredientTypeId);
             ViewData["UnitOfMeasureId"] = new SelectList(_context.UnitOfMeasures, "Id", "Id", ingredient.UnitOfMeasureId);
             return View();
+<<<<<<< HEAD
 >>>>>>> fe03965 (Added service for ingredients in shopping list and added configuration class to DI)
+=======
+>>>>>>> a0701c7b131637b7c8c4cc32b592cc392d6c1808
         }
 
         [HttpPost]
