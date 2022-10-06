@@ -13,14 +13,15 @@ public class ServicesConfiguration
     public void Configure(IServiceCollection services)
     {
         ConfigureServices(services);
-        services.AddScoped<IShoppingListIngredientService, ShoppingListIngredientService>();
         services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
         services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredientsHelper>();
+        services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
     }
     private void ConfigureServices(IServiceCollection services)
     {
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IShoppingListsService, ShoppingListsService>();
         services.AddScoped<IIngredientsService, IngredientsService>();
+        services.AddScoped<IShoppingListIngredientService, ShoppingListIngredientService>();
     }
 }
