@@ -16,12 +16,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
-builder.Services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredientsHelper>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IShoppingListsService, ShoppingListsService>();
-builder.Services.AddScoped<IIngredientsService, IngredientsService>();
-builder.Services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
 servicesConfiguration.Configure(builder.Services);
 servicesConfiguration.Configure(builder.Services);
 var app = builder.Build();
