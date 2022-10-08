@@ -36,4 +36,10 @@ public class ShoppingListsService : IShoppingListsService
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
     }
+
+    public async Task CreateAsync(ShoppingList shoppingList)
+    {
+        await _context.ShoppingLists.AddAsync(shoppingList);
+        await _context.SaveChangesAsync();
+    }
 }

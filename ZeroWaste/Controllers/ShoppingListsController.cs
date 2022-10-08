@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ZeroWaste.Data.Handlers;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.ShoppingLists;
@@ -10,11 +11,11 @@ namespace ZeroWaste.Controllers;
 public class ShoppingListsController : Controller
 {
     private readonly IShoppingListsService _shoppingListsService;
-    private readonly IIngredientsService _ingredientsService;
-    public ShoppingListsController(IShoppingListsService shoppingListsService, IIngredientsService ingredientsService)
+    private readonly IShoppingListHandler _shoppingListHandler;
+    public ShoppingListsController(IShoppingListsService shoppingListsService, IShoppingListHandler shoppingListHandler)
     {
         _shoppingListsService = shoppingListsService;
-        _ingredientsService = ingredientsService;
+        _shoppingListHandler = shoppingListHandler;
     }
     public async Task<IActionResult> Index()
     {
@@ -41,6 +42,9 @@ public class ShoppingListsController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(NewShoppingListVM shoppingListVm)
     {
-        
+        if (!(ModelState.IsValid))
+            return View(shoppingListVm);
+        await _shoppingListHandler.Create(shoppingListVm);
+        return View();
     }
 }
