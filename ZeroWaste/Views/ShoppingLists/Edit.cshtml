@@ -18,10 +18,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="row">
-                                <div class="col-md-2">
-                                    
+                                <div class="col-md-1">
+                                    @if (!(item.Selected))
+                                    {
+                                        <a class="btn btn-select" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-square"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-select" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-check-square"></i></a>
+                                    }
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-11">
                                     <h5>@item.Ingredient.Name</h5>
                                 </div>
                             </div>

@@ -27,6 +27,11 @@ public class ShoppingListsController : Controller
         var shoppingList = await _shoppingListsService.GetByIdAsync(id);
         return View(shoppingList);
     }
+    public async Task<IActionResult> ChangeIngredientSelection(int ingredientId, int shoppingListId)
+    {
+        await _shoppingListHandler.HandleSelection(ingredientId);
+        return RedirectToAction(nameof(Edit), new {id = shoppingListId});
+    }
     public async Task<IActionResult> Delete(int id)
     {
         return RedirectToAction(nameof(Index));
@@ -44,7 +49,7 @@ public class ShoppingListsController : Controller
     {
         if (!(ModelState.IsValid))
             return View(shoppingListVm);
-        await _shoppingListHandler.Create(shoppingListVm);
+        var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm);
         return View();
     }
 }

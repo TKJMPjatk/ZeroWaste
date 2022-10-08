@@ -37,9 +37,12 @@ public class ShoppingListsService : IShoppingListsService
             .FirstOrDefaultAsync();
     }
 
-    public async Task CreateAsync(ShoppingList shoppingList)
+    public async Task<ShoppingList> CreateAsync(ShoppingList shoppingList)
     {
         await _context.ShoppingLists.AddAsync(shoppingList);
+        //Todo: Identity
+        shoppingList.UserId = "28d514ff-63d5-47b3-ad32-e23c6c9921a6";
         await _context.SaveChangesAsync();
+        return shoppingList;
     }
 }

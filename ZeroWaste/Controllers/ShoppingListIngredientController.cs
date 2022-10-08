@@ -15,6 +15,25 @@ public class ShoppingListIngredientController : Controller
         _shoppingListIngredientService = shoppingListIngredientService;
         _shoppingListIngredientsHelper = shoppingListIngredientsHelper;
     }
+    public async Task<IActionResult> NewIngredientForShoppingList(int id, string searchString)
+    {
+        ShoppingListIngredientsVM item;
+        if (string.IsNullOrEmpty(searchString))
+        {
+            item = await _shoppingListIngredientsHelper
+                .GetShoppingListIngredients(id);
+        }
+        else
+        {
+            item = await _shoppingListIngredientsHelper
+                .GetShoppingListIngredients(id);
+            item.IngredientShoppingListVms =
+                item.IngredientShoppingListVms.Where(x => x.Name.Contains(searchString)).ToList();
+        }
+        return View(item);
+    }
+    
+    
     public async Task<IActionResult> DeleteIngredientFromShoppingList(int shoppingListId, int ingredientId)
     {
         await _shoppingListIngredientService
@@ -33,23 +52,7 @@ public class ShoppingListIngredientController : Controller
             .GetShoppingListIngredients(id);
         return View(item);
     }*/
-    public async Task<IActionResult> IngredientForShoppingList(int id, string searchString)
-    {
-        ShoppingListIngredientsVM item;
-        if (string.IsNullOrEmpty(searchString))
-        {
-            item = await _shoppingListIngredientsHelper
-                .GetShoppingListIngredients(id);
-        }
-        else
-        {
-            item = await _shoppingListIngredientsHelper
-                .GetShoppingListIngredients(id);
-            item.IngredientShoppingListVms =
-                item.IngredientShoppingListVms.Where(x => x.Name.Contains(searchString)).ToList();
-        }
-        return View(item);
-    }
+
     public async Task<IActionResult> EditQuantity(int shoppingListId)
     {
         var items = await _shoppingListIngredientService

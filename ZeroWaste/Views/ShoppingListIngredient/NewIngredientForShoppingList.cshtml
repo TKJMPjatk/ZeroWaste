@@ -9,7 +9,7 @@
         <h3>Produkty do dodania</h3>
     </div>
     <div class="col-md-4">
-        <form asp-controller="ShoppingListIngredient" asp-action="IngredientForShoppingList">
+        <form asp-controller="ShoppingListIngredient" asp-action="NewIngredientForShoppingList">
             <div class="row">
                 <div class="col-md-10">
                     <input name="searchString" type="text" class="form-control" placeholder="Szukaj składnika..." aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -26,12 +26,12 @@
 <div class="col-md-8 offset-md-2">
     <table class="table">
         <thead>
-            <tr>
-                <th>Nazwa</th>
-                <th>Jednostka</th>
-                <th>Typ</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>Nazwa</th>
+            <th>Jednostka</th>
+            <th>Typ</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
         @foreach (var item in Model.IngredientShoppingListVms)

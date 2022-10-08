@@ -5,11 +5,9 @@ namespace ZeroWaste.Data.ViewModels.ShoppingList;
 
 public class NewShoppingListVM
 {
-    [Required]
+    [Required(ErrorMessage = "Pole TYTUŁ LISTY ZAKUPÓW jest wymagane")]
     [Display(Name = "Tytuł listy zakupów")]
     public string Title { get; set; }
-    [Required]
     [Display(Name = "Notatka")]
-    public string Note { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public string? Note { get; set; }
 }

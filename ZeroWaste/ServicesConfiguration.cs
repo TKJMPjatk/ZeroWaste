@@ -1,3 +1,4 @@
+using ZeroWaste.Data.Handlers;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.ShoppingLists;
@@ -16,6 +17,7 @@ public class ServicesConfiguration
         services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
         services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredientsHelper>();
         services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
+        services.AddScoped<IShoppingListHandler, ShoppingListHandler>();
     }
     private void ConfigureServices(IServiceCollection services)
     {
@@ -23,5 +25,6 @@ public class ServicesConfiguration
         services.AddScoped<IShoppingListsService, ShoppingListsService>();
         services.AddScoped<IIngredientsService, IngredientsService>();
         services.AddScoped<IShoppingListIngredientService, ShoppingListIngredientService>();
+        services.AddScoped<IIngredientSelectionService, IngredientSelectionService>();
     }
 }
