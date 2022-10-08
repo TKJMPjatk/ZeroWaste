@@ -3,10 +3,11 @@ using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services.ShoppingLists;
 
-public interface IShoppingListIngredientService
+public interface IShoppingListIngredientsService
 {
     Task AddIngredientToShoppingList(int shoppingListId, int ingredientId);
-    Task AddIngredientToShoppingList(int shoppingListId, int ingredientId, int quantity);
+    Task EditQuantityAsync(int ingredientId, double quantity);
     Task DeleteIngredientFromShoppingList(int shoppingId, int ingredientId);
     Task<List<ShoppingListIngredient>> GetIngredientsForShoppingList(int shoppingListId);
+    Task<List<ShoppingListIngredient>> GetNewIngredientsForShoppingList(int shoppingListId);
 }

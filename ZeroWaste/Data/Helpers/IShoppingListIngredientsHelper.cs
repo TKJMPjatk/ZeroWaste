@@ -4,5 +4,5 @@ namespace ZeroWaste.Data.Helpers;
 
 public interface IShoppingListIngredientsHelper
 {
-    Task<ShoppingListIngredientsVM> GetShoppingListIngredients(int id);
+    Task<ShoppingListIngredientsVm> GetShoppingListIngredients(int id);
 }

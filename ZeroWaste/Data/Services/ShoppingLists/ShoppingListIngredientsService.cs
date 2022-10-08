@@ -5,10 +5,10 @@ using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services.ShoppingLists;
 
-public class ShoppingListIngredientService : IShoppingListIngredientService
+public class ShoppingListIngredientsService : IShoppingListIngredientsService
 {
     private readonly AppDbContext _context;
-    public ShoppingListIngredientService(AppDbContext context)
+    public ShoppingListIngredientsService(AppDbContext context)
     {
         _context = context;
     }
@@ -24,11 +24,16 @@ public class ShoppingListIngredientService : IShoppingListIngredientService
         await _context.SaveChangesAsync();
     }
 
-    public Task AddIngredientToShoppingList(int shoppingListId, int ingredientId, int quantity)
+    public async Task EditQuantityAsync(int ingredientId, double quantity)
     {
-        throw new NotImplementedException();
+        var entity = await _context
+            .ShoppingListIngredients
+            .FirstOrDefaultAsync(x => x.Id == ingredientId);
+        entity.Quantity = quantity;
+        EntityEntry entityEntry = _context.Entry(entity);
+        entityEntry.State = EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
-
     public async Task DeleteIngredientFromShoppingList(int shoppingId, int ingredientId)
     {
         var entity = await _context
@@ -39,15 +44,22 @@ public class ShoppingListIngredientService : IShoppingListIngredientService
         entityEntry.State = EntityState.Deleted;
         await _context.SaveChangesAsync();
     }
-
     public async Task<List<ShoppingListIngredient>> GetIngredientsForShoppingList(int shoppingListId)
     {
         var list = await _context
             .ShoppingListIngredients
             .Include(x => x.Ingredient)
             .ThenInclude(x => x.UnitOfMeasure)
-            .Where(x => x.ShoppingListId == shoppingListId && x.Quantity == 0)
+            .Where(x => x.ShoppingListId == shoppingListId)
             .ToListAsync();
         return list;
+    }
+    public async Task<List<ShoppingListIngredient>> GetNewIngredientsForShoppingList(int shoppingListId)
+    {
+        var list = await GetIngredientsForShoppingList(shoppingListId);
+        return list
+            .Where(x => 
+                x.Quantity == 0)
+            .ToList();
     }
 }

@@ -17,14 +17,12 @@ namespace ZeroWaste.Data.Services
             _context = context;
             _mapperHelper = mapperHelper;
         }
-
         public async Task AddNewAsync(NewIngredientVM newIngredient)
         {
             Ingredient ingredient = _mapperHelper.Map(newIngredient);
             await _context.Ingredients.AddAsync(ingredient);
             await _context.SaveChangesAsync();
         }
-
         public async Task DeleteAsync(int? id)
         {
             var ingredient = await _context.Set<Ingredient>().FirstOrDefaultAsync(n => n.Id == id);
