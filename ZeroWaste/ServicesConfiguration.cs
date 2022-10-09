@@ -1,4 +1,4 @@
-using ZeroWaste.Data.Handlers;
+using ZeroWaste.Data.Handlers.ShoppingListHandlers;
 using ZeroWaste.Data.Handlers.ShoppingListIngredients;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;

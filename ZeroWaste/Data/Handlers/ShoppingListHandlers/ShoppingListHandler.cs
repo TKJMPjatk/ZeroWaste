@@ -4,7 +4,7 @@ using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.Models;
 
-namespace ZeroWaste.Data.Handlers;
+namespace ZeroWaste.Data.Handlers.ShoppingListHandlers;
 
 public class ShoppingListHandler : IShoppingListHandler
 {
@@ -34,10 +34,18 @@ public class ShoppingListHandler : IShoppingListHandler
         else
             await _ingredientSelectionService.UnSelectIngredient(ingredient);
     }
-
     private ShoppingList MapNewShoppingListVm(NewShoppingListVM shoppingListVm)
     {
         ShoppingList shoppingList = _mapper.Map<ShoppingList>(shoppingListVm);
         return shoppingList;
+    }
+    public async Task DeleteAsync(int id)
+    {
+        await _shoppingListsService.DeleteAsync(id);
+    }
+
+    public async Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId)
+    {
+        return await _shoppingListsService.IsZeroQuantityIngredientsExists(shoppingListId);
     }
 }

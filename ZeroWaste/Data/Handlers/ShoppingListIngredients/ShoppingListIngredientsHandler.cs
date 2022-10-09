@@ -60,7 +60,6 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
     {
         return _idOfIngredientsInShoppingList.Contains(ingredientId);
     }
-
     private List<IngredientsToAddVm> FilterIngredientsToAddVmList(string searchString, List<IngredientsToAddVm> ingredientsToAddVms)
     {
         if (string.IsNullOrEmpty(searchString))
@@ -78,5 +77,4 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
                 .EditQuantityAsync(item.Id, item.Quantity);
         }
     }
-
 }

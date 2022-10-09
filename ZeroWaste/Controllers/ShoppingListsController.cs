@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ZeroWaste.Data.Handlers;
-using ZeroWaste.Data.Helpers;
-using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Handlers.ShoppingListHandlers;
 using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.Models;
@@ -34,6 +32,7 @@ public class ShoppingListsController : Controller
     }
     public async Task<IActionResult> Delete(int id)
     {
+        await _shoppingListHandler.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
     public async Task<IActionResult> ConfirmShoppingList(int id)
@@ -50,6 +49,6 @@ public class ShoppingListsController : Controller
         if (!(ModelState.IsValid))
             return View(shoppingListVm);
         var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm);
-        return View();
+        return RedirectToAction("NewIngredientForShoppingList", "ShoppingListIngredients", new {id = addedShoppingList.Id});
     }
 }

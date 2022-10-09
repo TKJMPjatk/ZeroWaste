@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services.ShoppingLists;
@@ -44,5 +45,20 @@ public class ShoppingListsService : IShoppingListsService
         shoppingList.UserId = "28d514ff-63d5-47b3-ad32-e23c6c9921a6";
         await _context.SaveChangesAsync();
         return shoppingList;
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var entity = await GetByIdAsync(id);
+        EntityEntry entityEntry = _context.Entry(entity);
+        entityEntry.State = EntityState.Deleted;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId)
+    {
+        return await _context
+            .ShoppingListIngredients
+            .AnyAsync(x => x.ShoppingListId == shoppingListId && x.Quantity == 0);
     }
 }
