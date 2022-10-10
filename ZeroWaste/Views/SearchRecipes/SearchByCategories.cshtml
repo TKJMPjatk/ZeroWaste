@@ -13,21 +13,12 @@
         <div class="row">
             @foreach (var item in @Model)
             {
-                
-            <div class="col-md-3 col-sm-6">
-                <div class="card mb-3" style="width: 200px;"> 
-                    <div class="row g-0">
-                        <a class="btn">
-                            <div class="card-header text-center">
-                                <h5>Kategoria 1</h5>
-                            </div>
-                            <div class="card-body text-center">
-                                <img class="rounded-circle" src="@Url.Content(@item.Image)" style="width:100px; height:100px; object-fit: cover" alt="test"/>
-                            </div> 
-                        </a>             
-                    </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <a class="btn">
+                        <img class="rounded-circle" src="@Url.Content(@item.Image)" style="width:100px; height:100px; object-fit: cover" alt="test"/>
+                    </a>
+                    <h5>@item.Name</h5>
                 </div>
-            </div>
             }
         </div>
     </div>
