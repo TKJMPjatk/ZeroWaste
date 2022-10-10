@@ -27,6 +27,7 @@ public class SearchRecipesController : Controller
         List<IngredientsForSearchVM> ingredientsForSearchList;
         if(ingredientsVm != null)
             ingredientsForSearchList = _urlQueryHelper.GetIngredientsFromUrl(ingredientsVm);
+        ViewBag.Title = "Wyszukiwanie po składnikach";
         return View();
     }
     public async Task<IActionResult> SearchByCategories()
@@ -34,5 +35,11 @@ public class SearchRecipesController : Controller
         List<Category> categories = await _categoryService.GetAllAsync();
         var tmp = await _searchRecipeHandler.GetCategoriesSearchVm();
         return View(tmp);
+    }
+
+    public IActionResult SearchByCategoryResult(int categoryId)
+    {
+        ViewBag.Title = "Wyszukiwanie po kategoriach";
+        return View("SearchByIngredientsResult");
     }
 }
