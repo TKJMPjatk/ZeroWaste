@@ -1,42 +1,34 @@
-@using ZeroWaste.Models;
-@model IEnumerable<Category>
+@using ZeroWaste.Data.ViewModels.CategorySearch;
+@model IEnumerable<CategorySearchVm>
 @{
     ViewData["Title"] = "Search by categories";
 }
 <div class="view-search">
-    <div class="col-md-4 offset-4">
+    <div class="col-md-6 offset-3">
         <div class="row">
             <div class="text-center">
-                <h3>Wyszukaj przepis</h3>
+                <h3>Wyszukaj przepis po kategoriach</h3>
             </div>
         </div>
-        <br/>
-        <div class="col-md-6 offset-3">
-            <div class="row">
-                <div class="text-center">
-                    <p>Kategorie</p>
+        <div class="row">
+            @foreach (var item in @Model)
+            {
+                
+            <div class="col-md-3 col-sm-6">
+                <div class="card mb-3" style="width: 200px;"> 
+                    <div class="row g-0">
+                        <a class="btn">
+                            <div class="card-header text-center">
+                                <h5>Kategoria 1</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <img class="rounded-circle" src="@Url.Content(@item.Image)" style="width:100px; height:100px; object-fit: cover" alt="test"/>
+                            </div> 
+                        </a>             
+                    </div>
                 </div>
             </div>
-                <div class="row">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Kategoria</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            
+            }
         </div>
     </div>
 </div>
