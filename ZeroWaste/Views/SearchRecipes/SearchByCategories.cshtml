@@ -14,7 +14,7 @@
             @foreach (var item in @Model)
             {
                 <div class="col-md-3 col-sm-6 mb-3 text-center">
-                    <a class="btn" asp-action="SearchByCategoryResult">
+                    <a class="btn" asp-action="SearchByCategoryResult" asp-route-categoryId="@item.Id">
                         <img class="rounded-circle" src="@Url.Content(@item.Image)" style="width:100px; height:100px; object-fit: cover" alt="test"/>
                     </a>
                     <h5>@item.Name</h5>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Handlers.SearchRecipesHandlers;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.ViewModels.Recipes;
 using ZeroWaste.Models;
 
@@ -12,11 +13,13 @@ public class SearchRecipesController : Controller
     private readonly IUrlQueryHelper _urlQueryHelper;
     private readonly ICategoryService _categoryService;
     private readonly ISearchRecipeHandler _searchRecipeHandler;
-    public SearchRecipesController(IUrlQueryHelper urlQueryHelper, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler)
+    private readonly IRecipesSearchService _recipesSearchService;
+    public SearchRecipesController(IUrlQueryHelper urlQueryHelper, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IRecipesSearchService recipesSearchService)
     {
         _urlQueryHelper = urlQueryHelper;
         _categoryService = categoryService;
         _searchRecipeHandler = searchRecipeHandler;
+        _recipesSearchService = recipesSearchService;
     }   
     public IActionResult SearchByIngredients()
     {
@@ -37,9 +40,10 @@ public class SearchRecipesController : Controller
         return View(tmp);
     }
 
-    public IActionResult SearchByCategoryResult(int categoryId)
+    public async Task<IActionResult> SearchByCategoryResult(int categoryId)
     {
+        var list = await _recipesSearchService.GetByCategoryAsync(categoryId);
         ViewBag.Title = "Wyszukiwanie po kategoriach";
-        return View("SearchByIngredientsResult");
+        return View("SearchByIngredientsResult", list);
     }
 }

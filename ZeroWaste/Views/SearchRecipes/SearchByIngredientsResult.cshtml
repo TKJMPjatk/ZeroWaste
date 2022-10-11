@@ -1,5 +1,5 @@
 @using ZeroWaste.Data.ViewModels.Recipes;
-@model SearchByIngredientsVm
+@model List<ZeroWaste.Models.Recipe>
 @{
     ViewData["Title"] = "Search by ingredients";
 }
@@ -27,7 +27,7 @@
     </div>
     <br/>
     <div class="row">
-        @for (int i = 0; i < 6; i++)
+        @foreach(var item in @Model)
         {
             <div class="col-md-3 col-xs-6 mb-3">
                 <div class="card mb-3" style="max-width: 540px">
@@ -37,12 +37,15 @@
                                 <img src="https://polki.pl/foto/4_3_LARGE/pilau-odswietna-potrawa-1661952.webp" width="100%" alt="Potrawa"/>
                             </div>
                             <div class="card-body bg-recipe-card">
-                                <h5 class="card-title">Potrawa z kurczaka</h5>
-                                <p class="card-text">1 godzina</p>
+                                <h5 class="card-title">@item.Title</h5>
+                                <p class="card-text"><i class="bi bi-clock"></i> @item.EstimatedTime</p>
                                 <hr/>
-                                <p class="card-text">Składnik 1</p>
-                                <p class="card-text">Składnik 2</p>
-                                <p class="card-text">Składnik 3</p>
+                                    <div class="anyClass">
+                                        @foreach (var ingredient in @item.RecipesIngredients)
+                                        {
+                                            <p class="card-text">@ingredient.Ingredient.Name</p>   
+                                        }
+                                    </div>
                                 <hr/>
                                 <div class="row">
                                     <div class="col-md-6">

@@ -3,6 +3,7 @@ using ZeroWaste.Data.Handlers.ShoppingListHandlers;
 using ZeroWaste.Data.Handlers.ShoppingListIngredients;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Services.ShoppingLists;
 
 namespace ZeroWaste;
@@ -30,5 +31,6 @@ public class ServicesConfiguration
         services.AddScoped<IIngredientsService, IngredientsService>();
         services.AddScoped<IShoppingListIngredientsService, ShoppingListIngredientsService>();
         services.AddScoped<IIngredientSelectionService, IngredientSelectionService>();
+        services.AddScoped<IRecipesSearchService, RecipesSearchService>();
     }
 }

@@ -152,3 +152,7 @@ footer{
 .category-card{
   background-color: #FDECD8;
 }
+.anyClass{
+  height: 120px;
+  overflow-y:scroll;
+}
