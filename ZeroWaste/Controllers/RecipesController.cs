@@ -13,4 +13,9 @@ public class RecipesController : Controller
     {
         return View();
     }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        return View();
+    }
 }

@@ -1,6 +1,8 @@
+using ZeroWaste.Models;
+
 namespace ZeroWaste.Data.Handlers.AutomatedShoppingList;
 
 public interface IAutomatedShoppingListHandler
 {
-    Task AddNewShoppingList(int recipeId);
+    Task<ShoppingList> AddNewShoppingList(int recipeId);
 }

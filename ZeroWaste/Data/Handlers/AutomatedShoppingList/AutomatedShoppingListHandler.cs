@@ -17,7 +17,7 @@ public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
         _shoppingListsService = shoppingListsService;
         _context = context;
     }
-    public async Task AddNewShoppingList(int recipeId)
+    public async Task<ShoppingList> AddNewShoppingList(int recipeId)
     {
         var recipe = await GetRecipe(recipeId);
         ShoppingList shoppingList = new ShoppingList()
@@ -25,9 +25,10 @@ public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
             Title = recipe.Title,
             Note = $"Wygenerowane automatycznie z przepisu {recipe.Title}"
         };
-        var shoppingListId = await AddShoppingList(shoppingList);
+        shoppingList = await AddShoppingList(shoppingList);
         var ingredientsList = await GetRecipeIngredientsForRecipe(recipeId);
-        await AddIngredientsToShoppingList(ingredientsList, recipeId);
+        await AddIngredientsToShoppingList(ingredientsList, shoppingList.Id);
+        return shoppingList;
     }
 
     private async Task<Recipe> GetRecipe(int id)
@@ -36,10 +37,10 @@ public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
             .GetByIdAsync(id);
         return item;
     }
-    private async Task<int> AddShoppingList(ShoppingList shoppingList)
+    private async Task<ShoppingList> AddShoppingList(ShoppingList shoppingList)
     {
         var item = await _shoppingListsService.CreateAsync(shoppingList);
-        return item.Id;
+        return item;
     }
     private async Task<List<RecipeIngredient>> GetRecipeIngredientsForRecipe(int recipeId)
     {
@@ -59,9 +60,11 @@ public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
             {
                 IngredientId = item.IngredientId,
                 Quantity = item.Quantity,
-                Selected = false
+                Selected = false,
+                ShoppingListId = shoppingListId
             });
         }
         await _context.ShoppingListIngredients.AddRangeAsync(shoppingListIngredients);
+        await _context.SaveChangesAsync();
     }
 }

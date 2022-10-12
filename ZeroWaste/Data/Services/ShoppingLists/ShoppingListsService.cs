@@ -40,9 +40,9 @@ public class ShoppingListsService : IShoppingListsService
 
     public async Task<ShoppingList> CreateAsync(ShoppingList shoppingList)
     {
+        shoppingList.UserId = "6f33d3dd-1f47-4247-a517-1fd7fed664bc";
         await _context.ShoppingLists.AddAsync(shoppingList);
         //Todo: Identity
-        shoppingList.UserId = "28d514ff-63d5-47b3-ad32-e23c6c9921a6";
         await _context.SaveChangesAsync();
         return shoppingList;
     }
