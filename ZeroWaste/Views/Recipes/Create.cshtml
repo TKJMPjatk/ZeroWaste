@@ -1,5 +1,6 @@
 ﻿@model NewRecipeVM
 @using ZeroWaste.Data;
+@using ZeroWaste.Models
 
 @{
     ViewData["Title"] = "Tworzenie nowego przepisu";
@@ -11,102 +12,134 @@
             <h3>Tworzenie nowego przepisu</h3>
         </p>
 
-        <div class="row">
+        <form class="row" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="col-md-12">
                 <i class="bi bi-award form-icon"></i><label asp-for="Title" class="control-label form-label"></label>
-                <input asp-for="Title" class="form-control"></input>
+                <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+
             <div class="col-md-12">
                 <i class="bi bi-clock-history form-icon"></i><label asp-for="EstimatedTime" class="control-label form-label"></label>
-                <input asp-for="EstimatedTime" class="form-control" type="number" min="1" max="1000" step="1"></input>
+                <input asp-for="EstimatedTime" class="form-control" type="number" min="1" max="1000" step="1" />
                 <span asp-validation-for="EstimatedTime" class="text-danger"></span>
             </div>
+
             <div class="col-md-12">
                 <i class="bi bi-star form-icon"></i><label asp-for="DifficultyLevel" class="control-label form-label"></label>
-                <input asp-for="DifficultyLevel" class="form-control" type="number" min="1" max="5" step="1"></input>
+                <input asp-for="DifficultyLevel" class="form-control" type="number" min="1" max="5" step="1"/>
                 <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
             </div>
+
             <div class="col-md-12">
                 <i class="bi bi-camera form-icon"></i><label asp-for="Photos" class="control-label form-label"></label>
-                <input type="file" class="form-control" asp-for="Photos" value="Model.Photos"/>
+                <input type="file" class="form-control" asp-for="Photos" value="Model.Photos" id="file-upload" name="file-upload" multiple />
                 <span asp-validation-for="Photos" class="text-danger"></span>
             </div>
-            <div class="col-md-12">
-                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-                    @if (Model != null)
-                  {
 
-                  <div class="carousel-inner">
-                      @foreach(var photo in Model.Photos)
-                      {
-                                <div class="carousel-item">
-                                    <img src="data:image;base64,@System.Convert.ToBase64String(photo)" class="d-block w-100" alt="...">
-                                </div>
-                      }
-                    @*<div class="carousel-item active">
-                      <img src="..." class="d-block w-100" alt="...">
+            <div class="col-md-8 offset-1 mt-2rem">
+                <div id="carouselExampleDark" class="carousel carousel-dark slide carousel-hidden" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
-                    
-                    <div class="carousel-item">
-                      <img src="..." class="d-block w-100" alt="...">
-                    </div>*@
-                  </div>
-                  }
-                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <div class="carousel-inner" id="photo-carousel">
+                        </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                   </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                   </button>
                 </div>
             </div>
-        </div>
+
+            <div class="col-md-12">
+                <i class="bi bi-chat-square-text form-icon"></i><label asp-for="Description" class="control-label form-label"></label>
+                <textarea class="form-control" asp-for="Description" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mt-2rem">
+                <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-add float-left">Powrót</a>
+                <input type="submit" value="Wybierz składniki" class="btn btn-default btn-add fr" />
+            </div>
+            @*<div class="col-md-12 mt-2rem">
+                <i class="bi bi-egg-fried form-icon"></i><label asp-for="Ingredients" class="control-label form-label"></label>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="bi bi-clipboard-check form-icon"></i>Istniejący składnik
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                @Html.DropDownList("Ingredient",ViewBag.Ingredients as SelectList, new { @class = "form-select"})
+                                <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="bi bi-clipboard-plus form-icon"></i>Nowy składnik
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        </form>
     </div>
 </div>
 
 @section Scripts{
     <script>
-      //var loadFile = function(event) {
-      //  var reader = new FileReader();
-      //  reader.onload = function(){
-      //    var output = document.getElementById('output');
-      //    output.src = reader.result;
-      //  };
-      //  reader.readAsDataURL(event.target.files[0]);
-      //};
+        $('#file-upload').on('change', function () {
+            var files = $('#file-upload').prop('files');
+            $("#photo-carousel").empty();
 
-        //function previewFiles() {
-        //    const preview = document.querySelector('#preview');
-        //    const files = document.querySelector('input[type=file]').files;
-        //    Model.Photos = files;
-        //    function readAndPreview(file) {
-        //        // Make sure `file.name` matches our extensions criteria
-        //        if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
-        //            const reader = new FileReader();
+            for (var i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                var file = files[i];
+                reader.readAsBinaryString(file);
 
-        //            reader.addEventListener("load", () => {
-        //                const image = new Image();
-        //                image.height = 100;
-        //                image.title = file.name;
-        //                image.src = this.result;
-        //                preview.appendChild(image);
-        //            }, false);
+                if(i === 0)
+                {
+                    reader.onload = function () {
+                        var div = "<div class=\"carousel-item active\">" +
+                            "<img src = data:image/jpeg;base64," + btoa(reader.result) + " class=\"d-block w-100 carousel-image-standard\" alt = \"...\" >" +
+                            "</div>";
 
-        //            reader.readAsDataURL(file);
-        //        }
-        //    }
+                        $("#photo-carousel").append(div);
+                    }
+                }
+                else
+                {
+                    reader.onload = function () {
+                        var div = "<div class=\"carousel-item\">" +
+                            "<img src = data:image/jpeg;base64," + btoa(reader.result) + " class=\"d-block w-100 carousel-image-standard\" alt = \"...\" >" +
+                            "</div>";
 
-        //    if (files) {
-        //        Array.prototype.forEach.call(files, readAndPreview);
-        //    }
-        //}
+                        $("#photo-carousel").append(div);
+                    }
+                }
+            }
+
+            var myCarousel = document.querySelector('#carouselExampleDark')
+            myCarousel.classList.remove('carousel-hidden')
+            var carousel = new bootstrap.Carousel(myCarousel)
+        });
     </script>
 }

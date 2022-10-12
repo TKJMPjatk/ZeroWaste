@@ -1,0 +1,11 @@
+﻿using ZeroWaste.Data.ViewModels;
+using ZeroWaste.Data.ViewModels.RecipeIngredients;
+using ZeroWaste.Models;
+
+namespace ZeroWaste.Data.Services.Recipes
+{
+    public interface IRecipesService
+    {
+        Task AddNewAsync(NewRecipeVM newRecipeVM);
+    }
+}

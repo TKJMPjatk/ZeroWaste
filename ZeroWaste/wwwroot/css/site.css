@@ -56,6 +56,16 @@ footer{
   object-fit: none;
 }
 
+.carousel-image-standard {
+    height: 38rem;
+    width: 38rem;
+    object-fit: scale-down;
+}
+
+.carousel-hidden {
+    visibility: hidden;
+}
+
 .label-home{
   font-weight: lighter;
   font-style: oblique;
