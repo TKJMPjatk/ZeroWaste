@@ -1,4 +1,5 @@
 @using ZeroWaste.Data.ViewModels.Recipes;
+@using Microsoft.CodeAnalysis.Scripting
 @model List<ZeroWaste.Models.Recipe>
 @{
     ViewData["Title"] = "Search by ingredients";
@@ -40,16 +41,19 @@
                                 <h5 class="card-title">@item.Title</h5>
                                 <p class="card-text"><i class="bi bi-clock"></i> @item.EstimatedTime</p>
                                 <hr/>
-                                    <div class="anyClass">
-                                        @foreach (var ingredient in @item.RecipesIngredients)
-                                        {
-                                            <p class="card-text">@ingredient.Ingredient.Name</p>   
-                                        }
-                                    </div>
+                                <div class="anyClass">
+                                    @foreach (var ingredient in @item.RecipesIngredients)
+                                    {
+                                        <p class="card-text">@ingredient.Ingredient.Name</p>   
+                                    }
+                                </div>
                                 <hr/>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <a class="btn btn-recipe-option">Koszyk</a>
+                                        <a class="btn btn-recipe-option" id="addToShoppingList" data-toggle="tooltip" data-placement="bottom" title="Dodaj do listy zakupów"
+                                           asp-controller="AutomatedShoppingListController" asp-action="CreateFromRecipe" asp-route-recipeId="@item.Id">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </a>
                                     </div>
                                     <div class="col-md-6">
                                         <a class="btn btn-recipe-option">Koszyk</a>
@@ -63,3 +67,16 @@
         }
     </div>
 </div>
+@section Scripts
+{
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $("#addToShoppingList").click(function (){
+            alert("Pomyślnie dodano do listy zakupów");    
+        })
+    </script>
+}
