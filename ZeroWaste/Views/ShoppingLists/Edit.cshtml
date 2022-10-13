@@ -21,11 +21,11 @@
                                 <div class="col-md-1">
                                     @if (!(item.Selected))
                                     {
-                                        <a class="btn btn-select" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-square"></i></a>
+                                        <a class="btn btn-white width-max height-max" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-square"></i></a>
                                     }
                                     else
                                     {
-                                        <a class="btn btn-select" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-check-square"></i></a>
+                                        <a class="btn btn-white width-max height-max" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-check-square"></i></a>
                                     }
                                 </div>
                                 <div class="col-md-11">
@@ -40,7 +40,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="col-md-4 offset-4">
-                                <a class="btn btn-trash-shopping-list" asp-controller="ShoppingListIngredients" asp-action="DeleteIngredientFromShoppingList"
+                                <a class="btn btn-oxford-blue text-platinum height-max width-max" asp-controller="ShoppingListIngredients" asp-action="DeleteIngredientFromShoppingList"
                                    asp-route-shoppingListId="@Model.Id" asp-route-ingredientId="@item.Id">
                                     <i class="bi bi-trash"></i>
                                 </a>
