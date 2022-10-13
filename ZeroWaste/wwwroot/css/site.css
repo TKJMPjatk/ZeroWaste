@@ -78,8 +78,17 @@ footer{
 .btn-platinum{
   background-color: #EDE8E8;
 }
+
+.btn-antique-white{
+  background-color: #FDECD8;
+}
+
 .text-oxford-blue{
-  color: #02223C;;
+  color: #02223C;
+}
+
+.text-antique-white{
+  color: #FDECD8;
 }
 
 .search-option{
@@ -87,11 +96,6 @@ footer{
   font-size: 40px;
   font-weight: lighter;
   font-style: oblique;
-}
-
-.btn-add{
-  background-color: #FDECD8;
-  color: #152536;
 }
 
 .btn-search{
