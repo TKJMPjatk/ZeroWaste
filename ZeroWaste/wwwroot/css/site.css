@@ -72,9 +72,17 @@ footer{
   font-size: 1.4rem;
 }
 
-.btn-search-option{
-  background-color: #EDE8E8;
+.btn-oxford-blue{
   color: #02223C;
+}
+.btn-platinum{
+  background-color: #EDE8E8;
+}
+.text-oxford-blue{
+  color: #02223C;;
+}
+
+.search-option{
   text-align: left;
   font-size: 40px;
   font-weight: lighter;
