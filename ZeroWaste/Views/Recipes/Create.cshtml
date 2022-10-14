@@ -12,7 +12,7 @@
             <h3>Tworzenie nowego przepisu</h3>
         </p>
 
-        <form class="row" asp-action="Create">
+        <form class="row" asp-action="Create" asp-controller="Recipes" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-md-12">
@@ -29,14 +29,20 @@
 
             <div class="col-md-12">
                 <i class="bi bi-star form-icon"></i><label asp-for="DifficultyLevel" class="control-label form-label"></label>
-                <input asp-for="DifficultyLevel" class="form-control" type="number" min="1" max="5" step="1"/>
+                <select asp-for="DifficultyLevel" class="form-select" aria-label="Default select example">
+                    <option selected>Wybierz poziom trudności</option>
+                    <option value="1">Banalny</option>
+                    <option value="2">Łatwy</option>
+                    <option value="3">Średni</option>
+                    <option value="4">Trudny</option>
+                    <option value="5">Bardzo trudny</option>
+                </select>
                 <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
             </div>
 
             <div class="col-md-12">
-                <i class="bi bi-camera form-icon"></i><label asp-for="Photos" class="control-label form-label"></label>
-                <input type="file" class="form-control" asp-for="Photos" value="Model.Photos" id="file-upload" name="file-upload" multiple />
-                <span asp-validation-for="Photos" class="text-danger"></span>
+                <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcia</label>
+                <input type="file" class="form-control" id="filesUpload" name="filesUpload" multiple/>
             </div>
 
             <div class="col-md-8 offset-1 mt-2rem">
@@ -106,8 +112,8 @@
 
 @section Scripts{
     <script>
-        $('#file-upload').on('change', function () {
-            var files = $('#file-upload').prop('files');
+        $('#filesUpload').on('change', function () {
+            var files = $('#filesUpload').prop('files');
             $("#photo-carousel").empty();
 
             for (var i = 0; i < files.length; i++) {

@@ -23,5 +23,21 @@ namespace ZeroWaste.Data.Services.Recipes
             await _context.Recipes.AddAsync(recipe);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<int> AddNewReturnsIdAsync(NewRecipeVM newRecipeVM)
+        {
+            Recipe recipe = _mapperHelper.Map(newRecipeVM);
+            // TODO : Only for tests - to remove!
+            var ILLEGAL_CODE_TO_REMOVE = AppDbInitializer.userIds[2];
+            recipe.AuthorId = ILLEGAL_CODE_TO_REMOVE;
+            await _context.Recipes.AddAsync(recipe);
+            await _context.SaveChangesAsync();
+            return recipe.Id;
+        }
+
+        public Task<Recipe> GetByIdAsync(int? id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

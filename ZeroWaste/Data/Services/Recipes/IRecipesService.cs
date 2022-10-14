@@ -7,5 +7,7 @@ namespace ZeroWaste.Data.Services.Recipes
     public interface IRecipesService
     {
         Task AddNewAsync(NewRecipeVM newRecipeVM);
+        Task<int> AddNewReturnsIdAsync(NewRecipeVM newRecipeVM);
+        Task<Recipe> GetByIdAsync(int? id);
     }
 }
