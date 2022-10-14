@@ -13,7 +13,7 @@ namespace ZeroWaste.Data.Helpers
             _mapper = mapper;
         }
 
-        public Recipe Map(this NewRecipeVM newRecipeVM)
+        public Recipe Map(NewRecipeVM newRecipeVM)
         {
             Recipe recipe = _mapper.Map<Recipe>(newRecipeVM);
             return recipe;
