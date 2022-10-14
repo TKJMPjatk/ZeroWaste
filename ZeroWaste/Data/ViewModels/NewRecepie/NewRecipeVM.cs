@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ZeroWaste.Data.ViewModels.NewRecepie;
 
 namespace ZeroWaste.Data.ViewModels
 {
@@ -18,9 +17,6 @@ namespace ZeroWaste.Data.ViewModels
         [Display(Name = "Poziom trudności")]
         [Required(ErrorMessage = "Określ poziom trudności")]
         public int DifficultyLevel { get; set; }
-        [Display(Name = "Wybierz zdjęcia")]
-        [Required(ErrorMessage = "Musisz dodać zdjęcie pokazujące potrawę")]
-        public List<FileVM> Photos { get; set; }
 
     }
 }
