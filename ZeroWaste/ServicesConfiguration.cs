@@ -2,6 +2,8 @@ using ZeroWaste.Data.Handlers.ShoppingListHandlers;
 using ZeroWaste.Data.Handlers.ShoppingListIngredients;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.Photo;
+using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.ShoppingLists;
 
@@ -20,6 +22,7 @@ public class ServicesConfiguration
         services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredientsHelper>();
         services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
         services.AddScoped<IShoppingListHandler, ShoppingListHandler>();
+        services.AddScoped<IRecipeMapperHelper, RecipeMapperHelper>();
         services.AddScoped<IShoppingListIngredientsHandler, ShoppingListIngredientsHandler>();
     }
     private void ConfigureServices(IServiceCollection services)
@@ -30,5 +33,7 @@ public class ServicesConfiguration
         services.AddScoped<IShoppingListIngredientsService, ShoppingListIngredientsService>();
         services.AddScoped<IIngredientSelectionService, IngredientSelectionService>();
         services.AddScoped<IRecipesService, RecipesService>();
+        services.AddScoped<IPhotoService, PhotoService>();
+        services.AddScoped<IRecipeIngredientService, RecipeIngredientService>();
     }
 }
