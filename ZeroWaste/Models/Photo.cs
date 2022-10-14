@@ -5,7 +5,7 @@ namespace ZeroWaste.Models
     public class Photo
     {
         public int Id { get; set; }
-        public string PhotoBinary { get; set; }
+        public byte[] BinaryPhoto { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public int? RecipeReviewId { get; set; }

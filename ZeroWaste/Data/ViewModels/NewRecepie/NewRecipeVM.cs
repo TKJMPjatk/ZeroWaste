@@ -17,12 +17,6 @@ namespace ZeroWaste.Data.ViewModels
         [Display(Name = "Poziom trudności")]
         [Required(ErrorMessage = "Określ poziom trudności")]
         public int DifficultyLevel { get; set; }
-        [Display(Name = "Wybierz zdjęcia")]
-        [Required(ErrorMessage = "Musisz dodać zdjęcie pokazujące potrawę")]
-        public List<byte[]> Photos { get; set; }
-        [Display(Name = "Składniki")]
-        [Required(ErrorMessage = "Musisz dodać składniki przepisu")]
-        public List<NewRecepieIngredientVM> Ingredients { get; set; }
 
     }
 }

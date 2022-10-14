@@ -1,5 +1,6 @@
 using AutoMapper;
 using ZeroWaste.Data.ViewModels.CategorySearch;
+using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.Data.ViewModels.ShoppingListIngredients;
@@ -16,5 +17,6 @@ public class AutoMapperProfile : Profile
         CreateMap<Ingredient, NewIngredientVM>();
         CreateMap<NewShoppingListVM, ShoppingList>();
         CreateMap<Category, CategorySearchVm>();
+        CreateMap<NewRecipeVM, Recipe>();
     }
 }

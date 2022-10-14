@@ -6,7 +6,7 @@ namespace ZeroWaste.Data
 {
     public class AppDbInitializer
     {
-        private static List<String> userIds = new();
+        public static List<String> userIds = new();
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
@@ -927,6 +927,10 @@ namespace ZeroWaste.Data
                     await userManager.CreateAsync(newS20034AdminUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newS20034AdminUser, UserRoles.Admin);
                 }
+                else
+                {
+                    userIds.Add(adminS20034User.Id);
+                }
 
                 string admins19424Email = "s19424@pjwstk.edu.pl";
                 var admins19424User = await userManager.FindByEmailAsync(admins19424Email);
@@ -943,6 +947,10 @@ namespace ZeroWaste.Data
                     };
                     await userManager.CreateAsync(newS19424AdminUser, "RUCH200nowe!");
                     await userManager.AddToRoleAsync(newS19424AdminUser, UserRoles.Admin);
+                }
+                else
+                {
+                    userIds.Add(admins19424User.Id);
                 }
 
                 string appUserEmail = "user@gmail.com";
