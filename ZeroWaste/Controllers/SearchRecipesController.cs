@@ -25,13 +25,14 @@ public class SearchRecipesController : Controller
     {
         return View();
     }
-    public IActionResult SearchByIngredientsResult(string ingredientsVm)
+    public async Task<IActionResult> SearchByIngredientsResult(string ingredientsVm)
     {
-        List<IngredientsForSearchVM> ingredientsForSearchList;
+        List<IngredientsForSearchVM> ingredientsForSearchList = new List<IngredientsForSearchVM>();
         if(ingredientsVm != null)
             ingredientsForSearchList = _urlQueryHelper.GetIngredientsFromUrl(ingredientsVm);
         ViewBag.Title = "Wyszukiwanie po składnikach";
-        return View();
+        var list = await _recipesSearchService.GetByIngredients(ingredientsForSearchList);
+        return View(list);
     }
     public async Task<IActionResult> SearchByCategories()
     {

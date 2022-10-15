@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ZeroWaste.Data.ViewModels.Recipes;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services.RecipesSearch;
@@ -17,6 +18,16 @@ public class RecipesSearchService : IRecipesSearchService
             .Include(x => x.RecipesIngredients)
             .ThenInclude(x=>x.Ingredient)
             .Where(x => x.CategoryId == categoryId)
+            .ToListAsync();
+        return list;
+    }
+
+    public async Task<List<Recipe>> GetByIngredients(List<IngredientsForSearchVM> ingredientsForSearchVm)
+    {
+        var list = await _context
+            .Recipes
+            .Include(x => x.RecipesIngredients)
+            .ThenInclude(x=>x.Ingredient)
             .ToListAsync();
         return list;
     }

@@ -19,7 +19,8 @@ namespace ZeroWaste.Controllers
             ViewBag.Ingredients = new SelectList(recipeDropdownsData.Ingredients, "Id", "Name");
             ViewBag.UnitOfMeasures = new SelectList(recipeDropdownsData.UnitOfMeasures, "Id", "Name");
 
-            return View();
+            //return View();
+            return NotFound();
         }
     }
 }
