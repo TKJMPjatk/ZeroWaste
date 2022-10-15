@@ -25,6 +25,8 @@ public class RecipesController : Controller
     }
     public async Task<IActionResult> Create()
     {
+        var recipeDropdownsData = await _recipesService.GetDropdownsValuesAsync();
+        ViewBag.Categories = new SelectList(recipeDropdownsData.Categories, "Id", "Name");
         return View();
     }
 
@@ -37,11 +39,13 @@ public class RecipesController : Controller
     {
         if (!ModelState.IsValid)
         {
+            var recipeDropdownsData = await _recipesService.GetDropdownsValuesAsync();
+            ViewBag.Categories = new SelectList(recipeDropdownsData.Categories, "Id", "Name");
             return View(recipeVM);
         }
         int recipeId = await _recipesService.AddNewReturnsIdAsync(recipeVM);
         await _photoService.AddNewRecipePhotosAsync(filesUpload, recipeId);
         
-        return RedirectToAction("AddIngredients", "RecipeIngredientsController", new { recipeId = recipeId });
+        return RedirectToAction("NewRecipeIngredients", "RecipeIngredients", new { recipeId });
     }
 }

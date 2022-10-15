@@ -17,6 +17,9 @@ namespace ZeroWaste.Data.ViewModels
         [Display(Name = "Poziom trudności")]
         [Required(ErrorMessage = "Określ poziom trudności")]
         public int DifficultyLevel { get; set; }
+        [Display(Name = "Kategoria przepisu")]
+        [Required(ErrorMessage = "Wskaż kategorię")]
+        public int CategoryId { get; set; }
 
     }
 }

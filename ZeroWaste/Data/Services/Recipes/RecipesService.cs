@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.ViewModels;
+using ZeroWaste.Data.ViewModels.NewRecepie;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
 using ZeroWaste.Models;
 
@@ -27,9 +28,10 @@ namespace ZeroWaste.Data.Services.Recipes
         public async Task<int> AddNewReturnsIdAsync(NewRecipeVM newRecipeVM)
         {
             Recipe recipe = _mapperHelper.Map(newRecipeVM);
-            // TODO : Only for tests - to remove!
+            // TODO : Only for tests - remove!
             var ILLEGAL_CODE_TO_REMOVE = AppDbInitializer.userIds[2];
             recipe.AuthorId = ILLEGAL_CODE_TO_REMOVE;
+            recipe.Status = await _context.Statuses.Where(c => c.Name == "Niepotwierdzony").FirstOrDefaultAsync();
             await _context.Recipes.AddAsync(recipe);
             await _context.SaveChangesAsync();
             return recipe.Id;
@@ -38,6 +40,15 @@ namespace ZeroWaste.Data.Services.Recipes
         public Task<Recipe> GetByIdAsync(int? id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<RecipeDropdownVM> GetDropdownsValuesAsync()
+        {
+            var response = new RecipeDropdownVM()
+            {
+                Categories = await _context.Categories.ToListAsync(),
+            };
+            return response;
         }
     }
 }

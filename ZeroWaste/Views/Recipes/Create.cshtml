@@ -15,19 +15,19 @@
         <form class="row" asp-action="Create" asp-controller="Recipes" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 mt-1rem">
                 <i class="bi bi-award form-icon"></i><label asp-for="Title" class="control-label form-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 mt-1rem">
                 <i class="bi bi-clock-history form-icon"></i><label asp-for="EstimatedTime" class="control-label form-label"></label>
                 <input asp-for="EstimatedTime" class="form-control" type="number" min="1" max="1000" step="1" />
                 <span asp-validation-for="EstimatedTime" class="text-danger"></span>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 mt-1rem">
                 <i class="bi bi-star form-icon"></i><label asp-for="DifficultyLevel" class="control-label form-label"></label>
                 <select asp-for="DifficultyLevel" class="form-select" aria-label="Default select example">
                     <option selected>Wybierz poziom trudności</option>
@@ -40,7 +40,13 @@
                 <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 mt-1rem">
+                <i class="bi bi-ui-radios form-icon"></i><label asp-for="CategoryId" class="control-label form-label"></label>
+                @Html.DropDownList("CategoryId",ViewBag.Categories as SelectList, new { @class = "form-select"})
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mt-1rem">
                 <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcia</label>
                 <input type="file" class="form-control" id="filesUpload" name="filesUpload" multiple/>
             </div>
@@ -65,47 +71,16 @@
                 </div>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 mt-1rem">
                 <i class="bi bi-chat-square-text form-icon"></i><label asp-for="Description" class="control-label form-label"></label>
                 <textarea class="form-control" asp-for="Description" rows="5"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <div class="col-md-12 mt-2rem">
-                <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-add float-left">Powrót</a>
-                <input type="submit" value="Wybierz składniki" class="btn btn-default btn-add fr" />
+                <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-pale-pink float-left">Powrót</a>
+                <input type="submit" value="Wybierz składniki" class="btn btn-default btn-pale-pink fr" />
             </div>
-            @*<div class="col-md-12 mt-2rem">
-                <i class="bi bi-egg-fried form-icon"></i><label asp-for="Ingredients" class="control-label form-label"></label>
-                <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="bi bi-clipboard-check form-icon"></i>Istniejący składnik
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                @Html.DropDownList("Ingredient",ViewBag.Ingredients as SelectList, new { @class = "form-select"})
-                                <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <i class="bi bi-clipboard-plus form-icon"></i>Nowy składnik
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-
         </form>
     </div>
 </div>
