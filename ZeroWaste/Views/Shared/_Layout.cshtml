@@ -24,7 +24,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #FFD6D6;">
                                 Przepisy
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #02223C;">
                                 <a class="dropdown-item" asp-controller="Recipes" asp-action="Index">Wyszukaj</a>
                                 <a class="dropdown-item" asp-controller="Home" asp-action="Index">Dodaj</a>
                                 <a class="dropdown-item" asp-controller="Home" asp-action="Index">Edytuj moje</a>
@@ -39,11 +39,11 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #FFD6D6;">
-                                Przepisy
+                                Produkty
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Index">Wyszukaj</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Index">Dodaj</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #02223C;">
+                                <a class="dropdown-item" asp-controller="Ingredients" asp-action="Index">Wyszukaj</a>
+                                <a class="dropdown-item" asp-controller="Ingredients" asp-action="Create">Dodaj</a>
                             </ul>
                         </li>
                     </ul>
@@ -66,7 +66,8 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="lib/jquery-ui-1.13.2.custom/jquery-ui.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
