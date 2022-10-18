@@ -1,0 +1,93 @@
+﻿@using ZeroWaste.Data.ViewModels.RecipeIngredients
+@using Newtonsoft.Json
+@model NewRecipeIngredient
+
+@{
+    ViewData["Title"] = "Dodawanie składników przepisu";
+    var ingredients = ViewBag.Ingredients as IEnumerable<ExistingIngredient>;
+    var data = JsonConvert.SerializeObject(ingredients);
+}
+
+<div class="row">
+    <div class="col-md-10 offset-1">
+        <p>
+            <h3>Dodawanie składników przepisu</h3>
+        </p>
+
+        <form class="row" asp-action="Add" asp-controller="RecipeIngredients" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="bi bi-clipboard-check form-icon"></i>Istniejący składnik
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="col-md-4">
+                                <i class="bi bi-ui-radios form-icon"></i><label asp-for="ExistingIngredientId" class="control-label form-label"></label>
+                                <select class="form-select" name="existIngredient" id="existIngredient">
+                                    <option value="0" selected>Wybierz produkt</option>
+                                    @foreach(var item in ViewBag.Ingredients)
+                                    {
+                                        <option value="item.Id">@item.Name </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ExistingIngredientId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <i class="bi bi-ui-radios form-icon"></i><label asp-for="ExistingIngredientUnitOfMeasureId" class="control-label form-label"></label>
+                                <span id="unitOfMeasure" name="unitOfMeasure"></span>
+                                <span asp-validation-for="ExistingIngredientUnitOfMeasureId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <i class="bi bi-ui-radios form-icon"></i><label asp-for="ExistingIngredientQuantity" class="control-label form-label"></label>
+                                <input asp-for="ExistingIngredientQuantity" class="form-control" type="number" min="1" max="1000" step="1" />
+                                <span asp-validation-for="ExistingIngredientQuantity" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <i class="bi bi-clipboard-plus form-icon"></i>Nowy składnik
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script >
+        $('#existIngredient').on('change', function () {
+            var select = document.getElementById('existIngredient');
+            var value = select.options[select.selectedIndex].text;
+            if (value === 'Wybierz produkt')
+            {
+                return;
+            }
+
+            var ingredientsJson = JSON.parse(he.decode('@data'));
+            var filtered = ingredientsJson.filter(a => a.Name == value);
+            if(!filtered[0])
+            {
+                return;
+            }
+
+            var unitOfMeasure = filtered[0]['UnitOfMeasure']['Name'];
+            var spanUnitOfMeasure = document.getElementById('unitOfMeasure');
+            spanUnitOfMeasure.textContent = unitOfMeasure;
+        });
+    </script>
+}

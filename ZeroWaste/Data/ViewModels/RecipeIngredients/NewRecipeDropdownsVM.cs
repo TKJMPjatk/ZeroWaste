@@ -4,7 +4,7 @@ namespace ZeroWaste.Data.ViewModels.RecipeIngredients
 {
     public class RecipeIngredientsDropdownsVM
     {
-        public List<Ingredient> Ingredients { get; set; }
+        public IEnumerable<ExistingIngredient> Ingredients { get; set; }
         public List<UnitOfMeasure> UnitOfMeasures { get; set; }
     }
 }

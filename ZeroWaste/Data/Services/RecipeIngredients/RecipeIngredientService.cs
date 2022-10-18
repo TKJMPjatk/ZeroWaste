@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
 using ZeroWaste.Models;
 
@@ -8,9 +9,11 @@ namespace ZeroWaste.Data.Services.RecipeIngredients
     {
 
         private readonly AppDbContext _context;
-        public RecipeIngredientService(AppDbContext context)
+        private readonly IRecipeIngredientMapperHelper _mapperHelper;
+        public RecipeIngredientService(AppDbContext context, IRecipeIngredientMapperHelper mapperHelper)
         {
             _context = context;
+            _mapperHelper = mapperHelper;
         }
 
         public async Task<IEnumerable<RecipeIngredient>> GetCurrentIngredientsAsync(int? recipeId)
@@ -21,9 +24,10 @@ namespace ZeroWaste.Data.Services.RecipeIngredients
 
         public async Task<RecipeIngredientsDropdownsVM> GetDropdownsValuesAsync()
         {
+            var ingredients = await _context.Ingredients.Include(c => c.UnitOfMeasure).OrderBy(c => c.Name).ToListAsync();
             var response = new RecipeIngredientsDropdownsVM()
             {
-                Ingredients = await _context.Ingredients.Include(c => c.UnitOfMeasure).OrderBy(c => c.Name).ToListAsync(),
+                Ingredients = _mapperHelper.Map(ingredients),
                 UnitOfMeasures = await _context.UnitOfMeasures.OrderBy(c => c.Name).ToListAsync()
             };
             return response;

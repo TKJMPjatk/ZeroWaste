@@ -13,14 +13,13 @@ namespace ZeroWaste.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> NewRecipeIngredients(int? recipeId)
+        public async Task<IActionResult> Edit(int? recipeId)
         {
             var recipeIngredientsDropdownsData = await _service.GetDropdownsValuesAsync();
-            ViewBag.Ingredients = new SelectList(recipeIngredientsDropdownsData.Ingredients, "Id", "Name");
+            ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();// new SelectList(recipeIngredientsDropdownsData.Ingredients, "Id", "Name");
             ViewBag.UnitOfMeasures = new SelectList(recipeIngredientsDropdownsData.UnitOfMeasures, "Id", "Name");
 
-            //return View();
-            return NotFound();
+            return View();
         }
     }
 }
