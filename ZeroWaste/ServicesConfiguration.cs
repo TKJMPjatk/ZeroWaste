@@ -27,6 +27,7 @@ public class ServicesConfiguration
         services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
         services.AddScoped<IShoppingListHandler, ShoppingListHandler>();
         services.AddScoped<IRecipeMapperHelper, RecipeMapperHelper>();
+        services.AddScoped<IRecipeIngredientMapperHelper, RecipeIngredientMapperHelper>();
         services.AddScoped<IShoppingListIngredientsHandler, ShoppingListIngredientsHandler>();
         services.AddScoped<ISearchRecipeHandler, SearchRecipeHandler>();
         services.AddScoped<IAutomatedShoppingListHandler, AutomatedShoppingListHandler>();

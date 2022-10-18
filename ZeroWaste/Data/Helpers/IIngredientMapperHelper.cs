@@ -1,4 +1,5 @@
 ﻿using ZeroWaste.Data.ViewModels.NewIngredient;
+using ZeroWaste.Data.ViewModels.RecipeIngredients;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Helpers

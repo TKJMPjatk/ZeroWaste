@@ -5,6 +5,7 @@ using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.Data.ViewModels.ShoppingListIngredients;
 using ZeroWaste.Models;
+using ZeroWaste.Data.ViewModels.RecipeIngredients;
 
 namespace ZeroWaste.Data.Mappers;
 
@@ -18,5 +19,7 @@ public class AutoMapperProfile : Profile
         CreateMap<NewShoppingListVM, ShoppingList>();
         CreateMap<Category, CategorySearchVm>();
         CreateMap<NewRecipeVM, Recipe>();
+        CreateMap<UnitOfMeasure, ExistingUnitOfMeasure>();
+        CreateMap<Ingredient, ExistingIngredient>();
     }
 }
