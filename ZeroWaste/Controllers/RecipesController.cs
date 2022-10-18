@@ -46,7 +46,6 @@ public class RecipesController : Controller
         int recipeId = await _recipesService.AddNewReturnsIdAsync(recipeVM);
         await _photoService.AddNewRecipePhotosAsync(filesUpload, recipeId);
         
-        //return RedirectToAction("AddIngredients", "RecipeIngredientsController", new { recipeId = recipeId });
-        return NotFound();
+        return RedirectToAction("Edit", "RecipeIngredients", new { recipeId });
     }
 }
