@@ -6,5 +6,6 @@ namespace ZeroWaste.Data.ViewModels.RecipeIngredients
     {
         public IEnumerable<ExistingIngredient> Ingredients { get; set; }
         public List<UnitOfMeasure> UnitOfMeasures { get; set; }
+        public IEnumerable<IngredientType> IngredientTypes { get; set; }
     }
 }

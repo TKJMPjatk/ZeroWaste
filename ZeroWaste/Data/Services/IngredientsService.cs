@@ -23,6 +23,15 @@ namespace ZeroWaste.Data.Services
             await _context.Ingredients.AddAsync(ingredient);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<int> AddNewReturnsIdAsync(NewIngredientVM newIngredient)
+        {
+            Ingredient ingredient = _mapperHelper.Map(newIngredient);
+            await _context.Ingredients.AddAsync(ingredient);
+            await _context.SaveChangesAsync();
+            return ingredient.Id;
+        }
+
         public async Task DeleteAsync(int? id)
         {
             var ingredient = await _context.Set<Ingredient>().FirstOrDefaultAsync(n => n.Id == id);
@@ -73,6 +82,19 @@ namespace ZeroWaste.Data.Services
         {
             var ingredientDetails = await _context.Ingredients
                 .Where(n => n.Id == id)
+                .Include(i => i.IngredientType)
+                .Include(i => i.UnitOfMeasure)
+                .FirstOrDefaultAsync();
+
+            var ingredient = _mapperHelper.Map(ingredientDetails);
+
+            return ingredient;
+        }
+
+        public async Task<NewIngredientVM> GetVmByNameAsync(string name)
+        {
+            var ingredientDetails = await _context.Ingredients
+                .Where(n => n.Name == name)
                 .Include(i => i.IngredientType)
                 .Include(i => i.UnitOfMeasure)
                 .FirstOrDefaultAsync();

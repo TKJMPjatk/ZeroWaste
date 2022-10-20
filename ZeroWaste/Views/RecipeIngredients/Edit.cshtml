@@ -15,8 +15,8 @@
         </p>
 
         <form class="row" asp-action="Add" asp-controller="RecipeIngredients" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+            <span class="text-danger">@ViewData["message"]</span>
+            @Html.HiddenFor(m=>m.RecipeId, new { Value = ViewData["recipeId"]})
             <div class="accordion" id="accordionExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
@@ -26,26 +26,28 @@
                     </h2>
                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <div class="col-md-4">
-                                <i class="bi bi-ui-radios form-icon"></i><label asp-for="ExistingIngredientId" class="control-label form-label"></label>
-                                <select class="form-select" name="existIngredient" id="existIngredient">
-                                    <option value="0" selected>Wybierz produkt</option>
-                                    @foreach(var item in ViewBag.Ingredients)
-                                    {
-                                        <option value="item.Id">@item.Name </option>
-                                    }
-                                </select>
-                                <span asp-validation-for="ExistingIngredientId" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <i class="bi bi-ui-radios form-icon"></i><label asp-for="ExistingIngredientUnitOfMeasureId" class="control-label form-label"></label>
-                                <span id="unitOfMeasure" name="unitOfMeasure"></span>
-                                <span asp-validation-for="ExistingIngredientUnitOfMeasureId" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <i class="bi bi-ui-radios form-icon"></i><label asp-for="ExistingIngredientQuantity" class="control-label form-label"></label>
-                                <input asp-for="ExistingIngredientQuantity" class="form-control" type="number" min="1" max="1000" step="1" />
-                                <span asp-validation-for="ExistingIngredientQuantity" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <i class="bi bi-egg-fried form-icon"></i><label asp-for="ExistingIngredientId" class="control-label form-label"></label>
+                                        @Html.DropDownListFor(x => x.ExistingIngredientId, new SelectList(ViewBag.Ingredients, "Id", "Name"), new { @class = "form-select" })
+                                        <span asp-validation-for="ExistingIngredientId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <i class="bi bi-rulers form-icon"></i><label asp-for="ExistingIngredientUnitOfMeasureId" class="control-label form-label"></label>
+                                        <input asp-for="ExistingIngredientUnitOfMeasureId" class="form-control" id="unitOfMeasure" name="unitOfMeasure" type="text" disabled />
+                                        <span asp-validation-for="ExistingIngredientUnitOfMeasureId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <i class="bi bi-calculator form-icon"></i><label asp-for="ExistingIngredientQuantity" class="control-label form-label"></label>
+                                        <input asp-for="ExistingIngredientQuantity" class="form-control" type="number" min="1" max="1000" step="1" />
+                                        <span asp-validation-for="ExistingIngredientQuantity" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -58,25 +60,106 @@
                     </h2>
                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <i class="bi bi-egg-fried form-icon"></i><label asp-for="NewIngredientName" class="control-label form-label"></label>
+                                        <input asp-for="NewIngredientName" class="form-control" type="text"/>
+                                        <span asp-validation-for="NewIngredientName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <i class="bi bi-rulers form-icon"></i><label asp-for="NewIngredientUnitOfMeasureId" class="control-label form-label"></label>
+                                        <select class="form-select" asp-for="NewIngredientUnitOfMeasureId" asp-items="@ViewBag.UnitOfMeasures">
+                                            <option selected>Wybierz jednostkę</option>
+                                            
+                                        </select>
+                                        <span asp-validation-for="NewIngredientUnitOfMeasureId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <i class="bi bi-calculator form-icon"></i><label asp-for="NewIngredientQuantity" class="control-label form-label"></label>
+                                        <input asp-for="NewIngredientQuantity" class="form-control" type="number" min="1" max="1000" step="1" />
+                                        <span asp-validation-for="NewIngredientQuantity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <i class="bi bi-ui-radios form-icon"></i><label asp-for="NewIngredientTypeId" class="control-label form-label"></label>
+                                        <select class="form-select" asp-for="NewIngredientTypeId" asp-items="@ViewBag.IngredientTypes">
+                                            <option selected>Wybierz typ</option>
+                                            
+                                        </select>
+                                        <span asp-validation-for="NewIngredientTypeId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="col-md-12 mt-2rem">
+                <input type="submit" value="Dodaj" class="btn btn-default btn-pale-pink fr" />
+            </div>
         </form>
     </div>
+</div>
+<div class="row">
+    <div class="col-md-10 offset-md-1 mt-2rem">
+        @if(ViewBag.RecipeIngredients.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Jednostka miary</th>
+                        <th>Ilość</th>
+                        <th>Usuń</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.RecipeIngredients)
+                    {
+                        <tr>
+                            <td>
+                                @item.Ingredient.Name
+                            </td>
+                            <td>
+                                @item.Ingredient.UnitOfMeasure.Name
+                            </td>
+                            <td>
+                                @item.Quantity
+                            </td>
+                            <td class="align-middle">
+                                <a class="btn btn-default" type="button" asp-action="Delete" asp-route-id="@item.Id">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 offset-md-4 mt-2rem">
+            <button class="btn btn-umber text-platinum width-max" asp-action="Index" asp-controller="Home">Zapisz</button>
+        </div>
+
+        </div>
 </div>
 
 @section Scripts{
     <script >
-        $('#existIngredient').on('change', function () {
-            var select = document.getElementById('existIngredient');
+        $('#ExistingIngredientId').on('change', function () {
+            var select = document.getElementById('ExistingIngredientId');
             var value = select.options[select.selectedIndex].text;
-            if (value === 'Wybierz produkt')
-            {
-                return;
-            }
 
             var ingredientsJson = JSON.parse(he.decode('@data'));
             var filtered = ingredientsJson.filter(a => a.Name == value);
@@ -86,8 +169,7 @@
             }
 
             var unitOfMeasure = filtered[0]['UnitOfMeasure']['Name'];
-            var spanUnitOfMeasure = document.getElementById('unitOfMeasure');
-            spanUnitOfMeasure.textContent = unitOfMeasure;
+            document.getElementById('unitOfMeasure').value =  unitOfMeasure;
         });
     </script>
 }
