@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ZeroWaste.Data.ViewModels;
+using ZeroWaste.Data.ViewModels.ExistingRecipe;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Helpers
@@ -17,6 +18,12 @@ namespace ZeroWaste.Data.Helpers
         {
             Recipe recipe = _mapper.Map<Recipe>(newRecipeVM);
             return recipe;
+        }
+
+        public DetailsRecipeVM Map(Recipe recipe)
+        {
+            DetailsRecipeVM detailsRecipe = _mapper.Map<DetailsRecipeVM>(recipe);
+            return detailsRecipe;
         }
     }
 }
