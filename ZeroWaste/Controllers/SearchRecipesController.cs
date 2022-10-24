@@ -7,26 +7,44 @@ using ZeroWaste.Data.Handlers.SearchRecipesHandlers;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipesSearch;
+using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.Recipes;
+using ZeroWaste.Data.ViewModels.RecipeSearch;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
 
 public class SearchRecipesController : Controller
 {
-    private readonly IUrlQueryHelper _urlQueryHelper;
     private readonly ICategoryService _categoryService;
     private readonly ISearchRecipeHandler _searchRecipeHandler;
     private readonly IRecipesSearchService _recipesSearchService;
     private readonly AppDbContext _context;
-    public SearchRecipesController(AppDbContext context, IUrlQueryHelper urlQueryHelper, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IRecipesSearchService recipesSearchService)
+    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IRecipesSearchService recipesSearchService)
     {
         _context = context;
-        _urlQueryHelper = urlQueryHelper;
         _categoryService = categoryService;
         _searchRecipeHandler = searchRecipeHandler;
         _recipesSearchService = recipesSearchService;
+    }
+    public IActionResult Index()
+    {
+        return View();
+    }
+    public IActionResult SearchByIngredients()
+    {
+        return View(new SearchByIngredientsVm());
+    }
+    [HttpPost]
+    public IActionResult AddIngredient(SearchByIngredientsVm searchByIngredientsVm)
+    {
+        if (!(ModelState.IsValid))
+        {
+            return View("SearchByIngredients", searchByIngredientsVm);
+        }
+        var newSearchByIngredientsVm = _searchRecipeHandler.AddIngredient(searchByIngredientsVm);
+        return View("SearchByIngredients", newSearchByIngredientsVm);
     }
     [HttpGet]
     public async Task<JsonResult> SearchByIngredientsAuto()
@@ -35,32 +53,62 @@ public class SearchRecipesController : Controller
         var list = await _context.Ingredients.Where( x=> x.Name.StartsWith(term)).Select(x => x.Name).ToListAsync();
         return Json(list);
     }
-    public IActionResult SearchByIngredients()
-    {
-        return View();
-    }
-    public async Task<IActionResult> SearchByIngredientsResult(string ingredientsVm)
+    [HttpPost]
+    public async Task<IActionResult> SearchResult(SearchByIngredientsVm searchByIngredientsVm)
     {
         ViewBag.PageTitle = "Wyszukiwanie po składnikach";
-        ViewBag.SortTypes = Enum.GetNames(typeof(SortTypes)).ToList();
-        //Tworzenie listy ze składnikami
-        List<IngredientsForSearchVM> ingredientsForSearchList = new List<IngredientsForSearchVM>();
-        if(!(string.IsNullOrEmpty(ingredientsVm)))
-            ingredientsForSearchList = _urlQueryHelper.GetIngredientsFromUrl(ingredientsVm);
-        //Wyszukanie przepisów - stworzenie SearchRecipeResultVM
-        var searchRecipeVm = await _recipesSearchService.GetByIngredients(ingredientsForSearchList);
-        searchRecipeVm.CategoryList = await _categoryService.GetAllAsync();
-        searchRecipeVm.IngredientForSearchList = ingredientsForSearchList;
-        return View(searchRecipeVm);
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        SearchRecipeResultsVm searchRecipeResultsVm =
+            await _searchRecipeHandler.GetSearchRecipeResultVm(searchByIngredientsVm);
+        return View(searchRecipeResultsVm);
     }
     [HttpPost]
     public async Task<IActionResult> SearchByIngredientsFilteredResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
-        ViewBag.SortTypes = Enum.GetNames(typeof(SortTypes)).ToList();
-        List<IngredientsForSearchVM> ingredientsForSearchList = new List<IngredientsForSearchVM>();
-        var searchRecipeVm = await _recipesSearchService.GetByIngredients(ingredientsForSearchList);
-        return View(nameof(SearchByIngredientsResult), searchRecipeVm);
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //Sortowanie
+        if (resultsVm.SortTypeId != 0)
+        {
+            if ((int) resultsVm.SortTypeId == (int) SortTypes.ByTime)
+            {
+                resultsVm.RecipesList = resultsVm
+                    .RecipesList
+                    .OrderBy(x => x.EstimatedTime)
+                    .ToList();
+            }
+            if ((int) resultsVm.SortTypeId == (int) SortTypes.ByDifficultyLevel)
+            {
+                resultsVm.RecipesList = resultsVm
+                    .RecipesList
+                    .OrderBy(x => x.DifficultyLevel)
+                    .ToList();
+            }
+            if ((int) resultsVm.SortTypeId == (int) SortTypes.FromAtoZ)
+            {
+                resultsVm.RecipesList = resultsVm
+                    .RecipesList
+                    .OrderBy(x => x.Title)
+                    .ToList();
+            }
+            if ((int) resultsVm.SortTypeId == (int) SortTypes.FromZToA)
+            {
+                resultsVm.RecipesList = resultsVm
+                    .RecipesList
+                    .OrderByDescending(x => x.Title)
+                    .ToList();
+            }
+        }
+        return View("SearchResult", resultsVm);
+    }
+    [HttpPost]
+    public async Task<IActionResult> ReturnToSearchByIngredients(SearchRecipeResultsVm resultsVm)
+    {
+        SearchByIngredientsVm searchByIngredientsVm = new SearchByIngredientsVm()
+        {
+            SingleIngredientToSearchVm = resultsVm.IngredientsLists
+        };
+        return View("SearchByIngredients", searchByIngredientsVm);
     }
     public async Task<IActionResult> SearchByCategories()
     {
@@ -70,8 +118,9 @@ public class SearchRecipesController : Controller
     }
     public async Task<IActionResult> SearchByCategoryResult(int categoryId)
     {
-        var list = await _recipesSearchService.GetByCategoryAsync(categoryId);
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
-        return View("SearchByIngredientsResult");
+        var resultVm = await _searchRecipeHandler.GetSearchRecipeResultVmByCategory(categoryId);
+        return View("SearchResult", resultVm);
     }
 }

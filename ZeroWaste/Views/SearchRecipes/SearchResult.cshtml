@@ -1,0 +1,197 @@
+@using ZeroWaste.Data.ViewModels.Recipes;
+@using Microsoft.CodeAnalysis.Scripting
+@using ZeroWaste.Models
+@model SearchRecipeResultsVm
+@{
+    ViewData["Title"] = "Wyszukiwanie po składnikach";
+}
+<div class="col-md-10 offset-1">
+    <div class="row">
+        <div class="col-md-5">
+            <h3>@ViewBag.PageTitle</h3>
+        </div>
+        <div class="col-md-3 offset-2">
+            <input class="width-max" type="text" placeholder="Wpisz szukaną frazę"/>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-3">
+                <form asp-action="ReturnToSearchByIngredients">
+                    @if (@Model.IngredientsLists != null)
+                    {
+                        @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
+                        {
+                            @Html.HiddenFor(x => x.IngredientsLists[j].Name)
+                            @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
+                            @Html.HiddenFor(x => x.IngredientsLists[j].Index)
+                        }
+                    }
+                    <input type="submit" class="btn btn-umber text-platinum width-max" value="Edytuj składniki"/>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-umber text-white dropdown-toggle" type="button" id="dropdownSort" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    Sortowanie
+                </button>
+                <ul class="dropdown-menu recipes-search-options" aria-labelledby="dropdownSort">
+                    @for(int i = 0;i<ViewBag.SortTypes.Count; i++)
+                    {
+                        <li>
+                            <form asp-action="SearchByIngredientsFilteredResult">
+                                @for (int j = 0; j < @Model.CategoryList.Count; j++)
+                                {
+                                    @Html.HiddenFor(x => x.CategoryList[j].Id)
+                                    @Html.HiddenFor(x => x.CategoryList[j].Name)
+                                }
+                                @if (@Model.IngredientsLists != null)
+                                {
+                                    @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
+                                    {
+                                        @Html.HiddenFor(x => x.IngredientsLists[j].Name)
+                                        @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
+                                        @Html.HiddenFor(x => x.IngredientsLists[j].Index)
+                                    }   
+                                }
+                                @for (int j = 0; j < @Model.RecipesList.Count; j++)
+                                {
+                                    @Html.HiddenFor(x => x.RecipesList[j].Id)
+                                    @Html.HiddenFor(x => x.RecipesList[j].Title)
+                                    @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
+                                    @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
+                                    @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
+                                    for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                    {
+                                        @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                    }
+                                }
+                                <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+                                <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
+                                <input type="hidden" asp-for="SortTypeId" value="@((int)ViewBag.SortTypes[i])"/>
+                                @if (Model.SortTypeId == (int)ViewBag.SortTypes[i])
+                                {
+                                    <input type="submit" class="btn btn-khaki-web text-white" value="@ViewBag.SortTypes[i].ToString()"/>
+                                }
+                                else
+                                {
+                                    <input type="submit" class="btn btn-umber text-white" value="@ViewBag.SortTypes[i].ToString()"/>
+                                }
+                            </form>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <btn class="btn-group">
+                        <button class="btn btn-umber text-white dropdown-toggle" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            Kategoria
+                        </button>
+                        <ul class="dropdown-menu recipes-search-options" aria-labelledby="dropdownMenuClickable">
+                            @for(int i = 0;i<@Model.CategoryList.Count;i++)
+                            {
+                                <li>
+                                    <form asp-action="SearchByIngredientsFilteredResult">
+                                            @for (int j=0; j<@Model.CategoryList.Count; j++)
+                                            {
+                                                @Html.HiddenFor(x => x.CategoryList[j].Id)
+                                                @Html.HiddenFor(x => x.CategoryList[j].Name)
+                                            }
+                                            @if (@Model.IngredientsLists != null)
+                                            {
+                                                @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
+                                                {
+                                                    @Html.HiddenFor(x => x.IngredientsLists[j].Name)
+                                                    @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
+                                                    @Html.HiddenFor(x => x.IngredientsLists[j].Index)
+                                                }   
+                                            }                                
+                                            @for (int j = 0; j < @Model.RecipesList.Count; j++)
+                                            {
+                                                @Html.HiddenFor(x => x.RecipesList[j].Id)
+                                                @Html.HiddenFor(x => x.RecipesList[j].Title)
+                                                @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
+                                                @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
+                                                @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
+                                                for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                                {
+                                                    @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                                }
+                                            }
+                                            <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
+                                            <input type="hidden" asp-for="CategoryId" value="@Model.CategoryList[i].Id"/>
+                                            <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
+                                            @if (Model.CategoryId == Model.CategoryList[i].Id)
+                                            {
+                                                <input type="submit" class="btn btn-khaki-web text-white" value="@Model.CategoryList[i].Name"/>
+                                            }
+                                            else
+                                            {
+                                                <input type="submit" class="btn btn-umber text-white" value="@Model.CategoryList[i].Name"/>
+                                            }
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                </btn>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        @foreach(var item in @Model.RecipesList)
+        {
+            <div class="col-md-3 col-xs-6 mb-3">
+                <div class="card mb-3" style="max-width: 540px">
+                    <div class="row g-0">
+                        <div class="col-md-12">
+                            <div class="card-header bg-recipe-card">
+                                <img src="https://polki.pl/foto/4_3_LARGE/pilau-odswietna-potrawa-1661952.webp" width="100%" alt="Potrawa"/>
+                            </div>
+                            <div class="card-body bg-recipe-card">
+                                <h5 class="card-title">@item.Title</h5>
+                                <p class="card-text"><i class="bi bi-clock"></i> @item.EstimatedTime</p>
+                                <hr/>
+                                <p>Poziom trudności: </p>
+                                    @for (int i = 0; i < item.DifficultyLevel; i++)
+                                    {
+                                        <i class="bi bi-star-fill"></i>
+                                    }
+                                    @for (int i = 0; i < 5-item.DifficultyLevel; i++) 
+                                    {
+                                        <i class="bi bi-star"></i>
+                                    }
+                                <hr/>
+                                <div class="card-body-scroll">
+                                    @foreach (var ingredient in @item.Ingredients)
+                                    {
+                                        <p class="card-text">@ingredient</p>   
+                                    }
+                                </div>
+                                <hr/>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a class="btn btn-pale-pink width-max" id="addToShoppingList" data-toggle="tooltip" data-placement="bottom" title="Dodaj do listy zakupów"
+                                           asp-controller="AutomatedShoppingList" asp-action="CreateFromRecipe" asp-route-recipeId="@item.Id">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a class="btn btn-pale-pink width-max">Koszyk</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+}

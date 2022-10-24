@@ -101,6 +101,10 @@ footer{
   background-color: #FFFFFF;
 }
 
+.btn-khaki-web{
+  background-color: #D5C3AA;
+}
+
 .text-oxford-blue{
   color: #02223C;
 }
@@ -169,4 +173,8 @@ footer{
 .card-body-scroll{
   height: 120px;
   overflow-y:scroll;
+}
+
+.recipes-search-options{
+  background-color: #615049;
 }
