@@ -18,18 +18,12 @@ public class RecipesController : Controller
         _recipesService = recipesService;
         _photoService = photoService;   
     }
-
-    public IActionResult Index()
-    {
-        return View();
-    }
     public async Task<IActionResult> Create()
     {
         var recipeDropdownsData = await _recipesService.GetDropdownsValuesAsync();
         ViewBag.Categories = new SelectList(recipeDropdownsData.Categories, "Id", "Name");
         return View();
     }
-
     public async Task<IActionResult> Details(int id)
     {
         return View();
@@ -45,7 +39,12 @@ public class RecipesController : Controller
         }
         int recipeId = await _recipesService.AddNewReturnsIdAsync(recipeVM);
         await _photoService.AddNewRecipePhotosAsync(filesUpload, recipeId);
+<<<<<<< HEAD
         
         return RedirectToAction("Edit", "RecipeIngredients", new { recipeId });
+=======
+        //return RedirectToAction("AddIngredients", "RecipeIngredientsController", new { recipeId = recipeId });
+        return NotFound();
+>>>>>>> origin/TK
     }
 }

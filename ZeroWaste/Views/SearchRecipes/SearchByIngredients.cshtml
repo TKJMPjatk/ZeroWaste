@@ -1,35 +1,53 @@
 @model SearchByIngredientsVm
-@using ZeroWaste.Data.ViewModels.Recipes;
+@using ZeroWaste.Data.ViewModels.RecipeSearch;
 @{
-    ViewData["Title"] = "Search by ingredients";
+    ViewData["Title"] = "Wyszukaj po składnikach";
 }
 <div class="view-search">
     <div class="col-md-4 offset-4">
         <div class="row">
             <div class="text-center">
-                <h3>Wyszukaj przepis</h3>
+                <h3>Uzupełnij składniki do wyszukania przepisu</h3>
             </div>
         </div>
         <br/>
-        <div class="row">
-            <div class="col-md-6">
-                <input type="text" id="nameInput" placeholder="składnik"/>
-                <span class="text-danger" id="nameInputError" style="visibility: hidden">Pole jest wymagane</span>
-            </div>
-            <div class="col-md-4">
-                <input type="number" id="quantityInput" placeholder="ilość"/>
-                <span class="text-danger small" id="quantityInputError" style="visibility: hidden">Pole jest wymagane</span>
-            </div>
-        </div>
+            <form asp-action="AddIngredient" asp-controller="SearchRecipes">
+                @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
+                {
+                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
+                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
+                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
+                }
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" id="nameInput" asp-for="@Model.Name" placeholder="składnik"/>
+                        <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                        <span class="text-danger" id="notExistIgnredient" style="visibility: hidden">Brak składnika na liście</span>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" id="quantityInput" asp-for="@Model.Quantity" placeholder="ilość"/>
+                        <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-antique-white text-oxford-blue float-end" id="addIngredientBtn" value="Dodaj"/>
+                    </div>
+                </div>
+            </form>
         <br/>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-antique-white text-oxford-blue float-end" id="addIngredient">Dodaj</button>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-6 offset-3">
-                <button class="btn btn-umber text-platinum width-max" id="searchRecipes">Wyszukaj</button>
+                <form asp-action="SearchResult">
+                    @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
+                    {
+                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
+                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
+                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
+                    }
+                    <input type="submit" class="btn btn-umber text-platinum width-max" value="Wyszukaj"/>
+                </form>
             </div>
         </div>
         <br/>
@@ -37,19 +55,27 @@
     <div class="col-md-6 offset-3">
         <div class="row">
             <div class="text-center">
-                <p>Składnik</p>
+                <p>Składniki</p>
             </div>
         </div>
         <div class="row">
             <table>
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Produkt</th>
-                    <th>Ilość</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Produkt</th>
+                        <th>Ilość</th>
+                    </tr>
                 </thead>
-                <tbody id="tbody">
+                <tbody>
+                @foreach (var item in @Model.SingleIngredientToSearchVm)
+                {
+                    <tr>
+                        <td>@item.Index</td>
+                        <td>@item.Name</td>
+                        <td>@item.Quantity</td>
+                    </tr>   
+                }
                 </tbody>
             </table>
         </div>
@@ -57,64 +83,43 @@
 </div>
 @section Scripts
 {
-    <script>
-        var ingredientsList = new Array();
-        var index = 1;
-        $("#addIngredient").click(function (){
-            var isValid = true;
-            var ingredientName = $("#nameInput").val();
-            if (ingredientName.length === 0)
-            {
-                $("#nameInputError").css("visibility", "visible");
-                isValid = false;
-            }
-            else
-            {
-                $("#nameInputError").css("visibility", "hidden");
-                isValid = true;
-            }
-            var ingredientQuantity = $("#quantityInput").val();
-            if (ingredientQuantity.length === 0)
-            {
-                $("#quantityInputError").css("visibility", "visible");
-                isValid = false;
-            }
-            else
-            {
-                $("#quantityInputError").css("visibility", "hidden");
-                isValid = true;
-            }
-            if (isValid === true){
-                ingredientsList.push({'name' : ingredientName, 'quantity' : ingredientQuantity});
-                $("#tbody").append("<tr><td>" 
-                    +index
-                    +"</td><td>"
-                    +ingredientName
-                    +"</td><td>"
-                    +ingredientQuantity
-                    +"</p></td></tr>");
-                $("#nameInput").val('');
-                $("#quantityInput").val('');
-            }
-        })
-        $("#searchRecipes").click(function (){
-            
-            var array = new Array();
-            for (var i = 0, l = ingredientsList.length;i < l; i++){
-                array.push(ingredientsList[i].name);
-                array.push(ingredientsList[i].quantity);
-            }
-            var queryString = array.join(',');
-            console.log("@Url.Action("SearchByIngredientsResult", "SearchRecipes")" + '?ingredientsVm='+queryString);
-            window.location.href = "@Url.Action("SearchByIngredientsResult", "SearchRecipes")" + '?ingredientsVm='+queryString;
-        })
-    </script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
     <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css"/>
     <script>
-    $("#nameInput").autocomplete({
-        source:"/SearchRecipes/SearchByIngredientsAuto"
-        });
+        $("#nameInput").autocomplete({
+            source:"/SearchRecipes/SearchByIngredientsAuto"
+            });
+    </script>
+    <script>
+        $("#document").ready(function(){
+            $("#nameInput").val('');
+            $("#quantityInput").val(0);
+        })
+    </script>
+    <script>
+        $("#nameInput").focusout(function (){
+            var _url = '/SearchRecipes/SearchByIngredientsAuto';
+            var ingredientsList = [];
+            $.ajax({
+                url: _url,
+                type: "GET",
+                dataType:"json",
+                success: function(data){
+                    data = data.map(function(x) {
+                      return x.toLowerCase()
+                    })
+                    var tmp = jQuery.inArray($("#nameInput").val().toLowerCase(), data);
+                    if (tmp === -1){
+                        $("#addIngredientBtn").prop('disabled', true);
+                        $("#notExistIgnredient").css('visibility', 'visible');
+                    }
+                    else{
+                        $("#addIngredientBtn").prop('disabled', false);
+                        $("#notExistIgnredient").css('visibility', 'hidden');
+                    }
+                }
+            });
+            })
     </script>
 }
