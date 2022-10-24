@@ -154,12 +154,17 @@ footer{
     margin-top: 1rem;
 }
 
+.ml-2rem {
+    margin-left: 2rem;
+}
+
 .fr {
     float: right !important;
 }
 
 .control-label{
   font-size: 22px;
+  font-weight: 400;
 }
 
 .category-card{
@@ -169,4 +174,9 @@ footer{
 .card-body-scroll{
   height: 120px;
   overflow-y:scroll;
+}
+
+.border-description {
+    background-color: #FDFDFD;
+    padding: 1rem;
 }
