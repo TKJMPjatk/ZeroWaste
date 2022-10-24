@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.ViewModels;
+using ZeroWaste.Data.ViewModels.ExistingRecipe;
 using ZeroWaste.Data.ViewModels.NewRecepie;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
 using ZeroWaste.Models;
@@ -37,9 +38,24 @@ namespace ZeroWaste.Data.Services.Recipes
             return recipe.Id;
         }
 
-        public Task<Recipe> GetByIdAsync(int? id)
+        public Task<Recipe> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<DetailsRecipeVM> GetDetailsByIdAsync(int id)
+        {
+            var recipe = await _context.Recipes
+                .Where(c => c.Id == id)
+                .Include(c => c.Photos)
+                .Include(c => c.Category)
+                .Include(c => c.RecipesIngredients)
+                .ThenInclude(c => c.Ingredient)
+                .ThenInclude(c => c.UnitOfMeasure)
+                .Include(c => c.RecipeReviews)
+                .FirstOrDefaultAsync();
+            var detailsRecipe = _mapperHelper.Map(recipe);
+            return detailsRecipe;
         }
 
         public async Task<RecipeDropdownVM> GetDropdownsValuesAsync()

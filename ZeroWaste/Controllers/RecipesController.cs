@@ -26,7 +26,12 @@ public class RecipesController : Controller
     }
     public async Task<IActionResult> Details(int id)
     {
-        return View();
+        var recipeDetails = await _recipesService.GetDetailsByIdAsync(id);
+        if (recipeDetails is null)
+        {
+            return NotFound();
+        }
+        return View(recipeDetails);
     }
     [HttpPost]
     public async Task<IActionResult> Create(NewRecipeVM recipeVM, IEnumerable<IFormFile> filesUpload)

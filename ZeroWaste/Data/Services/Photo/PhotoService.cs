@@ -18,7 +18,9 @@ namespace ZeroWaste.Data.Services.Photo
                 var photo = new Models.Photo()
                 {
                     BinaryPhoto = await file.GetBytes(),
-                    RecipeId = recipeId
+                    RecipeId = recipeId,
+                    Name = file.Name,
+                    CreatedAt = DateTime.Now,
                 };
                 await _context.Photos.AddAsync(photo);
             }

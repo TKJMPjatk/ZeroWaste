@@ -1,0 +1,124 @@
+﻿@model NewRecipeVM
+@using ZeroWaste.Data;
+@using ZeroWaste.Models
+
+@{
+    ViewData["Title"] = "Edycja istniejącego przepisu";
+}
+
+<div class="row">
+    <div class="col-md-10 offset-1">
+        <p>
+            <h3>Edycja istniejącego przepisu</h3>
+        </p>
+
+        <form class="row" asp-action="Create" asp-controller="Recipes" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-md-12 mt-1rem">
+                <i class="bi bi-award form-icon"></i><label asp-for="Title" class="control-label form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mt-1rem">
+                <i class="bi bi-clock-history form-icon"></i><label asp-for="EstimatedTime" class="control-label form-label"></label>
+                <input asp-for="EstimatedTime" class="form-control" type="number" min="1" max="1000" step="1" />
+                <span asp-validation-for="EstimatedTime" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mt-1rem">
+                <i class="bi bi-star form-icon"></i><label asp-for="DifficultyLevel" class="control-label form-label"></label>
+                <select asp-for="DifficultyLevel" class="form-select" aria-label="Default select example">
+                    <option selected>Wybierz poziom trudności</option>
+                    <option value="1">Banalny</option>
+                    <option value="2">Łatwy</option>
+                    <option value="3">Średni</option>
+                    <option value="4">Trudny</option>
+                    <option value="5">Bardzo trudny</option>
+                </select>
+                <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mt-1rem">
+                <i class="bi bi-ui-radios form-icon"></i><label asp-for="CategoryId" class="control-label form-label"></label>
+                @Html.DropDownList("CategoryId",ViewBag.Categories as SelectList, new { @class = "form-select"})
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mt-1rem">
+                <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcia</label>
+                <input type="file" class="form-control" id="filesUpload" name="filesUpload" multiple />
+            </div>
+
+            <div class="col-md-8 offset-1 mt-2rem">
+                <div id="carouselExampleDark" class="carousel carousel-dark slide carousel-hidden" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner" id="photo-carousel">
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-12 mt-1rem">
+                <i class="bi bi-chat-square-text form-icon"></i><label asp-for="Description" class="control-label form-label"></label>
+                <textarea class="form-control" asp-for="Description" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mt-2rem">
+                <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-pale-pink float-left">Powrót</a>
+                <input type="submit" value="Wybierz składniki" class="btn btn-default btn-pale-pink fr" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#filesUpload').on('change', function () {
+            var files = $('#filesUpload').prop('files');
+            $("#photo-carousel").empty();
+
+            for (var i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                var file = files[i];
+                reader.readAsBinaryString(file);
+
+                if (i === 0) {
+                    reader.onload = function () {
+                        var div = "<div class=\"carousel-item active\">" +
+                            "<img src = data:image/jpeg;base64," + btoa(reader.result) + " class=\"d-block w-100 carousel-image-standard\" alt = \"...\" >" +
+                            "</div>";
+
+                        $("#photo-carousel").append(div);
+                    }
+                }
+                else {
+                    reader.onload = function () {
+                        var div = "<div class=\"carousel-item\">" +
+                            "<img src = data:image/jpeg;base64," + btoa(reader.result) + " class=\"d-block w-100 carousel-image-standard\" alt = \"...\" >" +
+                            "</div>";
+
+                        $("#photo-carousel").append(div);
+                    }
+                }
+            }
+
+            var myCarousel = document.querySelector('#carouselExampleDark')
+            myCarousel.classList.remove('carousel-hidden')
+            var carousel = new bootstrap.Carousel(myCarousel)
+        });
+    </script>
+}
