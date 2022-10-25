@@ -5,7 +5,11 @@
     ViewData["Title"] = "Zaloguj się na konto";
 }
 <div class="row">
+<<<<<<< HEAD
     <div class="col-md-6 offset-3 text-center">
+=======
+    <div class="col-md-6 offset-3">
+>>>>>>> 17d4fe8 (Added Account Controller. Added ViewModels to login and register. Added Views for login and register. Added method in controller to getting View of login and register. Added method to log in)
         <p>
             <h4>Zaloguj się na swoje konto</h4>
         </p>
@@ -16,6 +20,7 @@
             </div>
         }
         <div class="row">
+<<<<<<< HEAD
             <div class="col-md-10 offset-1">
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -46,6 +51,24 @@
                     <div class="form-group">
                         <input class="btn btn-pale-pink text-black float-right" type="submit" value="Zaloguj"/>
                         <a class="btn btn-platinum text-black" asp-controller="Home" asp-action="Index">Cofnij</a>
+=======
+            <div class="col-md-8 offset-2">
+                <form asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="EmailAddress" class="control-label"></label>
+                        <input asp-for="EmailAddress" class="form-control"></input>
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control"></input>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-outline-success float-right" type="submit" value="Zaloguj"/>
+                        <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Cancel</a>
+>>>>>>> 17d4fe8 (Added Account Controller. Added ViewModels to login and register. Added Views for login and register. Added method in controller to getting View of login and register. Added method to log in)
                     </div>
                 </form>
             </div>
