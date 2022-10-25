@@ -20,7 +20,7 @@ public class RecipesSearchService : IRecipesSearchService
             .Recipes
             .Include(x => x.RecipesIngredients)
             .ThenInclude(x=>x.Ingredient)
-            .Where(x => x.CategoryId == categoryId)
+            .Where(x => x.CategoryId == categoryId && x.StatusId == 1)
             .ToListAsync();
         return list;
     }
@@ -36,5 +36,14 @@ public class RecipesSearchService : IRecipesSearchService
         return list;
     }
 
-
+    public async Task<List<Recipe>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId)
+    {        
+        var list = await _context
+            .Recipes
+            .Include(x => x.RecipesIngredients)
+            .ThenInclude(x=>x.Ingredient)
+            .Where(x => x.CategoryId == categoryId)
+            .ToListAsync();
+        return list;
+    }
 }

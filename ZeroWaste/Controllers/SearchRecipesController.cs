@@ -67,38 +67,20 @@ public class SearchRecipesController : Controller
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmFiltered(resultsVm);
         //Sortowanie
         if (resultsVm.SortTypeId != 0)
         {
-            if ((int) resultsVm.SortTypeId == (int) SortTypes.ByTime)
-            {
-                resultsVm.RecipesList = resultsVm
-                    .RecipesList
-                    .OrderBy(x => x.EstimatedTime)
-                    .ToList();
-            }
-            if ((int) resultsVm.SortTypeId == (int) SortTypes.ByDifficultyLevel)
-            {
-                resultsVm.RecipesList = resultsVm
-                    .RecipesList
-                    .OrderBy(x => x.DifficultyLevel)
-                    .ToList();
-            }
-            if ((int) resultsVm.SortTypeId == (int) SortTypes.FromAtoZ)
-            {
-                resultsVm.RecipesList = resultsVm
-                    .RecipesList
-                    .OrderBy(x => x.Title)
-                    .ToList();
-            }
-            if ((int) resultsVm.SortTypeId == (int) SortTypes.FromZToA)
-            {
-                resultsVm.RecipesList = resultsVm
-                    .RecipesList
-                    .OrderByDescending(x => x.Title)
-                    .ToList();
-            }
+            var result = await _searchRecipeHandler.GetSearchRecipeResultVmSorted(resultsVm);
         }
+        return View("SearchResult", resultsVm);
+    }
+
+    public async Task<IActionResult> SearchRecipeSortedResult(SearchRecipeResultsVm resultsVm)
+    {
+        ViewBag.PageTitle = resultsVm.PageTitle;
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        var result = await _searchRecipeHandler.GetSearchRecipeResultVmSorted(resultsVm);
         return View("SearchResult", resultsVm);
     }
     [HttpPost]
