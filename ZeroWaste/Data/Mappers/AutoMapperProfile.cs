@@ -23,16 +23,12 @@ public class AutoMapperProfile : Profile
         CreateMap<NewRecipeVM, Recipe>();
         CreateMap<UnitOfMeasure, ExistingUnitOfMeasure>();
         CreateMap<Ingredient, ExistingIngredient>();
-<<<<<<< HEAD
         CreateMap<Recipe, DetailsRecipeVM>();
-=======
         CreateMap<Recipe, RecipeResult>()
          .ForMember(dest => dest.Ingredients,
              opt => opt.MapFrom(
                  src => src.RecipesIngredients
                      .Select(x => x.Ingredient.Name)
                      .ToList()));
-
->>>>>>> origin/TK
     }
 }
