@@ -10,4 +10,5 @@ public interface IRecipesSearchService
 {
     Task<List<Recipe>> GetByCategoryAsync(int categoryId);
     Task<List<Recipe>> GetByIngredients(List<IngredientForSearch> searchByIngredientsVm);
+    Task<List<Recipe>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId);
 }

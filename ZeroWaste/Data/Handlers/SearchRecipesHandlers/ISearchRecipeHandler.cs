@@ -11,4 +11,5 @@ public interface ISearchRecipeHandler
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVm(SearchByIngredientsVm searchByIngredientsVm);
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVmByCategory(int categoryId);
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFiltered(SearchRecipeResultsVm searchRecipeResultsVm);
+    Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm);
 }

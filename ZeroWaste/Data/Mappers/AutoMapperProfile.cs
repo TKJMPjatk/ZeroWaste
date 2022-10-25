@@ -1,4 +1,5 @@
 using AutoMapper;
+using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels.CategorySearch;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.NewIngredient;
@@ -22,6 +23,16 @@ public class AutoMapperProfile : Profile
         CreateMap<NewRecipeVM, Recipe>();
         CreateMap<UnitOfMeasure, ExistingUnitOfMeasure>();
         CreateMap<Ingredient, ExistingIngredient>();
+<<<<<<< HEAD
         CreateMap<Recipe, DetailsRecipeVM>();
+=======
+        CreateMap<Recipe, RecipeResult>()
+         .ForMember(dest => dest.Ingredients,
+             opt => opt.MapFrom(
+                 src => src.RecipesIngredients
+                     .Select(x => x.Ingredient.Name)
+                     .ToList()));
+
+>>>>>>> origin/TK
     }
 }
