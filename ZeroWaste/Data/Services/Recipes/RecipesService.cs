@@ -53,6 +53,9 @@ namespace ZeroWaste.Data.Services.Recipes
                 .ThenInclude(c => c.Ingredient)
                 .ThenInclude(c => c.UnitOfMeasure)
                 .Include(c => c.RecipeReviews)
+                .ThenInclude(c => c.Photos)
+                .Include(c => c.RecipeReviews)
+                .ThenInclude(c => c.ApplicationUser)
                 .FirstOrDefaultAsync();
             var detailsRecipe = _mapperHelper.Map(recipe);
             return detailsRecipe;
