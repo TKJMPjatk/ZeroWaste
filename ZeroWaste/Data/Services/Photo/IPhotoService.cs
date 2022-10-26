@@ -3,5 +3,6 @@
     public interface IPhotoService
     {
         Task AddNewRecipePhotosAsync(IEnumerable<IFormFile> files, int? recipeId);
+        Task AddNewReviewPhotoAsync(IFormFile file, int? reviewId);
     }
 }
