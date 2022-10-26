@@ -23,5 +23,11 @@ namespace ZeroWaste.Data.ViewModels.ExistingRecipe
         public List<RecipeIngredient> RecipesIngredients { get; set; }
         public Category Category { get; set; }
         public List<RecipeReview> RecipeReviews { get; set; }
+        public string PhotoAlt { get; set; } = $"/images/Review/alt.png";
+        [Display(Name = "Poziom zadowolenia")]
+        public int NewReviewStars { get; set; }
+        [Display(Name = "Opis")]
+        public string NewReviewDescription { get; set; }
+        public int NewReviewRecipeId { get; set; }
     }
 }
