@@ -5,6 +5,7 @@ using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.Recipes;
+using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
 
@@ -31,6 +32,8 @@ public class RecipesController : Controller
         {
             return NotFound();
         }
+        ViewData["recipeId"] = id;
+        recipeDetails.NewReviewRecipeId = id;
         return View(recipeDetails);
     }
     [HttpPost]

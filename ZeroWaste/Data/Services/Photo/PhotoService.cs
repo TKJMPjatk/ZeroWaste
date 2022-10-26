@@ -26,5 +26,18 @@ namespace ZeroWaste.Data.Services.Photo
             }
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddNewReviewPhotoAsync(IFormFile file, int? reviewId)
+        {
+            var photo = new Models.Photo()
+            {
+                BinaryPhoto = await file.GetBytes(),
+                RecipeReviewId = reviewId,
+                Name = file.Name,
+                CreatedAt = DateTime.Now,
+            };
+            await _context.Photos.AddAsync(photo);
+            await _context.SaveChangesAsync();
+        }
     }
 }

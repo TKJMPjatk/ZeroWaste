@@ -188,3 +188,11 @@ footer{
     background-color: #FDFDFD;
     padding: 1rem;
 }
+
+.card-margin {
+    margin: 1rem;
+}
+
+.card-photo {
+    margin-top: 10px;
+}

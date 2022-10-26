@@ -11,6 +11,7 @@ using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.ShoppingLists;
+using ZeroWaste.Data.Services.Reviews;
 
 namespace ZeroWaste;
 
@@ -50,5 +51,6 @@ public class ServicesConfiguration
     private void ConfigureStrategy(IServiceCollection services)
     {
         services.AddScoped<ISearchRecipeContext, SearchRecipeContext>();
+        services.AddScoped<IReviewsService, ReviewsService>();
     }
 }
