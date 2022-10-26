@@ -10,6 +10,7 @@ using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.ShoppingLists;
+using ZeroWaste.Data.Services.Reviews;
 
 namespace ZeroWaste;
 
@@ -44,5 +45,6 @@ public class ServicesConfiguration
         services.AddScoped<IRecipesService, RecipesService>();
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<IRecipeIngredientService, RecipeIngredientService>();
+        services.AddScoped<IReviewsService, ReviewsService>();
     }
 }
