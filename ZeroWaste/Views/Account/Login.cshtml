@@ -5,7 +5,7 @@
     ViewData["Title"] = "Zaloguj się na konto";
 }
 <div class="row">
-    <div class="col-md-6 offset-3">
+    <div class="col-md-6 offset-3 text-center">
         <p>
             <h4>Zaloguj się na swoje konto</h4>
         </p>
@@ -16,22 +16,36 @@
             </div>
         }
         <div class="row">
-            <div class="col-md-8 offset-2">
+            <div class="col-md-10 offset-1">
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="EmailAddress" class="control-label"></label>
-                        <input asp-for="EmailAddress" class="form-control"></input>
-                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-4 text-end">
+                            <label asp-for="EmailAddress" class="control-label"></label>
+                        </div>
+                        <div class="col-md-4">
+                            <input asp-for="EmailAddress" class="form-control"/>
+                        </div>
+                        <div class="col-md-4">
+                            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control"></input>
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-4 text-end">
+                            <label asp-for="Password" class="control-label"></label>
+                        </div>
+                        <div class="col-md-4">
+                            <input asp-for="Password" class="form-control"/>
+                        </div>
+                        <div class="col-md-4">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
                     </div>
+                    <br/>
                     <div class="form-group">
-                        <input class="btn btn-outline-success float-right" type="submit" value="Zaloguj"/>
-                        <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Cancel</a>
+                        <input class="btn btn-pale-pink text-black float-right" type="submit" value="Zaloguj"/>
+                        <a class="btn btn-platinum text-black" asp-controller="Home" asp-action="Index">Cofnij</a>
                     </div>
                 </form>
             </div>

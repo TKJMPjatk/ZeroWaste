@@ -26,34 +26,38 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #02223C;">
                                 <a class="dropdown-item" asp-controller="SearchRecipes" asp-action="Index">Wyszukaj</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Index">Dodaj</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Index">Edytuj moje</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Index">Ulubione</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Index">Tych nie zjem</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Dodaj</a>
+                                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Edytuj moje</a>
+                                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Ulubione</a>
+                                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Tych nie zjem</a>
+                                }
                             </ul>
                         </li>
-                        <li class="navbar-nav flex-grow-1w">
-                            <a class="nav-link" asp-controller="ShoppingLists" asp-action="Index">
-                                Listy zakupów
-                            </a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="navbar-nav flex-grow-1w">
+                                <a class="nav-link" asp-controller="ShoppingLists" asp-action="Index">
+                                    Listy zakupów
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #FFD6D6;">
                                 Produkty
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #02223C;">
                                 <a class="dropdown-item" asp-controller="Ingredients" asp-action="Index">Wyszukaj</a>
-                                <a class="dropdown-item" asp-controller="Ingredients" asp-action="Create">Dodaj</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a class="dropdown-item" asp-controller="Ingredients" asp-action="Create">Dodaj</a>
+                                }
                             </ul>
                         </li>
-                        <a class="btn btn-outline-secondary my-2 my-sm-0" asp-controller="Account" asp-action="Login">
-                            <i class="bi bi-box-arrow-in-right"></i> Zaloguj
-                        </a>
-                        <a class="btn btn-outline-primary my-2 my-sm-0" asp-controller="Account" asp-action="Register">
-                            <i class="bi bi-person-plus"></i> Zarejestruj
-                        </a>
                     </ul>
                 </div>
+                <partial name="_Identity"/>
             </div>
         </nav>
     </header>

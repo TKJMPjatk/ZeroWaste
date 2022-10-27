@@ -1,0 +1,39 @@
+@inject UserManager<ApplicationUser> UserManager;
+@if (User.Identity.IsAuthenticated)
+{
+    <div style="padding-right: 100px">
+        <li class="nav-item dropdown" style="width: 80px">
+            <a class="btn btn-platinum btn-circle" href="#" id="logoutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="False">
+                @(UserManager.GetUserName(User).Substring(0,1).ToUpper() + UserManager.GetUserName(User).Substring(UserManager.GetUserName(User).IndexOf("-")+1, 1).ToUpper())
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="logoutDropdown" style="background: #EDE8E8">
+                <form asp-controller="Account" asp-action="Logout">
+                    <button class="btn btn-platinum-hover width-max">
+                        <i class="bi bi-box-arrow-in-right">Wyloguj</i>
+                    </button>
+                </form>
+            </ul>
+        </li>
+    </div>
+}
+else
+{
+    <div style="padding-right: 100px">
+        <li class="nav-item dropdown" style="width: 80px">
+            <a class="btn btn-platinum btn-circle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="False">
+                <i class="bi bi-person"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="loginDropdown" style="background: #EDE8E8">
+                <a class="btn btn-platinum-hover width-max" asp-controller="Account" asp-action="Login">
+                    <i class="bi bi-box-arrow-in-right"></i> Zaloguj
+                </a>
+                <a class="btn btn-platinum-hover width-max" asp-controller="Account" asp-action="Register">
+                    <i class="bi bi-person-plus"></i> Zarejestruj
+                </a>
+            </ul>
+        </li>
+    </div>
+}
+
+
+
