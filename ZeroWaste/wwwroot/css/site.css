@@ -37,6 +37,10 @@ footer{
   font-style: oblique;
 }
 
+.nav-item{
+  list-style-type: none;
+}
+
 .nav-link, .dropdown-item{
   color: #FFD6D6;
 }
@@ -81,6 +85,7 @@ footer{
 .btn-oxford-blue{
   background-color: #02223C;
 }
+
 .btn-platinum{
   background-color: #EDE8E8;
 }
@@ -103,6 +108,24 @@ footer{
 
 .btn-khaki-web{
   background-color: #D5C3AA;
+}
+
+.btn-circle{
+  width: 45px;
+  height: 45px;
+  border-radius: 35px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-platinum-hover{
+  background-color: #EDE8E8;
+}
+
+.btn-platinum-hover:hover{
+  background-color: #FFD6D6;
 }
 
 .text-oxford-blue{

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data;
+using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.Login;
 using ZeroWaste.Models;
 
@@ -47,5 +48,38 @@ public class AccountController : Controller
     public IActionResult Register()
     {
         return View(new RegisterVm());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(RegisterVm registerVm)
+    {
+        if (!ModelState.IsValid) return View(nameof(Register), registerVm);
+        var user = await _userManager
+            .FindByEmailAsync(registerVm.EmailAddress);
+        if (user != null)
+        {
+            TempData["Error"] = "Użytkownik jest już zarejestrowany";
+            return View(nameof(Register), registerVm);
+        }
+
+        var newUser = new ApplicationUser()
+        {
+            FullName = registerVm.FullName,
+            Email = registerVm.EmailAddress,
+            UserName = registerVm.EmailAddress,
+        };
+        var newUserResponse = await _userManager.CreateAsync(newUser, registerVm.Password);
+        if (newUserResponse.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+        }
+
+        return View("RegisterCompleted");
+    }
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
     }
 }
