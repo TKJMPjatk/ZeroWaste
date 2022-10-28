@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Handlers.AutomatedShoppingList;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.ViewModels.AutomatedShoppingList;
 
 namespace ZeroWaste.Controllers;
-
+[Authorize]
 public class AutomatedShoppingListController : Controller
 {
     private readonly IAutomatedShoppingListHandler _automatedShoppingListHandler;

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Handlers.ShoppingListIngredients;
 using ZeroWaste.Data.Helpers;
@@ -7,6 +8,7 @@ using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
 
+[Authorize]
 public class ShoppingListIngredientsController : Controller
 {
     private readonly IShoppingListIngredientsService _shoppingListIngredientService;

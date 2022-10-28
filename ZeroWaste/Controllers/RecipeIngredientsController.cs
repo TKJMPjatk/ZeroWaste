@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.RecipeService;
 using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
+using Controller = Microsoft.AspNetCore.Mvc.Controller;
+using SelectList = Microsoft.AspNetCore.Mvc.Rendering.SelectList;
 
 namespace ZeroWaste.Controllers
 {
@@ -40,7 +42,7 @@ namespace ZeroWaste.Controllers
             return View();
         }
 
-        [HttpPost]
+        [Microsoft.AspNetCore.Mvc.HttpPost]
         public async Task<IActionResult> Add(NewRecipeIngredient newRecipeIngredient)
         {
             var errors = ModelState.Values
@@ -94,7 +96,7 @@ namespace ZeroWaste.Controllers
             return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId });
         }
 
-        [HttpDelete]
+        [Microsoft.AspNetCore.Mvc.HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             var recipeIngredient = await _recipeIngredientService.GetByIdAsync(id);
