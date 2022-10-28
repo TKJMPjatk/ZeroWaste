@@ -84,8 +84,12 @@
             <div class="col-md-8 offset-2">
 =======
             <div class="col-md-10 offset-1">
+<<<<<<< HEAD
 >>>>>>> d28ea13 (Added identity. Added views to login and register. Hide nav bar item for not authenticated users)
                 <form asp-action="Register">
+=======
+                <form asp-action="Create">
+>>>>>>> 1152392 (Added Authorize to controllers and account handler)
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-md-4">
@@ -116,7 +120,7 @@
                             <label asp-for="Password" class="control-label"></label>
                         </div>
                         <div class="col-md-4">
-                            <input asp-for="Password" class="form-control"></input>
+                            <input asp-for="Password" class="form-control"/>
                         </div>
                         <div class="col-md-4">
                             <span asp-validation-for="Password" class="text-danger"></span>
