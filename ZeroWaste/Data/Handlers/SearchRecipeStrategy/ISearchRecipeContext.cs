@@ -4,5 +4,5 @@ namespace ZeroWaste.Data.Handlers.SearchRecipeStrategy;
 
 public interface ISearchRecipeContext
 {
-    Task<SearchRecipeResultsVm> GetSearchByIngredientsVm(SearchRecipeResultsVm recipeResultsVm);
+    Task<SearchRecipeResultsVm> GetSearchRecipeResultVm(SearchRecipeResultsVm recipeResultsVm);
 }

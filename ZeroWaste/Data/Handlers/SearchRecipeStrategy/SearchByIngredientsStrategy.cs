@@ -2,6 +2,7 @@
 
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
@@ -26,6 +27,12 @@ public class SearchByIngredientsStrategy : ISearchRecipeStrategy
         var recipeResultList = GetRecipeResultsList(recipeList);
         return recipeResultList;
     }
+
+    public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)
+    {
+        return SearchType.Ingredients;
+    }
+
     private List<RecipeResult> GetRecipeResultsList(List<Recipe> list)
     {
         List<RecipeResult> recipeResultsList = new List<RecipeResult>();        

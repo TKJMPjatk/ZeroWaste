@@ -1,4 +1,5 @@
 using AutoMapper;
+using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
@@ -23,6 +24,12 @@ public class SearchByAllStrategy : ISearchRecipeStrategy
         var recipeResultList = GetRecipeResultsList(recipeList);
         return recipeResultList;
     }
+    public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)
+    {
+        if (IsRecipeListNullOrEmpty(searchRecipeResultsVm.IngredientsLists))
+            return SearchType.Categories;
+        return SearchType.Ingredients;
+    }
     private List<RecipeResult> GetRecipeResultsList(List<Recipe> list)
     {
         List<RecipeResult> recipeResultsList = new List<RecipeResult>();        
@@ -32,5 +39,10 @@ public class SearchByAllStrategy : ISearchRecipeStrategy
             recipeResultsList.Add(recipeResult);
         }
         return recipeResultsList;
+    }
+    private bool IsRecipeListNullOrEmpty(List<IngredientForSearch> list)
+    {
+        //Todo: przeniesienie tego do jakieś metody statycznej albo extensions methods
+        return (list == null || (!list.Any()!));
     }
 }

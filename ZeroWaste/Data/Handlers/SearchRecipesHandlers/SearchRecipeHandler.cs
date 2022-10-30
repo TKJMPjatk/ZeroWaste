@@ -17,16 +17,14 @@ public class SearchRecipeHandler : ISearchRecipeHandler
     private readonly ICategoryService _categoryService;
     private readonly IMapper _mapper;
     private IWebHostEnvironment _hostEnvironment;
-    private readonly IRecipesSearchService _recipesSearchService;
 
     private readonly ISearchRecipeContext _searchRecipeContext;
     
-    public SearchRecipeHandler(ISearchRecipeContext searchRecipeContext, ICategoryService categoryService, IMapper mapper, IWebHostEnvironment hostEnvironment, IRecipesSearchService recipesSearchService)
+    public SearchRecipeHandler(ISearchRecipeContext searchRecipeContext, ICategoryService categoryService, IMapper mapper, IWebHostEnvironment hostEnvironment)
     {
         _categoryService = categoryService;
         _mapper = mapper;
         _hostEnvironment = hostEnvironment;
-        _recipesSearchService = recipesSearchService;
         _searchRecipeContext = searchRecipeContext;
     }
     public async Task<List<CategorySearchVm>> GetCategoriesSearchVm()
@@ -71,7 +69,7 @@ public class SearchRecipeHandler : ISearchRecipeHandler
 
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVm(SearchByIngredientsVm searchByIngredientsVm)
     {
-        var results = await _searchRecipeContext.GetSearchByIngredientsVm(new SearchRecipeResultsVm()
+        var results = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
         {
             IngredientsLists = searchByIngredientsVm.SingleIngredientToSearchVm
         });
@@ -79,7 +77,7 @@ public class SearchRecipeHandler : ISearchRecipeHandler
     }
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmByCategory(int categoryId)
     {
-        var results = await _searchRecipeContext.GetSearchByIngredientsVm(new SearchRecipeResultsVm()
+        var results = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
         {
             CategoryId = categoryId
         });
@@ -87,7 +85,7 @@ public class SearchRecipeHandler : ISearchRecipeHandler
     }
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFiltered(SearchRecipeResultsVm searchRecipeResultsVm)
     {
-        var results = await _searchRecipeContext.GetSearchByIngredientsVm(searchRecipeResultsVm);
+        var results = await _searchRecipeContext.GetSearchRecipeResultVm(searchRecipeResultsVm);
         return results;
     }
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm)

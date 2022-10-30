@@ -102,6 +102,7 @@ public class SearchRecipesController : Controller
     {
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
+        
         var resultVm = await _searchRecipeHandler.GetSearchRecipeResultVmByCategory(categoryId);
         return View("SearchResult", resultVm);
     }

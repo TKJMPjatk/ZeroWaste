@@ -1,3 +1,4 @@
+using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Models;
 
@@ -11,4 +12,5 @@ public class SearchRecipeResultsVm
     public int CategoryId { get; set;  }
     public int SortTypeId { get; set; }
     public string PageTitle { get; set; }
+    public SearchType SearchType { get; set; }
 }

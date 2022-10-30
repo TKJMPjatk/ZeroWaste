@@ -1,5 +1,6 @@
 @using ZeroWaste.Data.ViewModels.Recipes;
 @using Microsoft.CodeAnalysis.Scripting
+@using ZeroWaste.Data.Enums
 @using ZeroWaste.Models
 @model SearchRecipeResultsVm
 @{
@@ -17,21 +18,24 @@
     <div class="col-md-6">
         <div class="row">
             <div class="col-md-3">
-                <form asp-action="ReturnToSearchByIngredients">
-                    @if (@Model.IngredientsLists != null)
-                    {
-                        @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
+                @if (Model.SearchType == SearchType.Ingredients)
+                {
+                    <form asp-action="ReturnToSearchByIngredients">
+                        @if (@Model.IngredientsLists != null)
                         {
-                            @Html.HiddenFor(x => x.IngredientsLists[j].Name)
-                            @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
-                            @Html.HiddenFor(x => x.IngredientsLists[j].Index)
+                            @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
+                            {
+                                @Html.HiddenFor(x => x.IngredientsLists[j].Name)
+                                @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
+                                @Html.HiddenFor(x => x.IngredientsLists[j].Index)
+                            }
                         }
-                    }
-                    <input type="submit" class="btn btn-umber text-platinum width-max" value="Edytuj składniki"/>
-                </form>
+                        <input type="submit" class="btn btn-umber text-platinum width-max" value="Edytuj składniki"/>
+                    </form>
+                }
             </div>
             <div class="col-md-3">
-                <button class="btn btn-umber text-white dropdown-toggle" type="button" id="dropdownSort" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <button class="btn btn-umber text-white width-max dropdown-toggle" type="button" id="dropdownSort" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                     Sortowanie
                 </button>
                 <ul class="dropdown-menu recipes-search-options" aria-labelledby="dropdownSort">
@@ -68,6 +72,7 @@
                                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
                                 <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
                                 <input type="hidden" asp-for="SortTypeId" value="@((int)ViewBag.SortTypes[i])"/>
+                                @Html.HiddenFor(x => x.SearchType);
                                 @if (Model.SortTypeId == (int)ViewBag.SortTypes[i])
                                 {
                                     <input type="submit" class="btn btn-khaki-web text-white" value="@ViewBag.SortTypes[i].ToString()"/>
@@ -83,7 +88,7 @@
             </div>
             <div class="col-md-3">
                 <btn class="btn-group">
-                        <button class="btn btn-umber text-white dropdown-toggle" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <button class="btn btn-umber text-white width-max dropdown-toggle" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                             Kategoria
                         </button>
                         <ul class="dropdown-menu recipes-search-options" aria-labelledby="dropdownMenuClickable">
@@ -120,6 +125,7 @@
                                             <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
                                             <input type="hidden" asp-for="CategoryId" value="@Model.CategoryList[i].Id"/>
                                             <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
+                                            @Html.HiddenFor(x => x.SearchType);
                                             @if (Model.CategoryId == Model.CategoryList[i].Id)
                                             {
                                                 <input type="submit" class="btn btn-khaki-web text-white" value="@Model.CategoryList[i].Name"/>
