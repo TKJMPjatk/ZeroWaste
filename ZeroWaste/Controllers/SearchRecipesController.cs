@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ZeroWaste.Data;
@@ -7,6 +8,7 @@ using ZeroWaste.Data.Handlers.SearchRecipesHandlers;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipesSearch;
+using ZeroWaste.Data.Services.Statuses;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.Recipes;
@@ -19,14 +21,14 @@ public class SearchRecipesController : Controller
 {
     private readonly ICategoryService _categoryService;
     private readonly ISearchRecipeHandler _searchRecipeHandler;
-    private readonly IRecipesSearchService _recipesSearchService;
+    private readonly IStatusesService _statusesService;
     private readonly AppDbContext _context;
-    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IRecipesSearchService recipesSearchService)
+    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IStatusesService statusesService)
     {
         _context = context;
         _categoryService = categoryService;
+        _statusesService = statusesService;
         _searchRecipeHandler = searchRecipeHandler;
-        _recipesSearchService = recipesSearchService;
     }
     public IActionResult Index()
     {
@@ -59,7 +61,7 @@ public class SearchRecipesController : Controller
         ViewBag.PageTitle = "Wyszukiwanie po składnikach";
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         SearchRecipeResultsVm searchRecipeResultsVm =
-            await _searchRecipeHandler.GetSearchRecipeResultVm(searchByIngredientsVm);
+            await _searchRecipeHandler.GetSearchRecipeResultVmByIngredients(searchByIngredientsVm);
         return View(searchRecipeResultsVm);
     }
     [HttpPost]
@@ -105,5 +107,13 @@ public class SearchRecipesController : Controller
         
         var resultVm = await _searchRecipeHandler.GetSearchRecipeResultVmByCategory(categoryId);
         return View("SearchResult", resultVm);
+    }
+    public async Task<IActionResult> SearchForConfirm(int statusId = 1)
+    {
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.Statuses = await _statusesService.GetAllAsync();
+        ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
+        var resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmForConfirm(statusId);
+        return View("SearchResult", resultsVm);
     }
 }

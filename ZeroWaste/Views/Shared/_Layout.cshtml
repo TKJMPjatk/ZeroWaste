@@ -28,10 +28,14 @@
                                 <a class="dropdown-item" asp-controller="SearchRecipes" asp-action="Index">Wyszukaj</a>
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Dodaj</a>
+                                    <a class="dropdown-item" asp-controller="Recipes" asp-action="Create">Dodaj</a>
                                     <a class="dropdown-item" asp-controller="Home" asp-action="Index">Edytuj moje</a>
                                     <a class="dropdown-item" asp-controller="Home" asp-action="Index">Ulubione</a>
                                     <a class="dropdown-item" asp-controller="Home" asp-action="Index">Tych nie zjem</a>
+                                    if (User.IsInRole("Admin"))
+                                    {
+                                        <a class="dropdown-item" asp-controller="SearchRecipes" asp-action="SearchForConfirm">Do zatwierdzenia</a>
+                                    }
                                 }
                             </ul>
                         </li>

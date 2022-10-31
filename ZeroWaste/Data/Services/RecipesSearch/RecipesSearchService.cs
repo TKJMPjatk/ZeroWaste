@@ -46,4 +46,15 @@ public class RecipesSearchService : IRecipesSearchService
             .ToListAsync();
         return list;
     }
+
+    public async Task<List<Recipe>> GetByStatus(int statusId)
+    {
+        var list = await _context
+            .Recipes
+            .Include(x => x.RecipesIngredients)
+            .ThenInclude(x => x.Ingredient)
+            .Where(x => x.StatusId == statusId)
+            .ToListAsync();
+        return list;
+    }
 }

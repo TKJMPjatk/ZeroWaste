@@ -9,4 +9,5 @@ public interface ISearchRecipeStrategy
 {
     Task<List<RecipeResult>> SearchRecipe(SearchRecipeResultsVm searchRecipeResultsVm);
     SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm);
+    
 }

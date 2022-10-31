@@ -67,7 +67,7 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         return searchByIngredientsVm;
     }
 
-    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVm(SearchByIngredientsVm searchByIngredientsVm)
+    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmByIngredients(SearchByIngredientsVm searchByIngredientsVm)
     {
         var results = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
         {
@@ -83,6 +83,16 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         });
         return results;
     }
+
+    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmForConfirm(int statusId)
+    {
+        var results = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+        {
+            StatusId = statusId
+        });
+        return results;
+    }
+
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFiltered(SearchRecipeResultsVm searchRecipeResultsVm)
     {
         var results = await _searchRecipeContext.GetSearchRecipeResultVm(searchRecipeResultsVm);

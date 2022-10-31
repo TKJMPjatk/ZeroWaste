@@ -87,59 +87,73 @@
                 </ul>
             </div>
             <div class="col-md-3">
-                <btn class="btn-group">
-                        <button class="btn btn-umber text-white width-max dropdown-toggle" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                            Kategoria
-                        </button>
-                        <ul class="dropdown-menu recipes-search-options" aria-labelledby="dropdownMenuClickable">
-                            @for(int i = 0;i<@Model.CategoryList.Count;i++)
-                            {
-                                <li>
-                                    <form asp-action="SearchByIngredientsFilteredResult">
-                                            @for (int j=0; j<@Model.CategoryList.Count; j++)
-                                            {
-                                                @Html.HiddenFor(x => x.CategoryList[j].Id)
-                                                @Html.HiddenFor(x => x.CategoryList[j].Name)
-                                            }
-                                            @if (@Model.IngredientsLists != null)
-                                            {
-                                                @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
-                                                {
-                                                    @Html.HiddenFor(x => x.IngredientsLists[j].Name)
-                                                    @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
-                                                    @Html.HiddenFor(x => x.IngredientsLists[j].Index)
-                                                }   
-                                            }                                
-                                            @for (int j = 0; j < @Model.RecipesList.Count; j++)
-                                            {
-                                                @Html.HiddenFor(x => x.RecipesList[j].Id)
-                                                @Html.HiddenFor(x => x.RecipesList[j].Title)
-                                                @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
-                                                @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
-                                                @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
-                                                for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
-                                                {
-                                                    @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
-                                                }
-                                            }
-                                            <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
-                                            <input type="hidden" asp-for="CategoryId" value="@Model.CategoryList[i].Id"/>
-                                            <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
-                                            @Html.HiddenFor(x => x.SearchType);
-                                            @if (Model.CategoryId == Model.CategoryList[i].Id)
-                                            {
-                                                <input type="submit" class="btn btn-khaki-web text-white" value="@Model.CategoryList[i].Name"/>
-                                            }
-                                            else
-                                            {
-                                                <input type="submit" class="btn btn-umber text-white" value="@Model.CategoryList[i].Name"/>
-                                            }
-                                    </form>
-                                </li>
-                            }
-                        </ul>
-                </btn>
+                <button class="btn btn-umber text-white width-max dropdown-toggle" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    Kategoria
+                </button>
+                <ul class="dropdown-menu recipes-search-options" aria-labelledby="dropdownMenuClickable">
+                    @for(int i = 0;i<@Model.CategoryList.Count;i++)
+                    {
+                        <li>
+                            <form asp-action="SearchByIngredientsFilteredResult">
+                                @for (int j=0; j<@Model.CategoryList.Count; j++)
+                                {
+                                    @Html.HiddenFor(x => x.CategoryList[j].Id)
+                                    @Html.HiddenFor(x => x.CategoryList[j].Name)
+                                }
+                                @if (@Model.IngredientsLists != null)
+                                {
+                                    @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
+                                    {
+                                        @Html.HiddenFor(x => x.IngredientsLists[j].Name)
+                                        @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
+                                        @Html.HiddenFor(x => x.IngredientsLists[j].Index)
+                                    }   
+                                }                                
+                                @for (int j = 0; j < @Model.RecipesList.Count; j++)
+                                {
+                                    @Html.HiddenFor(x => x.RecipesList[j].Id)
+                                    @Html.HiddenFor(x => x.RecipesList[j].Title)
+                                    @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
+                                    @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
+                                    @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
+                                    for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                    {
+                                        @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                    }
+                                }
+                                <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
+                                <input type="hidden" asp-for="CategoryId" value="@Model.CategoryList[i].Id"/>
+                                <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
+                                @Html.HiddenFor(x => x.SearchType);
+                                @if (Model.CategoryId == Model.CategoryList[i].Id)
+                                {
+                                    <input type="submit" class="btn btn-khaki-web text-white" value="@Model.CategoryList[i].Name"/>
+                                }
+                                else
+                                {
+                                    <input type="submit" class="btn btn-umber text-white" value="@Model.CategoryList[i].Name"/>
+                                }
+                            </form>
+                        </li>
+                    }
+                </ul>
             </div>
+            @if (ViewBag.Statuses != null && User.IsInRole("Admin"))
+            {
+                <div class="col-md-3">
+                    <button class="btn btn-umber text-white width-max dropdown-toggle" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        Status
+                    </button>
+                    <ul class="dropdown-menu recipes-search-options" aria-labelledby="dropdownMenuClickable">
+                    @foreach (var item in ViewBag.Statuses)
+                    {
+                        <li>
+                            <a class="btn btn-umber text text-white" asp-action="SearchForConfirm" asp-route-statusId="@item.Id">@item.Name</a>
+                        </li>
+                    }
+                    </ul>
+                </div>
+            }
         </div>
     </div>
     <br/>
