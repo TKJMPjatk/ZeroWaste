@@ -1,4 +1,5 @@
-﻿using ZeroWaste.Data.Static;
+﻿using Microsoft.EntityFrameworkCore;
+using ZeroWaste.Data.Static;
 
 namespace ZeroWaste.Data.Services.Photo
 {
@@ -38,6 +39,16 @@ namespace ZeroWaste.Data.Services.Photo
             };
             await _context.Photos.AddAsync(photo);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<byte[]> GetFirstByRecipeAsync(int recipeId)
+        {
+            var result = await _context
+                .Photos
+                .Where(x => x.RecipeId == recipeId)
+                .Select(x => x.BinaryPhoto)
+                .FirstOrDefaultAsync();
+            return result;
         }
     }
 }

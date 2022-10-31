@@ -4,5 +4,6 @@
     {
         Task AddNewRecipePhotosAsync(IEnumerable<IFormFile> files, int? recipeId);
         Task AddNewReviewPhotoAsync(IFormFile file, int? reviewId);
+        Task<byte[]> GetFirstByRecipeAsync(int recipeId);
     }
 }

@@ -8,4 +8,5 @@ public class RecipeResult
     public int DifficultyLevel { get; set; }
     public int CategoryId { get; set; }
     public List<string> Ingredients { get; set; }
+    public byte[] Photo { get; set; }
 }

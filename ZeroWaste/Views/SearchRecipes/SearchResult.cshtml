@@ -165,7 +165,16 @@
                     <div class="row g-0">
                         <div class="col-md-12">
                             <div class="card-header bg-recipe-card">
-                                <img src="https://polki.pl/foto/4_3_LARGE/pilau-odswietna-potrawa-1661952.webp" width="100%" alt="Potrawa"/>
+                                @if (item.Photo is null)
+                                {
+                                    <img src="https://polki.pl/foto/4_3_LARGE/pilau-odswietna-potrawa-1661952.webp" width="100%" alt="Potrawa"/>
+                                }
+                                else
+                                {
+                                    var base64 = Convert.ToBase64String(item.Photo);
+                                    var imgSrc = String.Format("data:image/jpeg;base64,{0}", base64);
+                                    <img src="@imgSrc" width="100%" style="height: 250px" alt="...">
+                                }
                             </div>
                             <div class="card-body bg-recipe-card">
                                 <h5 class="card-title">@item.Title</h5>
