@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipeIngredients;
-using ZeroWaste.Data.Services.RecipeService;
+using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
 
@@ -12,9 +12,9 @@ namespace ZeroWaste.Controllers
     {
         private readonly IRecipeIngredientService _recipeIngredientService;
         private readonly IIngredientsService _ingredientService;
-        private readonly IRecipeService _recipeService;
+        private readonly IRecipesService _recipeService;
 
-        public RecipeIngredientsController(IRecipeIngredientService service, IIngredientsService ingredientService, IRecipeService recipeService)
+        public RecipeIngredientsController(IRecipeIngredientService service, IIngredientsService ingredientService, IRecipesService recipeService)
         {
             _recipeIngredientService = service;
             _ingredientService = ingredientService;
