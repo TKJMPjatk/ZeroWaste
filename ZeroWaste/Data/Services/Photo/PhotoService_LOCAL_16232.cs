@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-<<<<<<< .merge_file_UVIgct
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.ExistingRecipe;
 using ZeroWaste.Models;
-=======
-using ZeroWaste.Data.Static;
->>>>>>> .merge_file_286GSA
 
 namespace ZeroWaste.Data.Services.Photo
 {
@@ -67,7 +63,6 @@ namespace ZeroWaste.Data.Services.Photo
             await _context.SaveChangesAsync();
         }
 
-<<<<<<< .merge_file_UVIgct
         public async Task DeleteRecipePhotosAsync(IEnumerable<int> photosIds, int recipeId)
         {
             var recipe = await _context.Recipes
@@ -96,16 +91,6 @@ namespace ZeroWaste.Data.Services.Photo
                 .Where(c => c.RecipeId == recipeId).ToListAsync();
             var mappedPhotos = _mapperHelper.Map(photos);
             return mappedPhotos;
-=======
-        public async Task<byte[]> GetFirstByRecipeAsync(int recipeId)
-        {
-            var result = await _context
-                .Photos
-                .Where(x => x.RecipeId == recipeId)
-                .Select(x => x.BinaryPhoto)
-                .FirstOrDefaultAsync();
-            return result;
->>>>>>> .merge_file_286GSA
         }
     }
 }

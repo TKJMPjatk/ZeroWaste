@@ -1,36 +1,33 @@
-
-
 using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using ZeroWaste.Data.Enums;
+using ZeroWaste.Data.Services.RecipeService;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
-using ZeroWaste.Data.ViewModels.RecipeSearch;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Handlers.SearchRecipeStrategy;
 
-public class SearchByIngredientsStrategy : ISearchRecipeStrategy
+public class SearchForConfirm : ISearchRecipeStrategy
 {
     private readonly IRecipesSearchService _recipesSearchService;
     private readonly IMapper _mapper;
-    public SearchByIngredientsStrategy(IRecipesSearchService recipesSearchService, IMapper mapper)
+    public SearchForConfirm(IRecipesSearchService recipesSearchService, IMapper mapper)
     {
         _recipesSearchService = recipesSearchService;
         _mapper = mapper;
     }
     public async Task<List<RecipeResult>> SearchRecipe(SearchRecipeResultsVm searchRecipeResultsVm)
     {
-        var recipeList = await _recipesSearchService
-            .GetByIngredients(searchRecipeResultsVm.IngredientsLists);
-        var recipeResultList = GetRecipeResultsList(recipeList);
-        return recipeResultList;
+        var list = await _recipesSearchService
+            .GetByStatus(searchRecipeResultsVm.StatusId);
+        var recipeResult = GetRecipeResults(list);
+        return recipeResult;
     }
-    private List<RecipeResult> GetRecipeResultsList(List<Recipe> list)
+    private List<RecipeResult> GetRecipeResults(List<Recipe> recipesList)
     {
-        List<RecipeResult> recipeResultsList = new List<RecipeResult>();        
-        foreach (var item in list)
+        List<RecipeResult> recipeResultsList = new List<RecipeResult>();
+        foreach (var item in recipesList)
         {
             RecipeResult recipeResult = _mapper.Map<RecipeResult>(item);
             recipeResultsList.Add(recipeResult);
@@ -39,6 +36,6 @@ public class SearchByIngredientsStrategy : ISearchRecipeStrategy
     }
     public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)
     {
-        return SearchType.Ingredients;
+        return SearchType.Admin;
     }
 }
