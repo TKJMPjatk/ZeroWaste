@@ -13,5 +13,9 @@ namespace ZeroWaste.Data.Services.Recipes
         Task<Recipe> GetByIdAsync(int id);
         Task<RecipeDropdownVM> GetDropdownsValuesAsync();
         Task<DetailsRecipeVM> GetDetailsByIdAsync(int id);
+        Task<EditRecipeVM> GetEditByIdAsync(int id);
+        Task UpdateAsync(EditRecipeVM editRecipeVM);
+        Task AddLiked(int recipeId);
+        Task AddNotLiked(int recipeId);
     }
 }
