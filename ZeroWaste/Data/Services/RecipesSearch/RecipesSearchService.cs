@@ -57,4 +57,16 @@ public class RecipesSearchService : IRecipesSearchService
             .ToListAsync();
         return list;
     }
+
+    public async Task<List<Recipe>> GetFavouriteByUserIdAsync(string userId)
+    {
+        var listFavourite = await _context.FavouriteRecipes.Where(x => x.UserId == userId).ToListAsync();
+        var list = await _context
+            .Recipes
+            .Include(x => x.RecipesIngredients)
+            .ThenInclude(x => x.Ingredient)
+            .Where(x => listFavourite.Select(x => x.RecipeId).Contains(x.Id) && x.StatusId == 2)
+            .ToListAsync();
+        return list;
+    }
 }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -129,8 +130,18 @@ public class SearchRecipesController : Controller
     {
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.Statuses = await _statusesService.GetAllAsync();
-        ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
+        ViewBag.PageTitle = "Przepisy do zatwierdzenia";
         var resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmForConfirm(statusId);
+        return View("SearchResult", resultsVm);
+    }
+
+    public async Task<IActionResult> SearchFavourite()
+    {
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.Statuses = await _statusesService.GetAllAsync();
+        ViewBag.PageTitle = "Ulubione przepisy";
+        var resultsVm = await _searchRecipeHandler
+                .GetSearchRecipeResultVmFavourite(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         return View("SearchResult", resultsVm);
     }
 }

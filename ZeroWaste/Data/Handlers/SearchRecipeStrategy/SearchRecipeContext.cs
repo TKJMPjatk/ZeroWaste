@@ -42,6 +42,8 @@ public class SearchRecipeContext : ISearchRecipeContext
             _recipeStrategy = new SearchByCategoryStrategy(_recipesSearchService, _mapper);
         else if (recipeResultsVm.StatusId != 0)
             _recipeStrategy = new SearchForConfirm(_recipesSearchService, _mapper);
+        else if (!string.IsNullOrEmpty(recipeResultsVm.UserId))
+            _recipeStrategy = new SearchFavourite(_recipesSearchService, _mapper);
         else
             _recipeStrategy = new SearchByIngredientsStrategy(_recipesSearchService, _mapper);
     }
