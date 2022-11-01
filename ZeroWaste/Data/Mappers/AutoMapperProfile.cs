@@ -23,5 +23,8 @@ public class AutoMapperProfile : Profile
         CreateMap<UnitOfMeasure, ExistingUnitOfMeasure>();
         CreateMap<Ingredient, ExistingIngredient>();
         CreateMap<Recipe, DetailsRecipeVM>();
+        CreateMap<Recipe, EditRecipeVM>();
+        CreateMap<EditRecipeVM, Recipe>();
+        CreateMap<Photo, PhotoVM>();
     }
 }
