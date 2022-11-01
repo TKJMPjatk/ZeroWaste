@@ -1,5 +1,6 @@
-﻿@model NewRecipeVM
+﻿@model EditRecipeVM
 @using ZeroWaste.Data;
+@using ZeroWaste.Data.ViewModels.ExistingRecipe
 @using ZeroWaste.Models
 
 @{
@@ -12,7 +13,7 @@
             <h3>Edycja istniejącego przepisu</h3>
         </p>
 
-        <form class="row" asp-action="Create" asp-controller="Recipes" enctype="multipart/form-data">
+        <form class="row" asp-action="Edit" asp-controller="Recipes" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-md-12 mt-1rem">
@@ -46,28 +47,36 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
 
+            @Html.HiddenFor(model => model.PhotosToDelete)
+            @Html.HiddenFor(model => model.NewPhotosNamesToSkip)
             <div class="col-md-12 mt-1rem">
                 <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcia</label>
                 <input type="file" class="form-control" id="filesUpload" name="filesUpload" multiple />
             </div>
 
-            <div class="col-md-8 offset-1 mt-2rem">
-                <div id="carouselExampleDark" class="carousel carousel-dark slide carousel-hidden" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-                    <div class="carousel-inner" id="photo-carousel">
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+            <div class="col-md-12 mt-2rem">
+                <div class="card-group" id="photosDiv" name="photosDiv">
+                    @for (int i = 0; i < Model.Photos.Count(); i++)
+                    {
+                        var firstImgSrc = "";
+                        var firstItem = Model.Photos[i];
+                        if (firstItem != null && firstItem.BinaryPhoto.Length > 0)
+                        {
+                            var firstBase64 = Convert.ToBase64String(firstItem.BinaryPhoto);
+                            firstImgSrc = String.Format("data:image/jpeg;base64,{0}", firstBase64);
+                        }
+                   
+                        <div class="card">
+                            <img src="@firstImgSrc" class="card-img-top" alt="@Url.Content(Model.PhotoAlt)">
+                            <div class="card-body">
+                               <p>Stare zdjęcie</p>
+                                <hr />
+                                <button class="btn btn-default" type="button" onclick="updatePhotosToDelete(@Model.Photos[i].Id)">
+                                    <i class="bi bi-trash"> </i>
+                                </button>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
 
@@ -79,46 +88,112 @@
 
             <div class="col-md-12 mt-2rem">
                 <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-pale-pink float-left">Powrót</a>
-                <input type="submit" value="Wybierz składniki" class="btn btn-default btn-pale-pink fr" />
+                <input type="submit" value="Zapisz przepis i przejdź do składników" class="btn btn-default btn-pale-pink fr" />
             </div>
         </form>
     </div>
 </div>
 
 @section Scripts{
-    <script>
+    <script type="text/javascript">
         $('#filesUpload').on('change', function () {
-            var files = $('#filesUpload').prop('files');
-            $("#photo-carousel").empty();
+            console.log('dupa');
+            document.getElementById('NewPhotosNamesToSkip').value = "";
+            refreshPhotos();
+        });
 
-            for (var i = 0; i < files.length; i++) {
-                const reader = new FileReader();
-                var file = files[i];
-                reader.readAsBinaryString(file);
+        //$('#btn-default').click(function () {
+        //    var prop = $(this).attr('data-prop');
+        //    var elementVal = document.getElementById('PhotosToDelete').value;
+        //    elementVal = elementVal + '|' + prop;
+        //    document.getElementById('PhotosToDelete').value = elementVal;
+        //    refreshPhotos();
+        //});
 
-                if (i === 0) {
-                    reader.onload = function () {
-                        var div = "<div class=\"carousel-item active\">" +
-                            "<img src = data:image/jpeg;base64," + btoa(reader.result) + " class=\"d-block w-100 carousel-image-standard\" alt = \"...\" >" +
+            
+
+        function updatePhotosToDelete(val) {
+            var elementVal = document.getElementById('PhotosToDelete').value;
+            elementVal = elementVal + val + '|';
+            document.getElementById('PhotosToDelete').value = elementVal;
+            refreshPhotos();
+            //and probably call document.forms[0].submit();
+        };
+
+        function updateNewPhotosNamesToSkip(val) {
+            var elementVal = document.getElementById('NewPhotosNamesToSkip').value;
+            elementVal = elementVal + val + '|';
+            document.getElementById('NewPhotosNamesToSkip').value = elementVal;
+            refreshPhotos();
+        };
+
+        function refreshPhotos() {
+            var newFiles = $('#filesUpload').prop('files');
+            for (var i = 0; i < newFiles.length; i++) {
+                console.log(newFiles[i]);
+            }
+            var photosToDeleteStr = document.getElementById('PhotosToDelete').value;
+            var photosToDeleteArr = photosToDeleteStr.split('|');
+
+            var newPhotosToSkipStr = document.getElementById('NewPhotosNamesToSkip').value;
+            var newPhotosToSkipArr = newPhotosToSkipStr.split('|');
+
+            var oldPhotos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Photos));
+            console.log(oldPhotos);
+            console.log(photosToDeleteStr);
+            console.log(newPhotosToSkipStr);
+
+            $("#photosDiv").empty();
+            for (var j = 0; j < oldPhotos.length; j++) {
+                console.log(oldPhotos[j]);
+                if (!photosToDeleteArr.includes(oldPhotos[j].Id.toString())) {
+                    //var firstImgAlt = @Url.Content(Model.PhotoAlt);
+                    //var firstBase64 = Convert.ToBase64String(oldPhotos[j].BinaryPhoto);
+                    //var firstImgSrc = String.Format("data:image/jpeg;base64,{0}", firstBase64);
+                    //const reader = new FileReader();
+                    //reader.readAsBinaryString(oldPhotos[j].BinaryPhoto);
+                    //reader.onload = function () {
+                        var div = "<div class=\"card\">" +
+                            "<img src= data:image/jpeg;base64," + oldPhotos[j].BinaryPhoto + " class=\"card-img-top\">" +
+                        "<div class=\"card-body\" >" +
+                            "<p>Stare zdjęcie</p>" +
+                            "<hr/>" +
+                            "<button class=\"btn btn-default\" type = \"button\" onclick = \"updatePhotosToDelete(" + oldPhotos[j].Id + ")\">" +
+                            "<i class=\"bi bi-trash\"></i>" +
+                            "</button>" +
+                            "</div>"+
                             "</div>";
-
-                        $("#photo-carousel").append(div);
-                    }
+                        $("#photosDiv").append(div);
+                    //}
                 }
-                else {
-                    reader.onload = function () {
-                        var div = "<div class=\"carousel-item\">" +
-                            "<img src = data:image/jpeg;base64," + btoa(reader.result) + " class=\"d-block w-100 carousel-image-standard\" alt = \"...\" >" +
-                            "</div>";
+            }
+            if (typeof newFiles != 'undefined') {
 
-                        $("#photo-carousel").append(div);
+                for (var i = 0; i < newFiles.length; i++) {
+                    const reader = new FileReader();
+                    var file = newFiles[i];
+                    console.log(file.name);
+                    var namee = file.name;
+                    reader.readAsBinaryString(file);
+
+                    if (!newPhotosToSkipArr.includes(namee)) {
+
+                        reader.onload = function () {
+                            var div = "<div class=\"card\">" +
+                                "<img src= data:image/jpeg;base64," + btoa(reader.result) + " class=\"card-img-top\">" +
+                            "<div class=\"card-body\" >" +
+                                "<p>Nowe zdjęcie</p>" +
+                                "<hr/>" +
+                                "<button class=\"btn btn-default\" type = \"button\" onclick = \"updateNewPhotosNamesToSkip('" + namee + "')\" >" +
+                                "<i class=\"bi bi-trash\"></i>" +
+                                "</button>" +
+                                "</div>"+
+                                "</div>";
+                            $("#photosDiv").append(div);
+                        }
                     }
                 }
             }
-
-            var myCarousel = document.querySelector('#carouselExampleDark')
-            myCarousel.classList.remove('carousel-hidden')
-            var carousel = new bootstrap.Carousel(myCarousel)
-        });
+        };
     </script>
 }

@@ -7,6 +7,8 @@ namespace ZeroWaste.Data.Helpers
     public interface IRecipeMapperHelper
     {
         public Recipe Map(NewRecipeVM newRecipeVM);
-        public DetailsRecipeVM Map(Recipe recipe);
+        public DetailsRecipeVM MapToDetails(Recipe recipe);
+        public EditRecipeVM MapToEdit(Recipe recipe);
+        public Recipe MapFromEdit (EditRecipeVM editRecipeVM);
     }
 }

@@ -30,5 +30,8 @@ public class AutoMapperProfile : Profile
                  src => src.RecipesIngredients
                      .Select(x => x.Ingredient.Name)
                      .ToList()));
+        CreateMap<Recipe, EditRecipeVM>();
+        CreateMap<EditRecipeVM, Recipe>();
+        CreateMap<Photo, PhotoVM>();
     }
 }

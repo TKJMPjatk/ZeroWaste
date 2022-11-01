@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Services.Photo;
-using ZeroWaste.Data.Services.RecipeService;
+using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.Reviews;
 using ZeroWaste.Data.ViewModels.ExistingRecipe;
 
@@ -10,9 +10,9 @@ namespace ZeroWaste.Controllers
     {
         private readonly IReviewsService _reviewsService;
         private readonly IPhotoService _photoService;
-        private readonly IRecipeService _recipeService;
+        private readonly IRecipesService _recipeService;
 
-        public ReviewsController(IReviewsService reviewsService, IPhotoService photoService, IRecipeService recipeService)
+        public ReviewsController(IReviewsService reviewsService, IPhotoService photoService, IRecipesService recipeService)
         {
             _reviewsService = reviewsService;
             _photoService = photoService;
@@ -37,7 +37,7 @@ namespace ZeroWaste.Controllers
             int reviewId = await _reviewsService.AddNewReturnsIdAsync(details.NewReviewRecipeId, details.NewReviewStars, details.NewReviewDescription);
             if (filesUpload is not null)
             {
-                await _photoService.AddNewReviewPhotoAsync(filesUpload, reviewId);
+                await _photoService.AddReviewPhotoAsync(filesUpload, reviewId);
             }
             return RedirectToAction("Details","Recipes",new { id = details.NewReviewRecipeId });
         }

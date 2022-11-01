@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.ViewModels.ExistingRecipe
 {
@@ -20,7 +21,9 @@ namespace ZeroWaste.Data.ViewModels.ExistingRecipe
         [Display(Name = "Kategoria przepisu")]
         [Required(ErrorMessage = "Wskaż kategorię")]
         public int CategoryId { get; set; }
-
-        public IEnumerable<byte[]> Images { get; set; }
+        public List<PhotoVM> Photos { get; set; }
+        public string PhotosToDelete { get; set; }
+        public string NewPhotosNamesToSkip { get; set; }
+        public string PhotoAlt { get; set; } = $"/images/Review/alt.png";
     }
 }
