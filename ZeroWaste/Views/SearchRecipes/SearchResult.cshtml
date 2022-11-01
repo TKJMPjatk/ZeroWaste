@@ -1,6 +1,7 @@
 @using ZeroWaste.Data.ViewModels.Recipes;
 @using Microsoft.CodeAnalysis.Scripting
 @using ZeroWaste.Data.Enums
+@using ZeroWaste.Data.Static
 @using ZeroWaste.Models
 @model SearchRecipeResultsVm
 @{
@@ -11,16 +12,16 @@
         <div class="col-md-5">
             <h3>@ViewBag.PageTitle</h3>
         </div>
-        <div class="col-md-3 offset-2">
-            <input class="width-max" type="text" placeholder="Wpisz szukaną frazę"/>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-md-3">
-                @if (Model.SearchType == SearchType.Ingredients)
-                {
-                    <form asp-action="ReturnToSearchByIngredients">
+        <div class="col-md-5 offset-1">
+            <form asp-action="SearchRecipeSentenceResult">
+                <div class="row">
+                    <div class="col-md-10">
+                        <input class="width-max" type="text" asp-for="SearchSentence" placeholder="Wpisz szukaną frazę"/>
+                        @for (int j = 0; j < @Model.CategoryList.Count; j++)
+                        {
+                            @Html.HiddenFor(x => x.CategoryList[j].Id)
+                            @Html.HiddenFor(x => x.CategoryList[j].Name)
+                        }
                         @if (@Model.IngredientsLists != null)
                         {
                             @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
@@ -30,10 +31,48 @@
                                 @Html.HiddenFor(x => x.IngredientsLists[j].Index)
                             }
                         }
-                        <input type="submit" class="btn btn-umber text-platinum width-max" value="Edytuj składniki"/>
-                    </form>
-                }
-            </div>
+                        @for (int j = 0; j < @Model.RecipesList.Count; j++)
+                        {
+                            @Html.HiddenFor(x => x.RecipesList[j].Id)
+                            @Html.HiddenFor(x => x.RecipesList[j].Title)
+                            @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
+                            @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
+                            @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
+                            for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                            {
+                                @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                            }
+                        }
+                        @if (!(Model.RecipesListBase.IsRecipeResultNullOrEmpty()))
+                        {
+                            @for (int j = 0; j < @Model.RecipesListBase.Count; j++)
+                            {
+                                @Html.HiddenFor(x => x.RecipesListBase[j].Id)
+                                @Html.HiddenFor(x => x.RecipesListBase[j].Title)
+                                @Html.HiddenFor(x => x.RecipesListBase[j].EstimatedTime)
+                                @Html.HiddenFor(x => x.RecipesListBase[j].DifficultyLevel)
+                                @Html.HiddenFor(x => x.RecipesListBase[j].CategoryId)
+                                for (int k = 0; k < @Model.RecipesListBase[j].Ingredients.Count(); k++)
+                                {
+                                    @Html.HiddenFor(x => x.RecipesListBase[j].Ingredients[k])
+                                }
+                            }
+                        }
+                        <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
+                        <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+                        <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
+                        @Html.HiddenFor(x => x.SearchType)
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr/>
+    <div class="col-md-6">
+        <div class="row">
             <div class="col-md-3">
                 <button class="btn btn-umber text-white width-max dropdown-toggle" type="button" id="dropdownSort" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                     Sortowanie
@@ -42,7 +81,7 @@
                     @for(int i = 0;i<ViewBag.SortTypes.Count; i++)
                     {
                         <li>
-                            <form asp-action="SearchRecipeSortedResult">
+                            <form asp-action="SearchRecipesSortedResult">
                                 @for (int j = 0; j < @Model.CategoryList.Count; j++)
                                 {
                                     @Html.HiddenFor(x => x.CategoryList[j].Id)
@@ -94,7 +133,7 @@
                     @for(int i = 0;i<@Model.CategoryList.Count;i++)
                     {
                         <li>
-                            <form asp-action="SearchByIngredientsFilteredResult">
+                            <form asp-action="SearchRecipesFilteredResult">
                                 @for (int j=0; j<@Model.CategoryList.Count; j++)
                                 {
                                     @Html.HiddenFor(x => x.CategoryList[j].Id)
@@ -137,6 +176,23 @@
                         </li>
                     }
                 </ul>
+            </div>
+            <div class="col-md-3">
+                @if (Model.SearchType == SearchType.Ingredients)
+                {
+                    <form asp-action="ReturnToSearchByIngredients">
+                                    @if (@Model.IngredientsLists != null)
+                                    {
+                                        @for (int j = 0; j < @Model.IngredientsLists.Count; j++)
+                                        {
+                                            @Html.HiddenFor(x => x.IngredientsLists[j].Name)
+                                            @Html.HiddenFor(x => x.IngredientsLists[j].Quantity)
+                                            @Html.HiddenFor(x => x.IngredientsLists[j].Index)
+                                        }
+                                    }
+                                    <input type="submit" class="btn btn-umber text-platinum width-max" value="Edytuj składniki"/>
+                                </form>
+                }
             </div>
             @if (ViewBag.Statuses != null && User.IsInRole("Admin"))
             {

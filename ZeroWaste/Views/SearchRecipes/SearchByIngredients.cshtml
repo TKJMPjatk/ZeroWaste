@@ -1,7 +1,7 @@
 @model SearchByIngredientsVm
 @using ZeroWaste.Data.ViewModels.RecipeSearch;
 @{
-    ViewData["Title"] = "Wyszukaj po składnikach";
+    ViewData["Title"] = "Szukaj po składnikach";
 }
 <div class="view-search">
     <div class="col-md-4 offset-4">
@@ -39,7 +39,7 @@
         <br/>
         <div class="row">
             <div class="col-md-6 offset-3">
-                <form asp-action="SearchResult">
+                <form asp-action="SearchByIngredientsResult">
                     @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
                     {
                         @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
