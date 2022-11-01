@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ZeroWaste.Data.Static;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services.ShoppingLists;
@@ -40,7 +42,6 @@ public class ShoppingListsService : IShoppingListsService
 
     public async Task<ShoppingList> CreateAsync(ShoppingList shoppingList)
     {
-        shoppingList.UserId = "6f33d3dd-1f47-4247-a517-1fd7fed664bc";
         await _context.ShoppingLists.AddAsync(shoppingList);
         //Todo: Identity
         await _context.SaveChangesAsync();

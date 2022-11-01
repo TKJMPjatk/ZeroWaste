@@ -12,6 +12,6 @@ public class AdminSearchRecipesController : Controller
         {
             SearchType = SearchType.Admin
         };
-        return RedirectToAction("SearchResult", "SearchRecipes", resultsVm);
+        return RedirectToAction("SearchByIngredients", "SearchRecipes", resultsVm);
     }
 }
