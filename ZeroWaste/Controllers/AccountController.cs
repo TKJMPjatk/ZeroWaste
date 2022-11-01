@@ -55,4 +55,11 @@ public class AccountController : Controller
         await _accountHandler.Signout();
         return RedirectToAction("Index", "Home");
     }
+
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword()
+    {
+        //skąd wziąć zalogowanego użytkownika?
+        return RedirectToAction("Index", "Home");
+    }
 }
