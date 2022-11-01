@@ -103,13 +103,13 @@ public class RecipesController : Controller
     public async Task<IActionResult> AddLiked(int recipeId)
     {
         await _recipesService.AddLiked(recipeId);
-        return RedirectToAction("Details", "Recipe", new { id = recipeId });
+        return RedirectToAction("Details", "Recipes", new { id = recipeId });
     }
 
     [HttpPost]
     public async Task<IActionResult> AddNotLiked(int recipeId)
     {
         await _recipesService.AddNotLiked(recipeId);
-        return RedirectToAction("Details", "Recipe", new { id = recipeId });
+        return RedirectToAction("Details", "Recipes", new { id = recipeId });
     }
 }

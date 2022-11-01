@@ -1,6 +1,5 @@
 using AutoMapper;
 using ZeroWaste.Data.Enums;
-using ZeroWaste.Data.Services.RecipeService;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
