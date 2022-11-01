@@ -1,8 +1,12 @@
-﻿namespace ZeroWaste.Data.Services.Photo
+﻿using ZeroWaste.Data.ViewModels.ExistingRecipe;
+
+namespace ZeroWaste.Data.Services.Photo
 {
     public interface IPhotoService
     {
-        Task AddNewRecipePhotosAsync(IEnumerable<IFormFile> files, int? recipeId);
-        Task AddNewReviewPhotoAsync(IFormFile file, int? reviewId);
+        Task AddRecipePhotosAsync(IEnumerable<IFormFile> files, int? recipeId);
+        Task AddReviewPhotoAsync(IFormFile file, int? reviewId);
+        Task DeleteRecipePhotosAsync(IEnumerable<int> ids, int recipeId);
+        Task<IEnumerable<PhotoVM>> GetPhotoVMAsync(int recipeId);
     }
 }
