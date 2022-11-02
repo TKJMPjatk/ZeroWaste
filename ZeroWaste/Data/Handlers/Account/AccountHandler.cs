@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.Login;
 using ZeroWaste.Models;
@@ -47,5 +48,16 @@ public class AccountHandler : IAccountHandler
     public async Task Signout()
     {
         await _signInManager.SignOutAsync();
+    }
+
+    public async Task<IdentityResult> ChangePasswordAsync(ApplicationUser applicationUser, string oldPassword, string newPassword)
+    {
+        var result = await _userManager.ChangePasswordAsync(applicationUser, oldPassword, newPassword);
+        return result;
+    }
+
+    public async Task<ApplicationUser> GetByIdAsync(string id)
+    {
+        return await _userManager.FindByIdAsync(id);
     }
 }

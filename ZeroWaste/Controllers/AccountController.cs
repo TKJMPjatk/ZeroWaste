@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ZeroWaste.Data;
+using System.Security.Claims;
 using ZeroWaste.Data.Handlers.Account;
+using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.Login;
-using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
 
@@ -56,10 +55,36 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    [HttpPost]
     public async Task<IActionResult> ChangePassword()
     {
-        //skąd wziąć zalogowanego użytkownika?
+        return View(new ChangePasswordVM());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(changePasswordVM);
+        }
+
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        var user = await _accountHandler.GetByIdAsync(userId);
+        if (user is null)
+        {
+            TempData["Error"] = "Użytkownik nie istnieje";
+            return View(changePasswordVM);
+        }
+
+        var changePasswordResult = await _accountHandler.ChangePasswordAsync(user, changePasswordVM.OldPassword, changePasswordVM.NewPassword);
+
+        if(Equals(changePasswordResult.Succeeded, false))
+        {
+            string errors = string.Join(" ", changePasswordResult.Errors.Select(e => e.Code.TranslateErrorCodeToPolish()));
+            TempData["Error"] = errors;
+            return View(changePasswordVM);
+        }
+
         return RedirectToAction("Index", "Home");
     }
 }

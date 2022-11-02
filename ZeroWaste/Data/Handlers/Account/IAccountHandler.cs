@@ -11,4 +11,6 @@ public interface IAccountHandler
     Task<SignInResult> SignIn(ApplicationUser applicationUser, string password);
     Task CreateAsync(RegisterVm registerVm);
     Task Signout();
+    Task<IdentityResult> ChangePasswordAsync(ApplicationUser applicationUser, string oldPassword, string newPassword);
+    Task<ApplicationUser> GetByIdAsync(string id);
 }
