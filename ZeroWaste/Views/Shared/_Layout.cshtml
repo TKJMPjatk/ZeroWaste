@@ -29,9 +29,9 @@
                                 @if (User.Identity.IsAuthenticated)
                                 {
                                     <a class="dropdown-item" asp-controller="Recipes" asp-action="Create">Dodaj</a>
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Edytuj moje</a>
+                                    <a class="dropdown-item" asp-controller="SearchRecipes" asp-action="SearchMineToEdit">Edytuj moje</a>
                                     <a class="dropdown-item" asp-controller="SearchRecipes" asp-action="SearchFavourite">Ulubione</a>
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Tych nie zjem</a>
+                                    <a class="dropdown-item" asp-controller="SearchRecipes" asp-action="SearchHated">Tych nie zjem</a>
                                     if (User.IsInRole("Admin"))
                                     {
                                         <a class="dropdown-item" asp-controller="SearchRecipes" asp-action="SearchForConfirm">Do zatwierdzenia</a>

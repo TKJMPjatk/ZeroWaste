@@ -149,7 +149,6 @@ public class SearchRecipesController : Controller
         });
         return View("SearchResult", resultsVm);
     }
-
     public async Task<IActionResult> SearchFavourite()
     {
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
@@ -161,5 +160,29 @@ public class SearchRecipesController : Controller
                     SearchType = SearchType.Favourite
                 });
         return View("SearchResult", resultsVm);
+    }
+    public async Task<IActionResult> SearchHated()
+    {
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.Statuses = await _statusesService.GetAllAsync();
+        ViewBag.PageTitle = "Nie ulubione przepisy";
+        var resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+        {
+            UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+            SearchType = SearchType.Hated
+        });
+        return View("SearchResult", resultsVm);
+    }
+    public async Task<IActionResult> SearchMineToEdit()
+    {
+        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.Statuses = await _statusesService.GetAllAsync();
+        ViewBag.PageTitle = "Moje przepisy";
+        var resultVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+        {
+            UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+            SearchType = SearchType.EditMine
+        });
+        return View("SearchResult", resultVm);
     }
 }

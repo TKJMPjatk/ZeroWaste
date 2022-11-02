@@ -55,6 +55,8 @@ public class SearchRecipeContext : ISearchRecipeContext
             _recipeStrategy = new SearchForConfirm(_recipesSearchService, _mapper);
         else if (recipeResultsVm.SearchType == SearchType.Favourite)
             _recipeStrategy = new SearchFavourite(_recipesSearchService, _mapper);
+        else if (recipeResultsVm.SearchType == SearchType.Hated)
+            _recipeStrategy = new SearchFavourite(_recipesSearchService, _mapper);
         else
             _recipeStrategy = new SearchByIngredientsStrategy(_recipesSearchService, _mapper);
     }

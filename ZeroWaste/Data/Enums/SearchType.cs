@@ -6,5 +6,7 @@ public enum SearchType
     Ingredients,
     Admin,
     Favourite,
-    IngredientsFiltered
+    Hated,
+    IngredientsFiltered,
+    EditMine
 }
