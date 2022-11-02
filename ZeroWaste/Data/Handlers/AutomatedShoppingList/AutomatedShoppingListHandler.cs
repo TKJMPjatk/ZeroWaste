@@ -17,13 +17,14 @@ public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
         _shoppingListsService = shoppingListsService;
         _context = context;
     }
-    public async Task<ShoppingList> AddNewShoppingList(int recipeId)
+    public async Task<ShoppingList> AddNewShoppingList(int recipeId, string userId)
     {
         var recipe = await GetRecipe(recipeId);
         ShoppingList shoppingList = new ShoppingList()
         {
             Title = recipe.Title,
-            Note = $"Wygenerowane automatycznie z przepisu {recipe.Title}"
+            Note = $"Wygenerowane automatycznie z przepisu {recipe.Title}",
+            UserId = userId
         };
         shoppingList = await AddShoppingList(shoppingList);
         var ingredientsList = await GetRecipeIngredientsForRecipe(recipeId);
