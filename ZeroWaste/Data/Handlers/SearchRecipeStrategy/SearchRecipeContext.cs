@@ -25,8 +25,6 @@ public class SearchRecipeContext : ISearchRecipeContext
         _photoService = photoService;
         _mapper = mapper;
     }
-
-
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVm(SearchRecipeResultsVm recipeResultsVm)
     {
         SetRecipeStrategy(recipeResultsVm);
@@ -46,23 +44,18 @@ public class SearchRecipeContext : ISearchRecipeContext
     private void SetRecipeStrategy(SearchRecipeResultsVm recipeResultsVm)
     {
         if (recipeResultsVm.SearchType == SearchType.Ingredients)
-            _recipeStrategy = new SearchByIngredientsStrategy(_recipesSearchService, _mapper);
+            _recipeStrategy = new SearchByIngredientsStrategy(_recipesSearchService);
         else if (recipeResultsVm.SearchType == SearchType.Categories)
-            _recipeStrategy = new SearchByCategoryStrategy(_recipesSearchService, _mapper);
+            _recipeStrategy = new SearchByCategoryStrategy(_recipesSearchService);
         else if (recipeResultsVm.SearchType == SearchType.IngredientsFiltered)
-            _recipeStrategy = new SearchByAllStrategy(_recipesSearchService, _mapper);
+            _recipeStrategy = new SearchByAllStrategy(_recipesSearchService);
         else if (recipeResultsVm.SearchType == SearchType.Admin)
-            _recipeStrategy = new SearchForConfirm(_recipesSearchService, _mapper);
+            _recipeStrategy = new SearchForConfirm(_recipesSearchService);
         else if (recipeResultsVm.SearchType == SearchType.Favourite)
-            _recipeStrategy = new SearchFavourite(_recipesSearchService, _mapper);
+            _recipeStrategy = new SearchFavourite(_recipesSearchService);
         else if (recipeResultsVm.SearchType == SearchType.Hated)
-            _recipeStrategy = new SearchFavourite(_recipesSearchService, _mapper);
-        else
-            _recipeStrategy = new SearchByIngredientsStrategy(_recipesSearchService, _mapper);
-    }
-    private bool IsRecipeListNullOrEmpty(List<IngredientForSearch> list)
-    {
-        //Todo: przeniesienie tego do jakieś metody statycznej albo extensions methods
-        return (list == null || (!list.Any()!));
+            _recipeStrategy = new SearchFavourite(_recipesSearchService);
+        else if (recipeResultsVm.SearchType == SearchType.EditMine)
+            _recipeStrategy = new SearchMineToEdit(_recipesSearchService);
     }
 }

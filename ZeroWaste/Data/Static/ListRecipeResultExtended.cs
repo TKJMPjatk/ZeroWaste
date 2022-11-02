@@ -2,7 +2,7 @@ using ZeroWaste.Data.Structs;
 
 namespace ZeroWaste.Data.Static;
 
-public static class IsNullOrEmpty
+public static class ListRecipeResultExtended
 {
     public static bool IsRecipeResultNullOrEmpty(this List<RecipeResult> recipeResults)
     {
