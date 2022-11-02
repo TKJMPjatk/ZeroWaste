@@ -1,20 +1,15 @@
 using System.Security.Claims;
 using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Handlers.SearchRecipesHandlers;
-using ZeroWaste.Data.Helpers;
+using ZeroWaste.Data.Handlers.SearchRecipeStrategy;
 using ZeroWaste.Data.Services;
-using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Services.Statuses;
 using ZeroWaste.Data.Static;
-using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
-using ZeroWaste.Data.ViewModels.Recipes;
 using ZeroWaste.Data.ViewModels.RecipeSearch;
 using ZeroWaste.Models;
 
@@ -25,13 +20,15 @@ public class SearchRecipesController : Controller
     private readonly ICategoryService _categoryService;
     private readonly ISearchRecipeHandler _searchRecipeHandler;
     private readonly IStatusesService _statusesService;
+    private readonly ISearchRecipeContext _searchRecipeContext;
     private readonly AppDbContext _context;
-    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IStatusesService statusesService)
+    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IStatusesService statusesService, ISearchRecipeContext searchRecipeContext)
     {
         _context = context;
         _categoryService = categoryService;
         _statusesService = statusesService;
         _searchRecipeHandler = searchRecipeHandler;
+        _searchRecipeContext = searchRecipeContext;
     }
     public IActionResult Index()
     {
@@ -68,8 +65,12 @@ public class SearchRecipesController : Controller
     {
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
-        
-        var resultVm = await _searchRecipeHandler.GetSearchRecipeResultVmByCategory(categoryId);
+
+        var resultVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+        {
+            CategoryId = categoryId,
+            SearchType = SearchType.Categories
+        });
         return View("SearchResult", resultVm);
     }
     [Microsoft.AspNetCore.Mvc.HttpPost]
@@ -78,19 +79,29 @@ public class SearchRecipesController : Controller
         ViewBag.PageTitle = "Wyszukiwanie po składnikach";
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         SearchRecipeResultsVm searchRecipeResultsVm =
-            await _searchRecipeHandler.GetSearchRecipeResultVmByIngredients(searchByIngredientsVm);
+            await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+            {
+                IngredientsLists = searchByIngredientsVm.SingleIngredientToSearchVm,
+                SearchType = SearchType.Ingredients
+            });
         return View("SearchResult", searchRecipeResultsVm);
     }
     [Microsoft.AspNetCore.Mvc.HttpPost]
     public async Task<IActionResult> SearchRecipesFilteredResult(SearchRecipeResultsVm resultsVm)
     {
+        //Todo: Ogarnąć to
         ViewBag.PageTitle = resultsVm.PageTitle;
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
-        resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmFiltered(resultsVm);
-        if (resultsVm.SortTypeId != 0)
+        if(resultsVm.IngredientsLists != null || resultsVm.IngredientsLists.Count != 0)
         {
-            var result = await _searchRecipeHandler.GetSearchRecipeResultVmSorted(resultsVm);
+            resultsVm.SearchType = SearchType.IngredientsFiltered;
+            resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
         }
+        else
+        {
+            resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
+        }
+        //resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmFiltered(resultsVm);
         return View("SearchResult", resultsVm);
     }
 
@@ -131,7 +142,11 @@ public class SearchRecipesController : Controller
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.Statuses = await _statusesService.GetAllAsync();
         ViewBag.PageTitle = "Przepisy do zatwierdzenia";
-        var resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmForConfirm(statusId);
+        var resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+        {
+            StatusId = statusId,
+            SearchType = SearchType.Admin
+        });
         return View("SearchResult", resultsVm);
     }
 
@@ -140,8 +155,11 @@ public class SearchRecipesController : Controller
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.Statuses = await _statusesService.GetAllAsync();
         ViewBag.PageTitle = "Ulubione przepisy";
-        var resultsVm = await _searchRecipeHandler
-                .GetSearchRecipeResultVmFavourite(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+                {
+                    UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                    SearchType = SearchType.Favourite
+                });
         return View("SearchResult", resultsVm);
     }
 }

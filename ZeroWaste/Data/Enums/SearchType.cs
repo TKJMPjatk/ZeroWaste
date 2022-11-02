@@ -5,5 +5,6 @@ public enum SearchType
     Categories,
     Ingredients,
     Admin,
-    Favourite
+    Favourite,
+    IngredientsFiltered
 }

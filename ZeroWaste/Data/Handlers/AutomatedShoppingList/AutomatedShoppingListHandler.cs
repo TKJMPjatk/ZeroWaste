@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data.Services.RecipeService;
-using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Models;
 

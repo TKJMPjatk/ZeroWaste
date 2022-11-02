@@ -42,7 +42,7 @@ public class RecipesSearchService : IRecipesSearchService
             .Recipes
             .Include(x => x.RecipesIngredients)
             .ThenInclude(x=>x.Ingredient)
-            .Where(x => x.CategoryId == categoryId)
+            .Where(x => x.CategoryId == categoryId && x.StatusId == 1)
             .ToListAsync();
         return list;
     }
@@ -65,7 +65,7 @@ public class RecipesSearchService : IRecipesSearchService
             .Recipes
             .Include(x => x.RecipesIngredients)
             .ThenInclude(x => x.Ingredient)
-            .Where(x => listFavourite.Select(x => x.RecipeId).Contains(x.Id) && x.StatusId == 2)
+            .Where(x => listFavourite.Select(x => x.RecipeId).Contains(x.Id) && x.StatusId == 1)
             .ToListAsync();
         return list;
     }

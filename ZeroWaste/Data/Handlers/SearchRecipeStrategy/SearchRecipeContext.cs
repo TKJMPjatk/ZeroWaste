@@ -1,6 +1,7 @@
 using AutoMapper;
 using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
@@ -15,14 +16,16 @@ public class SearchRecipeContext : ISearchRecipeContext
     private readonly IRecipesSearchService _recipesSearchService;
     private readonly ICategoryService _categoryService;
     private readonly IMapper _mapper;
-
-    public SearchRecipeContext(IRecipesSearchService recipesSearchService, ICategoryService categoryService,
+    private readonly IPhotoService _photoService;
+    public SearchRecipeContext(IRecipesSearchService recipesSearchService, ICategoryService categoryService, IPhotoService photoService,
         IMapper mapper)
     {
         _recipesSearchService = recipesSearchService;
         _categoryService = categoryService;
+        _photoService = photoService;
         _mapper = mapper;
     }
+
 
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVm(SearchRecipeResultsVm recipeResultsVm)
     {
@@ -30,19 +33,27 @@ public class SearchRecipeContext : ISearchRecipeContext
         recipeResultsVm.RecipesList = await _recipeStrategy.SearchRecipe(recipeResultsVm);
         recipeResultsVm.CategoryList = await _categoryService.GetAllAsync();
         recipeResultsVm.SearchType = _recipeStrategy.GetSearchType(recipeResultsVm);
+        await FillRecipesWithPhotos(recipeResultsVm.RecipesList);
         return recipeResultsVm;
+    }
+    private async Task FillRecipesWithPhotos(List<RecipeResult> recipeResults)
+    {
+        foreach (var recipe in recipeResults)
+        {
+            recipe.Photo =  await _photoService.GetFirstByRecipeAsync(recipe.Id);
+        }
     }
     private void SetRecipeStrategy(SearchRecipeResultsVm recipeResultsVm)
     {
-        if ((!IsRecipeListNullOrEmpty(recipeResultsVm.IngredientsLists)) && recipeResultsVm.CategoryId == 0)
+        if (recipeResultsVm.SearchType == SearchType.Ingredients)
             _recipeStrategy = new SearchByIngredientsStrategy(_recipesSearchService, _mapper);
-        else if (IsRecipeListNullOrEmpty(recipeResultsVm.IngredientsLists) && recipeResultsVm.CategoryId != 0)
+        else if (recipeResultsVm.SearchType == SearchType.Categories)
             _recipeStrategy = new SearchByCategoryStrategy(_recipesSearchService, _mapper);
-        else if ((!IsRecipeListNullOrEmpty(recipeResultsVm.IngredientsLists)) && recipeResultsVm.CategoryId != 0)
-            _recipeStrategy = new SearchByCategoryStrategy(_recipesSearchService, _mapper);
-        else if (recipeResultsVm.StatusId != 0)
+        else if (recipeResultsVm.SearchType == SearchType.IngredientsFiltered)
+            _recipeStrategy = new SearchByAllStrategy(_recipesSearchService, _mapper);
+        else if (recipeResultsVm.SearchType == SearchType.Admin)
             _recipeStrategy = new SearchForConfirm(_recipesSearchService, _mapper);
-        else if (!string.IsNullOrEmpty(recipeResultsVm.UserId))
+        else if (recipeResultsVm.SearchType == SearchType.Favourite)
             _recipeStrategy = new SearchFavourite(_recipesSearchService, _mapper);
         else
             _recipeStrategy = new SearchByIngredientsStrategy(_recipesSearchService, _mapper);
