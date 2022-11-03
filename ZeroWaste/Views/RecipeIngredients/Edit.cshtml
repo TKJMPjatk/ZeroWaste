@@ -14,8 +14,22 @@
             <h3>Dodawanie składników przepisu</h3>
         </p>
 
+        @if(ViewData["Error"] != null) 
+        {
+            <div class="col-md-12 alert alert-danger">
+                <span>@ViewData["Error"]</span>
+            </div>
+        }
+
+        @if(ViewData["Success"] != null) 
+        {
+            <div class="col-md-12 alert alert-success">
+                <span>@ViewData["Success"]</span>
+            </div>
+        }
+
         <form class="row" asp-action="Add" asp-controller="RecipeIngredients" enctype="multipart/form-data">
-            <span class="text-danger">@ViewData["message"]</span>
+            @*<span class="text-danger">@ViewData["message"]</span>*@
             @Html.HiddenFor(m=>m.RecipeId, new { Value = ViewData["recipeId"]})
             <div class="accordion" id="accordionExample">
                 <div class="accordion-item">
