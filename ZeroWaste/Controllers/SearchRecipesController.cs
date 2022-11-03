@@ -92,13 +92,14 @@ public class SearchRecipesController : Controller
         //Todo: Ogarnąć to
         ViewBag.PageTitle = resultsVm.PageTitle;
         ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
-        if(resultsVm.IngredientsLists != null || resultsVm.IngredientsLists.Count != 0)
+        if(resultsVm.IngredientsLists != null)
         {
             resultsVm.SearchType = SearchType.IngredientsFiltered;
             resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
         }
         else
         {
+            resultsVm.SearchType = SearchType.Categories;
             resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
         }
         //resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmFiltered(resultsVm);
@@ -116,7 +117,7 @@ public class SearchRecipesController : Controller
             resultsVm.RecipesList = resultsVm.RecipesListBase;
         else
             resultsVm.RecipesList = resultsVm.RecipesListBase.Where(x =>
-                    x.Title.Contains(resultsVm.SearchSentence))
+                    x.Title.ToLower().Contains(resultsVm.SearchSentence.ToLower()))
                 .ToList();
         return View("SearchResult", resultsVm);
     }

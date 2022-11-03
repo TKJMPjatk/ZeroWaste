@@ -30,7 +30,6 @@ public class SearchRecipeContext : ISearchRecipeContext
         SetRecipeStrategy(recipeResultsVm);
         recipeResultsVm.RecipesList = await _recipeStrategy.SearchRecipe(recipeResultsVm);
         recipeResultsVm.CategoryList = await _categoryService.GetAllAsync();
-        recipeResultsVm.SearchType = _recipeStrategy.GetSearchType(recipeResultsVm);
         await FillRecipesWithPhotos(recipeResultsVm.RecipesList);
         return recipeResultsVm;
     }
