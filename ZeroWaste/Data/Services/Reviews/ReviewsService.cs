@@ -11,13 +11,11 @@ namespace ZeroWaste.Data.Services.Reviews
             _context = context;
         }
 
-        public async Task<int> AddNewReturnsIdAsync(int recipeId, int stars, string description)
+        public async Task<int> AddNewReturnsIdAsync(int recipeId, int stars, string description, string userId)
         {
-            // TODO : Only for tests - remove!
-            var ILLEGAL_CODE_TO_REMOVE = AppDbInitializer.userIds[2];
             var review = new RecipeReview()
             {
-                AuthorId = ILLEGAL_CODE_TO_REMOVE,
+                AuthorId = userId,
                 CreatedAt = DateTime.Now,
                 Description = description,
                 RecipeId = recipeId,

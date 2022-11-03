@@ -2,6 +2,6 @@
 {
     public interface IReviewsService
     {
-        Task<int> AddNewReturnsIdAsync(int recipeId, int stars, string description);
+        Task<int> AddNewReturnsIdAsync(int recipeId, int stars, string description, string userId);
     }
 }
