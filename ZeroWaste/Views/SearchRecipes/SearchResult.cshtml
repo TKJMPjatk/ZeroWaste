@@ -38,9 +38,12 @@
                             @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
                             @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
                             @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
-                            for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                            @if (Model.RecipesList[j].Ingredients != null)
                             {
-                                @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                {
+                                    @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                }   
                             }
                         }
                         @if (!(Model.RecipesListBase.IsRecipeResultNullOrEmpty()))
@@ -52,9 +55,12 @@
                                 @Html.HiddenFor(x => x.RecipesListBase[j].EstimatedTime)
                                 @Html.HiddenFor(x => x.RecipesListBase[j].DifficultyLevel)
                                 @Html.HiddenFor(x => x.RecipesListBase[j].CategoryId)
-                                for (int k = 0; k < @Model.RecipesListBase[j].Ingredients.Count(); k++)
+                                @if (Model.RecipesList[j].Ingredients != null)
                                 {
-                                    @Html.HiddenFor(x => x.RecipesListBase[j].Ingredients[k])
+                                    for (int k = 0; k < @Model.RecipesListBase[j].Ingredients.Count(); k++)
+                                    {
+                                        @Html.HiddenFor(x => x.RecipesListBase[j].Ingredients[k])
+                                    }
                                 }
                             }
                         }
@@ -103,9 +109,12 @@
                                     @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
                                     @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
                                     @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
-                                    for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                    @if (Model.RecipesList[j].Ingredients != null)
                                     {
-                                        @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                        for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                        {
+                                            @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                        }
                                     }
                                 }
                                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
@@ -157,9 +166,12 @@
                                         @Html.HiddenFor(x => x.RecipesList[j].EstimatedTime)
                                         @Html.HiddenFor(x => x.RecipesList[j].DifficultyLevel)
                                         @Html.HiddenFor(x => x.RecipesList[j].CategoryId)
-                                        for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                        @if (Model.RecipesList[j].Ingredients != null)
                                         {
-                                            @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                            for (int k = 0; k < @Model.RecipesList[j].Ingredients.Count(); k++)
+                                            {
+                                                @Html.HiddenFor(x => x.RecipesList[j].Ingredients[k])
+                                            }
                                         }
                                     }
                                     <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
@@ -250,9 +262,12 @@
                                     }
                                 <hr/>
                                 <div class="card-body-scroll">
-                                    @foreach (var ingredient in @item.Ingredients)
+                                    @if (item.Ingredients != null)
                                     {
-                                        <p class="card-text">@ingredient</p>   
+                                        @foreach (var ingredient in @item.Ingredients)
+                                        {
+                                            <p class="card-text">@ingredient</p>
+                                        }
                                     }
                                 </div>
                                 <hr/>
