@@ -17,9 +17,10 @@ public class ShoppingListHandler : IShoppingListHandler
         _ingredientSelectionService = ingredientSelectionService;
         _mapper = mapper;
     }
-    public async Task<ShoppingList> Create(NewShoppingListVM shoppingListVm)
+    public async Task<ShoppingList> Create(NewShoppingListVM shoppingListVm, string userId)
     {
         ShoppingList shoppingList = MapNewShoppingListVm(shoppingListVm);
+        shoppingList.UserId = userId;
         shoppingList.FillTodaysDate();
         var addedShoppingList = await _shoppingListsService.CreateAsync(shoppingList);
         return addedShoppingList;

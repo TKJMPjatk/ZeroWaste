@@ -24,7 +24,6 @@ public class RecipesSearchService : IRecipesSearchService
             .ToListAsync();
         return list;
     }
-
     public async Task<List<Recipe>> GetByIngredients(List<IngredientForSearch> ingredientsForSearchList)
     {
         var list = await _context
@@ -35,18 +34,16 @@ public class RecipesSearchService : IRecipesSearchService
             .ToListAsync();
         return list;
     }
-
     public async Task<List<Recipe>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId)
     {        
         var list = await _context
             .Recipes
             .Include(x => x.RecipesIngredients)
             .ThenInclude(x=>x.Ingredient)
-            .Where(x => x.CategoryId == categoryId)
+            .Where(x => x.CategoryId == categoryId && x.StatusId == 1)
             .ToListAsync();
         return list;
     }
-
     public async Task<List<Recipe>> GetByStatus(int statusId)
     {
         var list = await _context
@@ -54,6 +51,38 @@ public class RecipesSearchService : IRecipesSearchService
             .Include(x => x.RecipesIngredients)
             .ThenInclude(x => x.Ingredient)
             .Where(x => x.StatusId == statusId)
+            .ToListAsync();
+        return list;
+    }
+    public async Task<List<Recipe>> GetFavouriteByUserIdAsync(string userId)
+    {
+        var listFavourite = await _context.FavouriteRecipes.Where(x => x.UserId == userId).ToListAsync();
+        var list = await _context
+            .Recipes
+            .Include(x => x.RecipesIngredients)
+            .ThenInclude(x => x.Ingredient)
+            .Where(x => listFavourite.Select(x => x.RecipeId).Contains(x.Id) && x.StatusId == 1)
+            .ToListAsync();
+        return list;
+    }
+    public async Task<List<Recipe>> GetHatedByUserIdAsync(string userId)
+    {
+        var listHated = await _context.HatedRecipes.Where(x => x.UserId == userId).ToListAsync();
+        var list = await _context
+            .Recipes
+            .Include(x => x.RecipesIngredients)
+            .ThenInclude(x => x.Ingredient)
+            .Where(x => listHated.Select(x => x.RecipeId).Contains(x.Id) && x.StatusId == 1)
+            .ToListAsync();
+        return list;
+    }
+    public async Task<List<Recipe>> GetEditMineByUserAsync(string userId)
+    {
+        var list = await _context
+            .Recipes
+            .Include(x => x.RecipesIngredients)
+            .ThenInclude(x => x.Ingredient)
+            .Where(x => x.AuthorId == userId)
             .ToListAsync();
         return list;
     }

@@ -95,6 +95,15 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         await FillRecipesWithPhotos(results.RecipesList);
         return results;
     }
+    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFavourite(string userId)
+    {
+        var results = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
+        {
+            UserId = userId
+        });
+        await FillRecipesWithPhotos(results.RecipesList);
+        return results;
+    }
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFiltered(SearchRecipeResultsVm searchRecipeResultsVm)
     {
         var results = await _searchRecipeContext

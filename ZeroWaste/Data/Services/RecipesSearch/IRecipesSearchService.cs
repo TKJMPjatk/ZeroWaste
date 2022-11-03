@@ -12,4 +12,7 @@ public interface IRecipesSearchService
     Task<List<Recipe>> GetByIngredients(List<IngredientForSearch> searchByIngredientsVm);
     Task<List<Recipe>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId);
     Task<List<Recipe>> GetByStatus(int statusId);
+    Task<List<Recipe>> GetFavouriteByUserIdAsync(string userId);
+    Task<List<Recipe>> GetHatedByUserIdAsync(string userId);
+    Task<List<Recipe>> GetEditMineByUserAsync(string userId);
 }

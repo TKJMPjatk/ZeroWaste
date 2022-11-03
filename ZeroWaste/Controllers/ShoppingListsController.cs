@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Handlers.ShoppingListHandlers;
@@ -20,6 +21,10 @@ public class ShoppingListsController : Controller
     public async Task<IActionResult> Index()
     {
         List<ShoppingList> shoppingLists = await _shoppingListsService.GetAllAsync();
+        shoppingLists = shoppingLists
+            .Where(x => 
+                x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            .ToList();
         return View(shoppingLists);
     }
     public async Task<IActionResult> Edit(int id)
@@ -50,7 +55,7 @@ public class ShoppingListsController : Controller
     {
         if (!(ModelState.IsValid))
             return View(shoppingListVm);
-        var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm);
+        var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm, User.FindFirst(ClaimTypes.NameIdentifier).Value);
         return RedirectToAction("NewIngredientForShoppingList", "ShoppingListIngredients", new {id = addedShoppingList.Id});
     }
 }

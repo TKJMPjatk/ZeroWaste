@@ -3,7 +3,7 @@ using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Static;
 
-public static class ShoppingListDate
+public static class ShoppingListDateExtended
 {
     public static void FillTodaysDate(this ShoppingList shoppingList)
     {

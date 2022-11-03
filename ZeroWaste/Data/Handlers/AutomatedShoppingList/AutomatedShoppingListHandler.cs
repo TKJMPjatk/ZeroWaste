@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ZeroWaste.Data.Services.Recipes;
-using ZeroWaste.Data.Services.RecipesSearch;
+using ZeroWaste.Data.Services.RecipeService;
 using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Models;
 
@@ -8,22 +7,23 @@ namespace ZeroWaste.Data.Handlers.AutomatedShoppingList;
 
 public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
 {
-    private IRecipesService _recipeService;
+    private IRecipeService _recipeService;
     private IShoppingListsService _shoppingListsService;
     private AppDbContext _context;
-    public AutomatedShoppingListHandler(IRecipesService recipeService, IShoppingListsService shoppingListsService, AppDbContext context)
+    public AutomatedShoppingListHandler(IRecipeService recipeService, IShoppingListsService shoppingListsService, AppDbContext context)
     {
         _recipeService = recipeService;
         _shoppingListsService = shoppingListsService;
         _context = context;
     }
-    public async Task<ShoppingList> AddNewShoppingList(int recipeId)
+    public async Task<ShoppingList> AddNewShoppingList(int recipeId, string userId)
     {
         var recipe = await GetRecipe(recipeId);
         ShoppingList shoppingList = new ShoppingList()
         {
             Title = recipe.Title,
-            Note = $"Wygenerowane automatycznie z przepisu {recipe.Title}"
+            Note = $"Wygenerowane automatycznie z przepisu {recipe.Title}",
+            UserId = userId
         };
         shoppingList = await AddShoppingList(shoppingList);
         var ingredientsList = await GetRecipeIngredientsForRecipe(recipeId);

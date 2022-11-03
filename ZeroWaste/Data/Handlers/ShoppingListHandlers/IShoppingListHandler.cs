@@ -5,7 +5,7 @@ namespace ZeroWaste.Data.Handlers.ShoppingListHandlers;
 
 public interface IShoppingListHandler
 {
-    Task<ShoppingList> Create(NewShoppingListVM shoppingListVm);
+    Task<ShoppingList> Create(NewShoppingListVM shoppingListVm, string userId);
     Task HandleSelection(int ingredientId);
     Task DeleteAsync(int id);
     Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId);

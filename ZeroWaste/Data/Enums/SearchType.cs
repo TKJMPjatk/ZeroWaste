@@ -4,5 +4,9 @@ public enum SearchType
 {
     Categories,
     Ingredients,
-    Admin
+    Admin,
+    Favourite,
+    Hated,
+    IngredientsFiltered,
+    EditMine
 }
