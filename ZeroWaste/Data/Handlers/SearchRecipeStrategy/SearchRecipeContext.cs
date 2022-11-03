@@ -54,7 +54,7 @@ public class SearchRecipeContext : ISearchRecipeContext
         else if (recipeResultsVm.SearchType == SearchType.Favourite)
             _recipeStrategy = new SearchFavourite(_recipesSearchService);
         else if (recipeResultsVm.SearchType == SearchType.Hated)
-            _recipeStrategy = new SearchFavourite(_recipesSearchService);
+            _recipeStrategy = new SearchHated(_recipesSearchService);
         else if (recipeResultsVm.SearchType == SearchType.EditMine)
             _recipeStrategy = new SearchMineToEdit(_recipesSearchService);
     }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Services.RecipesSearch;
+using ZeroWaste.Data.Static;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Models;
@@ -10,27 +11,14 @@ namespace ZeroWaste.Data.Handlers.SearchRecipeStrategy;
 public class SearchHated : ISearchRecipeStrategy
 {    
     private readonly IRecipesSearchService _recipesSearchService;
-    private readonly IMapper _mapper;
-    public SearchHated(IRecipesSearchService recipesSearchService, IMapper mapper)
+    public SearchHated(IRecipesSearchService recipesSearchService)
     {
         _recipesSearchService = recipesSearchService;
-        _mapper = mapper;
     }
     public async Task<List<RecipeResult>> SearchRecipe(SearchRecipeResultsVm searchRecipeResultsVm)
     {
         var list = await _recipesSearchService.GetHatedByUserIdAsync(searchRecipeResultsVm.UserId);
-        var recipeResult = GetRecipeResults(list);
-        return recipeResult;
-    }
-    private List<RecipeResult> GetRecipeResults(List<Recipe> recipesList)
-    {
-        List<RecipeResult> recipeResultsList = new List<RecipeResult>();
-        foreach (var item in recipesList)
-        {
-            RecipeResult recipeResult = _mapper.Map<RecipeResult>(item);
-            recipeResultsList.Add(recipeResult);
-        }
-        return recipeResultsList;
+        return list.MapToRecipeResult();
     }
     public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)
     {

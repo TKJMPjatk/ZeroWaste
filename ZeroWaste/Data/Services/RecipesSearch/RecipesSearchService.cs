@@ -67,7 +67,7 @@ public class RecipesSearchService : IRecipesSearchService
     }
     public async Task<List<Recipe>> GetHatedByUserIdAsync(string userId)
     {
-        var listHated = await _context.FavouriteRecipes.Where(x => x.UserId == userId).ToListAsync();
+        var listHated = await _context.HatedRecipes.Where(x => x.UserId == userId).ToListAsync();
         var list = await _context
             .Recipes
             .Include(x => x.RecipesIngredients)
