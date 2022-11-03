@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Security.Claims;
 using ZeroWaste.Data.Handlers.Account;
 using ZeroWaste.Data.Static;
@@ -49,18 +51,19 @@ public class AccountController : Controller
         return View("RegisterCompleted");
     }
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Logout()
     {
         await _accountHandler.Signout();
         return RedirectToAction("Index", "Home");
     }
-
+    [Authorize]
     public async Task<IActionResult> ChangePassword()
     {
         return View(new ChangePasswordVM());
     }
-
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
     {
         if (!ModelState.IsValid)
