@@ -37,7 +37,7 @@ namespace ZeroWaste.Controllers
 
             var recipeIngredients = await _recipeIngredientService.GetCurrentIngredientsAsync(recipeId);
             var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
-            ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();// new SelectList(recipeIngredientsDropdownsData.Ingredients, "Id", "Name");
+            ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
             ViewBag.UnitOfMeasures = new SelectList(recipeIngredientsDropdownsData.UnitOfMeasures, "Id", "Name");
             ViewBag.RecipeIngredients = recipeIngredients.ToList();
             ViewBag.IngredientTypes = new SelectList(recipeIngredientsDropdownsData.IngredientTypes, "Id", "Name");

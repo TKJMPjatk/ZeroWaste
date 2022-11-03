@@ -97,27 +97,15 @@
 @section Scripts{
     <script type="text/javascript">
         $('#filesUpload').on('change', function () {
-            console.log('dupa');
             document.getElementById('NewPhotosNamesToSkip').value = "";
             refreshPhotos();
         });
-
-        //$('#btn-default').click(function () {
-        //    var prop = $(this).attr('data-prop');
-        //    var elementVal = document.getElementById('PhotosToDelete').value;
-        //    elementVal = elementVal + '|' + prop;
-        //    document.getElementById('PhotosToDelete').value = elementVal;
-        //    refreshPhotos();
-        //});
-
-            
 
         function updatePhotosToDelete(val) {
             var elementVal = document.getElementById('PhotosToDelete').value;
             elementVal = elementVal + val + '|';
             document.getElementById('PhotosToDelete').value = elementVal;
             refreshPhotos();
-            //and probably call document.forms[0].submit();
         };
 
         function updateNewPhotosNamesToSkip(val) {
@@ -129,9 +117,6 @@
 
         function refreshPhotos() {
             var newFiles = $('#filesUpload').prop('files');
-            for (var i = 0; i < newFiles.length; i++) {
-                console.log(newFiles[i]);
-            }
             var photosToDeleteStr = document.getElementById('PhotosToDelete').value;
             var photosToDeleteArr = photosToDeleteStr.split('|');
 
@@ -139,32 +124,21 @@
             var newPhotosToSkipArr = newPhotosToSkipStr.split('|');
 
             var oldPhotos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Photos));
-            console.log(oldPhotos);
-            console.log(photosToDeleteStr);
-            console.log(newPhotosToSkipStr);
 
             $("#photosDiv").empty();
             for (var j = 0; j < oldPhotos.length; j++) {
-                console.log(oldPhotos[j]);
                 if (!photosToDeleteArr.includes(oldPhotos[j].Id.toString())) {
-                    //var firstImgAlt = @Url.Content(Model.PhotoAlt);
-                    //var firstBase64 = Convert.ToBase64String(oldPhotos[j].BinaryPhoto);
-                    //var firstImgSrc = String.Format("data:image/jpeg;base64,{0}", firstBase64);
-                    //const reader = new FileReader();
-                    //reader.readAsBinaryString(oldPhotos[j].BinaryPhoto);
-                    //reader.onload = function () {
-                        var div = "<div class=\"card\">" +
-                            "<img src= data:image/jpeg;base64," + oldPhotos[j].BinaryPhoto + " class=\"card-img-top\">" +
-                        "<div class=\"card-body\" >" +
-                            "<p>Stare zdjęcie</p>" +
-                            "<hr/>" +
-                            "<button class=\"btn btn-default\" type = \"button\" onclick = \"updatePhotosToDelete(" + oldPhotos[j].Id + ")\">" +
-                            "<i class=\"bi bi-trash\"></i>" +
-                            "</button>" +
-                            "</div>"+
-                            "</div>";
-                        $("#photosDiv").append(div);
-                    //}
+                    var div = "<div class=\"card\">" +
+                        "<img src= data:image/jpeg;base64," + oldPhotos[j].BinaryPhoto + " class=\"card-img-top\">" +
+                    "<div class=\"card-body\" >" +
+                        "<p>Stare zdjęcie</p>" +
+                        "<hr/>" +
+                        "<button class=\"btn btn-default\" type = \"button\" onclick = \"updatePhotosToDelete(" + oldPhotos[j].Id + ")\">" +
+                        "<i class=\"bi bi-trash\"></i>" +
+                        "</button>" +
+                        "</div>"+
+                        "</div>";
+                    $("#photosDiv").append(div);
                 }
             }
             if (typeof newFiles != 'undefined') {
@@ -172,7 +146,6 @@
                 for (var i = 0; i < newFiles.length; i++) {
                     const reader = new FileReader();
                     var file = newFiles[i];
-                    console.log(file.name);
                     var namee = file.name;
                     reader.readAsBinaryString(file);
 
