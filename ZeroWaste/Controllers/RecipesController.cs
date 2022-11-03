@@ -112,14 +112,12 @@ public class RecipesController : Controller
         await _photoService.AddRecipePhotosAsync(filesUpload, recipeId);
         return RedirectToAction("Edit", "RecipeIngredients", new { recipeId, success = "Pomyœlnie zapisaliœmy Twój przepis - teraz dodaj sk³adniki." });
     }
-    //[HttpPost]
     public async Task<IActionResult> AddLiked(int recipeId)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         await _recipesService.AddLiked(recipeId, userId);
         return RedirectToAction("Details", "Recipes", new { id = recipeId });
     }
-    //[HttpPost]
     public async Task<IActionResult> AddNotLiked(int recipeId)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
