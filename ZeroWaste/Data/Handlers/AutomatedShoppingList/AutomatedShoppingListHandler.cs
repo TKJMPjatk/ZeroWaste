@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ZeroWaste.Data.Services.RecipeService;
+using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Models;
 
@@ -7,10 +7,10 @@ namespace ZeroWaste.Data.Handlers.AutomatedShoppingList;
 
 public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
 {
-    private IRecipeService _recipeService;
+    private IRecipesService _recipeService;
     private IShoppingListsService _shoppingListsService;
     private AppDbContext _context;
-    public AutomatedShoppingListHandler(IRecipeService recipeService, IShoppingListsService shoppingListsService, AppDbContext context)
+    public AutomatedShoppingListHandler(IRecipesService recipeService, IShoppingListsService shoppingListsService, AppDbContext context)
     {
         _recipeService = recipeService;
         _shoppingListsService = shoppingListsService;
