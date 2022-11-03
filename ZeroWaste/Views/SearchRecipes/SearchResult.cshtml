@@ -55,7 +55,7 @@
                                 @Html.HiddenFor(x => x.RecipesListBase[j].EstimatedTime)
                                 @Html.HiddenFor(x => x.RecipesListBase[j].DifficultyLevel)
                                 @Html.HiddenFor(x => x.RecipesListBase[j].CategoryId)
-                                @if (Model.RecipesList[j].Ingredients != null)
+                                @if (Model.RecipesListBase[j].Ingredients != null)
                                 {
                                     for (int k = 0; k < @Model.RecipesListBase[j].Ingredients.Count(); k++)
                                     {
@@ -67,7 +67,7 @@
                         <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
                         <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
                         <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
-                        @Html.HiddenFor(x => x.SearchType)
+                        <input type="hidden" asp-for="SearchType" value="@Model.SearchType"/>
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
@@ -120,7 +120,7 @@
                                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
                                 <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
                                 <input type="hidden" asp-for="SortTypeId" value="@((int)ViewBag.SortTypes[i])"/>
-                                @Html.HiddenFor(x => x.SearchType)
+                                <input type="hidden" asp-for="SearchType" value="@Model.SearchType"/>
                                 @if (Model.SortTypeId == (int)ViewBag.SortTypes[i])
                                 {
                                     <input type="submit" class="btn btn-khaki-web text-white" value="@ViewBag.SortTypes[i].ToString()"/>
@@ -177,7 +177,7 @@
                                     <input type="hidden" asp-for="SortTypeId" value="@Model.SortTypeId"/>
                                     <input type="hidden" asp-for="CategoryId" value="@Model.CategoryList[i].Id"/>
                                     <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
-                                    @Html.HiddenFor(x => x.SearchType);
+                                    <input type="hidden" asp-for="SearchType" value="@Model.SearchType"/>
                                     @if (Model.CategoryId == Model.CategoryList[i].Id)
                                     {
                                         <input type="submit" class="btn btn-khaki-web text-white" value="@Model.CategoryList[i].Name"/>
@@ -193,7 +193,7 @@
                 </div>
             }
             <div class="col-md-3">
-                @if (Model.SearchType == SearchType.Ingredients)
+                @if (Model.SearchType == SearchType.Ingredients || Model.SearchType == SearchType.IngredientsFiltered)
                 {
                     <form asp-action="ReturnToSearchByIngredients">
                                     @if (@Model.IngredientsLists != null)
