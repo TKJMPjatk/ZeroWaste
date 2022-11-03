@@ -20,19 +20,11 @@ namespace ZeroWaste.Data.Services.Recipes
             _mapperHelper = mapperHelper;
         }
 
-        public async Task AddNewAsync(NewRecipeVM newRecipeVM)
+        public async Task<int> AddNewReturnsIdAsync(NewRecipeVM newRecipeVM, string userId)
         {
-            Recipe recipe = _mapperHelper.Map(newRecipeVM);
-            await _context.Recipes.AddAsync(recipe);
-            await _context.SaveChangesAsync();
-        }
 
-        public async Task<int> AddNewReturnsIdAsync(NewRecipeVM newRecipeVM)
-        {
             Recipe recipe = _mapperHelper.Map(newRecipeVM);
-            // TODO : Only for tests - remove!
-            var ILLEGAL_CODE_TO_REMOVE = AppDbInitializer.userIds[2];
-            recipe.AuthorId = ILLEGAL_CODE_TO_REMOVE;
+            recipe.AuthorId = userId;
             recipe.Status = await _context.Statuses.Where(c => c.Name == "Niepotwierdzony").FirstOrDefaultAsync();
             await _context.Recipes.AddAsync(recipe);
             await _context.SaveChangesAsync();
@@ -90,47 +82,61 @@ namespace ZeroWaste.Data.Services.Recipes
             return response;
         }
 
-        public async Task UpdateAsync(EditRecipeVM editRecipeVM)
+        public async Task UpdateAsync(EditRecipeVM editRecipeVM, string userId)
         {
             var recipe = _mapperHelper.MapFromEdit(editRecipeVM);
-            var ILLEGAL_CODE_TO_REMOVE = AppDbInitializer.userIds[2];
-            recipe.AuthorId = ILLEGAL_CODE_TO_REMOVE;
+            recipe.AuthorId = userId;
             recipe.Status = await _context.Statuses.Where(c => c.Name == "Niepotwierdzony").FirstOrDefaultAsync();
             _context.Update(recipe);
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddLiked(int recipeId)
+        public async Task AddLiked(int recipeId, string userId)
         {
-            var ILLEGAL_CODE_TO_REMOVE = AppDbInitializer.userIds[2];
             var likedRecipe = await _context.FavouriteRecipes
-                .FirstOrDefaultAsync(c => c.RecipeId == recipeId && c.UserId == ILLEGAL_CODE_TO_REMOVE);
+                .FirstOrDefaultAsync(c => c.RecipeId == recipeId && c.UserId == userId);
             if (likedRecipe is null)
             {
                 var newLikedRecipe = new FavouriteRecipe()
                 {
                     RecipeId = recipeId,
-                    UserId = ILLEGAL_CODE_TO_REMOVE
+                    UserId = userId
                 };
                 await _context.FavouriteRecipes.AddAsync(newLikedRecipe);
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task AddNotLiked(int recipeId)
+        public async Task AddNotLiked(int recipeId, string userId)
         {
-            var ILLEGAL_CODE_TO_REMOVE = AppDbInitializer.userIds[2];
             var hatedRecipe = await _context.HatedRecipes
-                .FirstOrDefaultAsync(c => c.RecipeId == recipeId && c.UserId == ILLEGAL_CODE_TO_REMOVE);
+                .FirstOrDefaultAsync(c => c.RecipeId == recipeId && c.UserId == userId);
             if (hatedRecipe is null)
             {
                 var newHatedRecipe = new HatedRecipe()
                 {
                     RecipeId = recipeId,
-                    UserId = ILLEGAL_CODE_TO_REMOVE
+                    UserId = userId
                 };
                 await _context.HatedRecipes.AddAsync(newHatedRecipe);
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> IsAuthorEqualsEditor(int recipeId, string editorId)
+        {
+            var entity = await _context
+           .Recipes
+           .AsNoTracking()
+           .FirstOrDefaultAsync(x =>
+               x.Id == recipeId);
+            if (entity is null || Equals(entity.AuthorId, editorId))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

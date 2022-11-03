@@ -1,15 +1,19 @@
 ﻿using System.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Recipes;
+using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using SelectList = Microsoft.AspNetCore.Mvc.Rendering.SelectList;
 
 namespace ZeroWaste.Controllers
 {
+    [Authorize]
     public class RecipeIngredientsController : Controller
     {
         private readonly IRecipeIngredientService _recipeIngredientService;
@@ -23,12 +27,12 @@ namespace ZeroWaste.Controllers
             _recipeService = recipeService;
         }
 
-        public async Task<IActionResult> Edit(int recipeId, string? message)
+        public async Task<IActionResult> Edit(int recipeId, string? error, string? success)
         {
             var recipe = await _recipeService.GetByIdAsync(recipeId);
             if (recipe is null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             var recipeIngredients = await _recipeIngredientService.GetCurrentIngredientsAsync(recipeId);
@@ -37,7 +41,14 @@ namespace ZeroWaste.Controllers
             ViewBag.UnitOfMeasures = new SelectList(recipeIngredientsDropdownsData.UnitOfMeasures, "Id", "Name");
             ViewBag.RecipeIngredients = recipeIngredients.ToList();
             ViewBag.IngredientTypes = new SelectList(recipeIngredientsDropdownsData.IngredientTypes, "Id", "Name");
-            ViewData["message"]= message;
+            if (!string.IsNullOrEmpty(error))
+            {
+                ViewData["Error"]= error;
+            }
+            if (!string.IsNullOrEmpty(success))
+            {
+                ViewData["Success"] = success;
+            }
             @ViewData["recipeId"] = recipeId;
             return View();
         }
@@ -58,7 +69,7 @@ namespace ZeroWaste.Controllers
             var recipe = await _recipeService.GetByIdAsync(newRecipeIngredient.RecipeId);
             if (recipe is null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             if (newRecipeIngredient.ExistingIngredientId > 0 && newRecipeIngredient.ExistingIngredientQuantity > 0)
@@ -93,7 +104,7 @@ namespace ZeroWaste.Controllers
                 var message = "Uwaga błędy!\nNie rozpoznano rodzaju operacji!";
                 return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, message });
             }
-            return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId });
+            return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, success = "Pomyślnie dodano składnik" });
         }
 
         [Microsoft.AspNetCore.Mvc.HttpDelete]
@@ -102,12 +113,12 @@ namespace ZeroWaste.Controllers
             var recipeIngredient = await _recipeIngredientService.GetByIdAsync(id);
             if (recipeIngredient is null)
             {
-                return NotFound();
+                return View("NotFound");
             }
-            string message = $"Usunięto składnik: {recipeIngredient.Ingredient.Name}";
+            string success = $"Usunięto składnik: {recipeIngredient.Ingredient.Name}";
             int recipeId = recipeIngredient.RecipeId;
             await _recipeIngredientService.DeleteAsync(id);
-            return RedirectToAction("Edit", "RecipeIngredients", new { recipeId, message });
+            return RedirectToAction("Edit", "RecipeIngredients", new { recipeId, success });
         }
     }
 }

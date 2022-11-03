@@ -11,7 +11,12 @@
         <p>
             <h3>Tworzenie nowego przepisu</h3>
         </p>
-
+        @if (TempData["Error"] != null)
+        {
+            <div class="col-md-12 alert alert-danger">
+                <span>@TempData["Error"]</span>
+            </div>
+        }
         <form class="row" asp-action="Create" asp-controller="Recipes" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
