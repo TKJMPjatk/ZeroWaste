@@ -41,14 +41,8 @@ namespace ZeroWaste.Controllers
             ViewBag.UnitOfMeasures = new SelectList(recipeIngredientsDropdownsData.UnitOfMeasures, "Id", "Name");
             ViewBag.RecipeIngredients = recipeIngredients.ToList();
             ViewBag.IngredientTypes = new SelectList(recipeIngredientsDropdownsData.IngredientTypes, "Id", "Name");
-            if (!string.IsNullOrEmpty(error))
-            {
-                ViewData["Error"]= error;
-            }
-            if (!string.IsNullOrEmpty(success))
-            {
-                ViewData["Success"] = success;
-            }
+            ViewData["Error"]= error;
+            ViewData["Success"] = success;
             @ViewData["recipeId"] = recipeId;
             return View();
         }
@@ -102,7 +96,7 @@ namespace ZeroWaste.Controllers
             else
             {
                 var message = "Uwaga błędy!\nNie rozpoznano rodzaju operacji!";
-                return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, message });
+                return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, error = message });
             }
             return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, success = "Pomyślnie dodano składnik" });
         }

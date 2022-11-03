@@ -96,7 +96,7 @@ public class RecipesController : Controller
             newPhotos = filesUpload.Where(c => !newPhotosToSkip.Contains(c.FileName));
         }
         await _photoService.AddRecipePhotosAsync(newPhotos, recipe.Id);
-        return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = recipe.Id, error = "", success = "Przepis zaktualizowano pomyœlnie." });
+        return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = recipe.Id, success = "Przepis zaktualizowano pomyœlnie - sprawdŸ sk³adniki." });
     }
     [HttpPost]
     public async Task<IActionResult> Create(NewRecipeVM recipeVM, IEnumerable<IFormFile> filesUpload)
@@ -110,16 +110,16 @@ public class RecipesController : Controller
         }
         int recipeId = await _recipesService.AddNewReturnsIdAsync(recipeVM, userId);
         await _photoService.AddRecipePhotosAsync(filesUpload, recipeId);
-        return RedirectToAction("Edit", "RecipeIngredients", new { recipeId });
+        return RedirectToAction("Edit", "RecipeIngredients", new { recipeId, success = "Pomyœlnie zapisaliœmy Twój przepis - teraz dodaj sk³adniki." });
     }
-    [HttpPost]
+    //[HttpPost]
     public async Task<IActionResult> AddLiked(int recipeId)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         await _recipesService.AddLiked(recipeId, userId);
         return RedirectToAction("Details", "Recipes", new { id = recipeId });
     }
-    [HttpPost]
+    //[HttpPost]
     public async Task<IActionResult> AddNotLiked(int recipeId)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
