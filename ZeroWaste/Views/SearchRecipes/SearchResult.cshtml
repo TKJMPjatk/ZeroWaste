@@ -119,15 +119,15 @@
                                 }
                                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
                                 <input type="hidden" asp-for="PageTitle" value="@ViewBag.PageTitle"/>
-                                <input type="hidden" asp-for="SortTypeId" value="@((int)ViewBag.SortTypes[i])"/>
+                                <input type="hidden" asp-for="SortTypeId" value="@((int)ViewBag.SortTypes[i].SearchType)"/>
                                 <input type="hidden" asp-for="SearchType" value="@Model.SearchType"/>
-                                @if (Model.SortTypeId == (int)ViewBag.SortTypes[i])
+                                @if (Model.SortTypeId == (int)ViewBag.SortTypes[i].SearchType)
                                 {
-                                    <input type="submit" class="btn btn-khaki-web text-white" value="@ViewBag.SortTypes[i].ToString()"/>
+                                    <input type="submit" class="btn btn-khaki-web text-white" value="@ViewBag.SortTypes[i].DisplayText.ToString()"/>
                                 }
                                 else
                                 {
-                                    <input type="submit" class="btn btn-umber text-white" value="@ViewBag.SortTypes[i].ToString()"/>
+                                    <input type="submit" class="btn btn-umber text-white" value="@ViewBag.SortTypes[i].DisplayText.ToString()"/>
                                 }
                             </form>
                         </li>

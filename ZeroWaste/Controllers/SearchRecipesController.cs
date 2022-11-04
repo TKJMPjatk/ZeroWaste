@@ -17,6 +17,7 @@ namespace ZeroWaste.Controllers;
 
 public class SearchRecipesController : Controller
 {
+    private List<SortTypeDisplayVm> _sortTypeDisplayVmList;
     private readonly ICategoryService _categoryService;
     private readonly ISearchRecipeHandler _searchRecipeHandler;
     private readonly IStatusesService _statusesService;
@@ -29,6 +30,7 @@ public class SearchRecipesController : Controller
         _statusesService = statusesService;
         _searchRecipeHandler = searchRecipeHandler;
         _searchRecipeContext = searchRecipeContext;
+        _sortTypeDisplayVmList = SortTypeSupplementer.SupplementSortTypeVm();
     }
     public IActionResult Index()
     {
@@ -69,7 +71,8 @@ public class SearchRecipesController : Controller
     }
     public async Task<IActionResult> SearchByCategoryResult(int categoryId)
     {
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
 
         var resultVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
@@ -83,7 +86,8 @@ public class SearchRecipesController : Controller
     public async Task<IActionResult> SearchByIngredientsResult(SearchByIngredientsVm searchByIngredientsVm)
     {
         ViewBag.PageTitle = "Wyszukiwanie po składnikach";
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         SearchRecipeResultsVm searchRecipeResultsVm =
             await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
             {
@@ -95,9 +99,9 @@ public class SearchRecipesController : Controller
     [Microsoft.AspNetCore.Mvc.HttpPost]
     public async Task<IActionResult> SearchRecipesFilteredResult(SearchRecipeResultsVm resultsVm)
     {
-        //Todo: Ogarnąć to
         ViewBag.PageTitle = resultsVm.PageTitle;
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         if(resultsVm.IngredientsLists != null)
         {
             resultsVm.SearchType = SearchType.IngredientsFiltered;
@@ -116,7 +120,8 @@ public class SearchRecipesController : Controller
     public async Task<IActionResult> SearchRecipeSentenceResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         if(resultsVm.RecipesListBase.IsRecipeResultNullOrEmpty())
             resultsVm.RecipesListBase = resultsVm.RecipesList;
         if (string.IsNullOrEmpty(resultsVm.SearchSentence))
@@ -130,7 +135,8 @@ public class SearchRecipesController : Controller
     public async Task<IActionResult> SearchRecipesSortedResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         var result = await _searchRecipeHandler.GetSearchRecipeResultVmSorted(resultsVm);
         return View("SearchResult", resultsVm);
     }
@@ -146,7 +152,8 @@ public class SearchRecipesController : Controller
     [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> SearchForConfirm(int statusId = 1)
     {
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.Statuses = await _statusesService.GetAllAsync();
         ViewBag.PageTitle = "Przepisy do zatwierdzenia";
         var resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
@@ -158,7 +165,8 @@ public class SearchRecipesController : Controller
     }
     public async Task<IActionResult> SearchFavourite()
     {
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.Statuses = await _statusesService.GetAllAsync();
         ViewBag.PageTitle = "Ulubione przepisy";
         var resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
@@ -170,7 +178,8 @@ public class SearchRecipesController : Controller
     }
     public async Task<IActionResult> SearchHated()
     {
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.Statuses = await _statusesService.GetAllAsync();
         ViewBag.PageTitle = "Nie ulubione przepisy";
         var resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
@@ -182,7 +191,8 @@ public class SearchRecipesController : Controller
     }
     public async Task<IActionResult> SearchMineToEdit()
     {
-        ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.Statuses = await _statusesService.GetAllAsync();
         ViewBag.PageTitle = "Moje przepisy";
         var resultVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
