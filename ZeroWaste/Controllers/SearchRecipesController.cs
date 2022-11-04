@@ -34,6 +34,12 @@ public class SearchRecipesController : Controller
     {
         return View();
     }
+
+    public async Task<IActionResult> SupriseMeResult()
+    {
+        int recipeId = await _searchRecipeHandler.GetRandomRecipeId();
+        return RedirectToAction("Details", "Recipes", new {id = recipeId});
+    }
     public IActionResult SearchByIngredients()
     {
         return View(new SearchByIngredientsVm());

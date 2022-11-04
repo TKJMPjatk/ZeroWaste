@@ -4,6 +4,7 @@ using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Handlers.SearchRecipeStrategy;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.Photo;
+using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
@@ -20,13 +21,15 @@ public class SearchRecipeHandler : ISearchRecipeHandler
     private IWebHostEnvironment _hostEnvironment;
     private readonly ISearchRecipeContext _searchRecipeContext;
     private readonly IPhotoService _photoService;
-    public SearchRecipeHandler(ISearchRecipeContext searchRecipeContext, ICategoryService categoryService, IMapper mapper, IWebHostEnvironment hostEnvironment, IPhotoService photoService)
+    private readonly IRecipesService _recipesService;
+    public SearchRecipeHandler(ISearchRecipeContext searchRecipeContext, ICategoryService categoryService, IMapper mapper, IWebHostEnvironment hostEnvironment, IPhotoService photoService, IRecipesService recipesService)
     {
         _categoryService = categoryService;
         _mapper = mapper;
         _hostEnvironment = hostEnvironment;
         _searchRecipeContext = searchRecipeContext;
         _photoService = photoService;
+        _recipesService = recipesService;
     }
     public async Task<List<CategorySearchVm>> GetCategoriesSearchVm()
     {
@@ -117,6 +120,15 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         await FillRecipesWithPhotos(resultsVm.RecipesList);
         return resultsVm;
     }
+
+    public async Task<int> GetRandomRecipeId()
+    {
+        List<int> recipeIdsList = await _recipesService.GetRecipeIdList();
+        Random r = new Random();
+        int randomNumber = r.Next(0, (recipeIdsList.Count()-1));
+        return recipeIdsList[randomNumber];
+    }
+
     private List<RecipeResult> GetSortField(List<RecipeResult> recipeResults, int sortTypeId)
     {
         if (sortTypeId == (int) SortTypes.ByTime)

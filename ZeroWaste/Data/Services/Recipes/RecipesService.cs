@@ -139,5 +139,14 @@ namespace ZeroWaste.Data.Services.Recipes
                 return true;
             }
         }
+
+        public async Task<List<int>> GetRecipeIdList()
+        {
+            return await _context
+                .Recipes
+                .Where(x => x.StatusId == 1)
+                .Select(x => x.Id)
+                .ToListAsync();
+        }
     }
 }

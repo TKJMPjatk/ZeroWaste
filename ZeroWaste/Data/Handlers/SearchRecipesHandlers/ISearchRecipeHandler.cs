@@ -14,4 +14,5 @@ public interface ISearchRecipeHandler
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFavourite(string userId);
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFiltered(SearchRecipeResultsVm searchRecipeResultsVm);
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm);
+    Task<int> GetRandomRecipeId();
 }
