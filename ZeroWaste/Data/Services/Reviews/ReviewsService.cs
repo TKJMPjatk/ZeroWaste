@@ -1,4 +1,5 @@
-﻿using ZeroWaste.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services.Reviews
 {
@@ -24,6 +25,12 @@ namespace ZeroWaste.Data.Services.Reviews
             await _context.RecipeReviews.AddAsync(review);
             await _context.SaveChangesAsync();
             return review.Id;
+        }
+
+        public async Task<bool> ReviewExists(int recipeId, string userId)
+        {
+            var review = await _context.RecipeReviews.Where(r => r.AuthorId == userId && r.RecipeId == recipeId).FirstOrDefaultAsync();
+            return review != null;
         }
     }
 }

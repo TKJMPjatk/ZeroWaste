@@ -17,6 +17,12 @@
             <span>@TempData["Error"]</span>
         </div>
     }
+    @if (TempData["Success"] != null)
+    {
+        <div class="col-md-12 alert alert-success">
+            <span>@TempData["Success"]</span>
+        </div>
+    }
     <div class="row">
         @Html.HiddenFor(m=>m.NewReviewRecipeId, @ViewData["recipeId"])
         

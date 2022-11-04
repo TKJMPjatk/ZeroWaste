@@ -46,13 +46,18 @@ namespace ZeroWaste.Controllers
                 return RedirectToAction("Details", "Recipes", new { id = details.NewReviewRecipeId, error = "Użytkownik nie zalogowany lub nie istnieje"});
             }
 
+            if (await _reviewsService.ReviewExists(details.NewReviewRecipeId, userId))
+            {
+                return RedirectToAction("Details", "Recipes", new { id = details.NewReviewRecipeId, error = "Nie możesz dodać dwóch opinii na jednym przepisie." });
+            }
+
 
             int reviewId = await _reviewsService.AddNewReturnsIdAsync(details.NewReviewRecipeId, details.NewReviewStars, details.NewReviewDescription, userId);
             if (filesUpload is not null)
             {
                 await _photoService.AddReviewPhotoAsync(filesUpload, reviewId);
             }
-            return RedirectToAction("Details","Recipes",new { id = details.NewReviewRecipeId });
+            return RedirectToAction("Details","Recipes",new { id = details.NewReviewRecipeId, success = "Pomyślnie dodano opinię" });
         }
     }
 }
