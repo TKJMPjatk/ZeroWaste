@@ -35,7 +35,7 @@ public class RecipesController : Controller
         return View();
     }
     [AllowAnonymous]
-    public async Task<IActionResult> Details(int id, string? error)
+    public async Task<IActionResult> Details(int id, string? error, string? success)
     {
         var recipeDetails = await _recipesService.GetDetailsByIdAsync(id);
         if (recipeDetails is null)
@@ -44,6 +44,7 @@ public class RecipesController : Controller
         }
         ViewData["recipeId"] = id;
         TempData["Error"] = error;
+        TempData["Success"] = success;
         recipeDetails.NewReviewRecipeId = id;
         return View(recipeDetails);
     }
