@@ -1,0 +1,17 @@
+@model ZeroWaste.Models.ShoppingList
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditTitle" asp-controller="ShoppingLists">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" class="form-control" asp-for=@Model.Title style="width: 100%"/>        
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-pale-pink text-black width-max">
+                        <i class="bi bi-check2"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
