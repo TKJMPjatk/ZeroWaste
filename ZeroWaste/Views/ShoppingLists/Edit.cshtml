@@ -5,11 +5,27 @@
 }
 <div class="col-md-10 offset-1">
     <div class="row">
-        <div class="col-md-5">
-            <h3>Lista zakupów: @Model.Title (@Model.ShoppingListIngredients.Count)</h3>
-            <br/>
+        <div class="col-md-2">
+            <h3>Lista zakupów:</h3>
+        </div>
+        <div class="col-md-4">
+            <h3>@Model.Title (@Model.ShoppingListIngredients.Count)</h3>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-2">
+            <button id="btnEditTitleShow" style="background: transparent">
+                <i class="bi bi-pencil-square"></i>
+            </button>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-4 offset-2">
+            <div id="partialEditTitleSection" style="visibility:hidden">
+                @await Html.PartialAsync("_ShoppingListEditTitle", Model)
+            </div>
+        </div>
+    </div>
+    <br/>
     @foreach (var item in @Model.ShoppingListIngredients)
     {
         <div class="row">
@@ -54,3 +70,16 @@
     }
     @await Html.PartialAsync("_CreateShoppingListItemButton")
 </div>
+@section Scripts
+{
+    <script>
+    $("#btnEditTitleShow").click(function (){
+       if($("#partialEditTitleSection").css("visibility") === "hidden"){
+            $("#partialEditTitleSection ").css("visibility", "visible") 
+       }
+       else{
+           $("#partialEditTitleSection").css("visibility", "hidden")
+       }
+    })
+    </script>
+}

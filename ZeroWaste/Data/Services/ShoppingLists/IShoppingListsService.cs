@@ -9,4 +9,5 @@ public interface IShoppingListsService
     Task<ShoppingList> CreateAsync(ShoppingList shoppingList);
     Task DeleteAsync(int id);
     Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId);
+    Task EditAsync(ShoppingList shoppingList);
 }
