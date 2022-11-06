@@ -4,7 +4,8 @@
         <form asp-action="EditTitle" asp-controller="ShoppingLists">
             <div class="row">
                 <div class="col-md-8">
-                    <input type="text" class="form-control" asp-for=@Model.Title style="width: 100%"/>        
+                    <input type="text" class="form-control" asp-for=@Model.Title style="width: 100%"/>    
+                    <input type="hidden" asp-for="@Model.Id"/>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-pale-pink text-black width-max">

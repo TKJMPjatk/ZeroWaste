@@ -65,7 +65,9 @@ public class ShoppingListsService : IShoppingListsService
 
     public async Task EditAsync(ShoppingList shoppingList)
     {
-        EntityEntry entityEntry = _context.Entry(shoppingList);
+        var entity = await GetByIdAsync(shoppingList.Id);
+        entity.Title = shoppingList.Title;
+        EntityEntry entityEntry = _context.Entry(entity);
         entityEntry.State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }

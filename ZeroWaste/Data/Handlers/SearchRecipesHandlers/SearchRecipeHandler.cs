@@ -70,57 +70,12 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         searchByIngredientsVm.Quantity = 0; 
         return searchByIngredientsVm;
     }
-    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmByIngredients(SearchByIngredientsVm searchByIngredientsVm)
-    {
-        var results = await _searchRecipeContext
-            .GetSearchRecipeResultVm(new SearchRecipeResultsVm()
-        {
-            IngredientsLists = searchByIngredientsVm.SingleIngredientToSearchVm
-        });
-        return results;
-    }
-    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmByCategory(int categoryId)
-    {
-        var results = await _searchRecipeContext
-            .GetSearchRecipeResultVm(new SearchRecipeResultsVm()
-        {
-            CategoryId = categoryId
-        });
-        await FillRecipesWithPhotos(results.RecipesList);
-        return results;
-    }
-    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmForConfirm(int statusId)
-    {
-        var results = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
-        {
-            StatusId = statusId
-        });
-        await FillRecipesWithPhotos(results.RecipesList);
-        return results;
-    }
-    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFavourite(string userId)
-    {
-        var results = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
-        {
-            UserId = userId
-        });
-        await FillRecipesWithPhotos(results.RecipesList);
-        return results;
-    }
-    public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmFiltered(SearchRecipeResultsVm searchRecipeResultsVm)
-    {
-        var results = await _searchRecipeContext
-            .GetSearchRecipeResultVm(searchRecipeResultsVm);
-        await FillRecipesWithPhotos(results.RecipesList);
-        return results;
-    }
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm)
     {
         resultsVm.RecipesList = GetSortField(resultsVm.RecipesList, resultsVm.SortTypeId);
         await FillRecipesWithPhotos(resultsVm.RecipesList);
         return resultsVm;
     }
-
     public async Task<int> GetRandomRecipeId()
     {
         List<int> recipeIdsList = await _recipesService.GetRecipeIdList();
@@ -128,7 +83,6 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         int randomNumber = r.Next(0, (recipeIdsList.Count()-1));
         return recipeIdsList[randomNumber];
     }
-
     private List<RecipeResult> GetSortField(List<RecipeResult> recipeResults, int sortTypeId)
     {
         if (sortTypeId == (int) SortTypes.ByTime)

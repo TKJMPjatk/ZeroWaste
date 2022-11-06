@@ -64,6 +64,6 @@ public class ShoppingListsController : Controller
     public async Task<IActionResult> EditTitle(ShoppingList shoppingList)
     {
         await _shoppingListsService.EditAsync(shoppingList);
-        return RedirectToAction();
+        return RedirectToAction("Edit", new {id = shoppingList.Id});
     }
 }
