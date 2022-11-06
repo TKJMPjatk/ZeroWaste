@@ -25,7 +25,7 @@ public class CategorySearchVmMapper : ICategorySearchVmMapper
         List<CategorySearchVm> categorySearchVmsList = new List<CategorySearchVm>();
         categories
             .ForEach(x => 
-                categories.Add(MapToCategorySearchVm(x)));
+                categorySearchVmsList.Add(MapToCategorySearchVm(x)));
         return categorySearchVmsList;
     }
 }
