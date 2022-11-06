@@ -10,6 +10,7 @@ public class SearchByIngredientsVm
     [Required(ErrorMessage = "Pole jest wymagane")]
     [Range(1, Int32.MaxValue, ErrorMessage = "Ilość nie może być mniejsza niż 1")]
     public int Quantity { get; set; }
+    //Todo zmiana nazwy
     public List<IngredientForSearch> SingleIngredientToSearchVm { get; set; } =
         new List<IngredientForSearch>();
 }

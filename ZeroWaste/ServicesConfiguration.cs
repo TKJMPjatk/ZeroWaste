@@ -6,6 +6,7 @@ using ZeroWaste.Data.Handlers.ShoppingListHandlers;
 using ZeroWaste.Data.Handlers.ShoppingListIngredients;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Helpers.RecipeCategoryImage;
+using ZeroWaste.Data.Helpers.SearchByIngredients;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Services.Photo;
@@ -45,6 +46,7 @@ public class ServicesConfiguration
     {
         services.AddScoped<ICategoryImageProvider, CategoryImageProvider>();
         services.AddScoped<ICategorySearchVmMapper, CategorySearchVmMapper>();
+        services.AddScoped<ISearchByIngredientAdder, SearchByIngredientAdder>();
     }
     private void ConfigureServices(IServiceCollection services)
     {
