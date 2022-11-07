@@ -49,7 +49,11 @@ footer{
   background: #EDE8E8;
   height: 300px;
 }
-
+.image-logo{
+    width: 150px;
+    height: 60px;
+    object-fit: fill;
+}
 .image-home{
   height: 300px;
   width: 100%;

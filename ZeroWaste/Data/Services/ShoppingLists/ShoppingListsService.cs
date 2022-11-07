@@ -62,4 +62,13 @@ public class ShoppingListsService : IShoppingListsService
             .ShoppingListIngredients
             .AnyAsync(x => x.ShoppingListId == shoppingListId && x.Quantity == 0);
     }
+
+    public async Task EditAsync(ShoppingList shoppingList)
+    {
+        var entity = await GetByIdAsync(shoppingList.Id);
+        entity.Title = shoppingList.Title;
+        EntityEntry entityEntry = _context.Entry(entity);
+        entityEntry.State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+    }
 }

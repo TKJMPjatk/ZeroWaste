@@ -29,6 +29,7 @@ public class ShoppingListsController : Controller
     }
     public async Task<IActionResult> Edit(int id)
     {
+        ViewBag.Hidden = "hidden";
         var shoppingList = await _shoppingListsService.GetByIdAsync(id);
         return View(shoppingList);
     }
@@ -57,5 +58,12 @@ public class ShoppingListsController : Controller
             return View(shoppingListVm);
         var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm, User.FindFirst(ClaimTypes.NameIdentifier).Value);
         return RedirectToAction("NewIngredientForShoppingList", "ShoppingListIngredients", new {id = addedShoppingList.Id});
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditTitle(ShoppingList shoppingList)
+    {
+        await _shoppingListsService.EditAsync(shoppingList);
+        return RedirectToAction("Edit", new {id = shoppingList.Id});
     }
 }
