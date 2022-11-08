@@ -58,7 +58,7 @@ public class RecipesController : Controller
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         if (!await _recipesService.IsAuthorEqualsEditor(id, userId))
         {
-            return Unauthorized();
+            return View("Unauthorized");
         }
 
         var recipeDropdownsData = await _recipesService.GetDropdownsValuesAsync();
