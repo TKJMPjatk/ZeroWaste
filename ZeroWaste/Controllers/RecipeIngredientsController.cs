@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Security.Claims;
+using System.Web.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Services;
@@ -7,6 +8,7 @@ using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
+using ZeroWaste.Models;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using SelectList = Microsoft.AspNetCore.Mvc.Rendering.SelectList;
@@ -18,21 +20,27 @@ namespace ZeroWaste.Controllers
     {
         private readonly IRecipeIngredientService _recipeIngredientService;
         private readonly IIngredientsService _ingredientService;
-        private readonly IRecipesService _recipeService;
+        private readonly IRecipesService _recipesService;
 
         public RecipeIngredientsController(IRecipeIngredientService service, IIngredientsService ingredientService, IRecipesService recipeService)
         {
             _recipeIngredientService = service;
             _ingredientService = ingredientService;
-            _recipeService = recipeService;
+            _recipesService = recipeService;
         }
 
         public async Task<IActionResult> Edit(int recipeId, string? error, string? success)
         {
-            var recipe = await _recipeService.GetByIdAsync(recipeId);
+            var recipe = await _recipesService.GetByIdAsync(recipeId);
             if (recipe is null)
             {
                 return View("NotFound");
+            }
+
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!await _recipesService.IsAuthorEqualsEditor(recipeId, userId))
+            {
+                return View("Unauthorized");
             }
 
             var recipeIngredients = await _recipeIngredientService.GetCurrentIngredientsAsync(recipeId);
@@ -60,10 +68,16 @@ namespace ZeroWaste.Controllers
                 return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, message });
             }
 
-            var recipe = await _recipeService.GetByIdAsync(newRecipeIngredient.RecipeId);
+            var recipe = await _recipesService.GetByIdAsync(newRecipeIngredient.RecipeId);
             if (recipe is null)
             {
                 return View("NotFound");
+            }
+
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!await _recipesService.IsAuthorEqualsEditor(newRecipeIngredient.RecipeId, userId))
+            {
+                return View("Unauthorized");
             }
 
             if (newRecipeIngredient.ExistingIngredientId > 0 && newRecipeIngredient.ExistingIngredientQuantity > 0)
@@ -109,8 +123,15 @@ namespace ZeroWaste.Controllers
             {
                 return View("NotFound");
             }
-            string success = $"Usunięto składnik: {recipeIngredient.Ingredient.Name}";
+
             int recipeId = recipeIngredient.RecipeId;
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!await _recipesService.IsAuthorEqualsEditor(recipeId, userId))
+            {
+                return View("Unauthorized");
+            }
+
+            string success = $"Usunięto składnik: {recipeIngredient.Ingredient.Name}";
             await _recipeIngredientService.DeleteAsync(id);
             return RedirectToAction("Edit", "RecipeIngredients", new { recipeId, success });
         }
