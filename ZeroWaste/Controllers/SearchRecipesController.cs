@@ -7,6 +7,7 @@ using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Handlers.SearchRecipesHandlers;
 using ZeroWaste.Data.Handlers.SearchRecipeStrategy;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Statuses;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels;
@@ -22,8 +23,9 @@ public class SearchRecipesController : Controller
     private readonly ISearchRecipeHandler _searchRecipeHandler;
     private readonly IStatusesService _statusesService;
     private readonly ISearchRecipeContext _searchRecipeContext;
+    private readonly IRecipeIngredientService _recipeIngredientService;
     private readonly AppDbContext _context;
-    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IStatusesService statusesService, ISearchRecipeContext searchRecipeContext)
+    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IStatusesService statusesService, ISearchRecipeContext searchRecipeContext, IRecipeIngredientService service)
     {
         _context = context;
         _categoryService = categoryService;
@@ -31,6 +33,7 @@ public class SearchRecipesController : Controller
         _searchRecipeHandler = searchRecipeHandler;
         _searchRecipeContext = searchRecipeContext;
         _sortTypeDisplayVmList = SortTypeSupplementer.SupplementSortTypeVm();
+        _recipeIngredientService = service;
     }
     public IActionResult Index()
     {
@@ -42,13 +45,17 @@ public class SearchRecipesController : Controller
         int recipeId = await _searchRecipeHandler.GetRandomRecipeId();
         return RedirectToAction("Details", "Recipes", new {id = recipeId});
     }
-    public IActionResult SearchByIngredients()
+    public async Task<IActionResult> SearchByIngredientsAsync()
     {
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
         return View(new SearchByIngredientsVm());
     }
     [Microsoft.AspNetCore.Mvc.HttpPost]
-    public IActionResult AddIngredient(SearchByIngredientsVm searchByIngredientsVm)
+    public async Task<IActionResult> AddIngredientAsync(SearchByIngredientsVm searchByIngredientsVm)
     {
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
         if (!(ModelState.IsValid))
         {
             return View("SearchByIngredients", searchByIngredientsVm);

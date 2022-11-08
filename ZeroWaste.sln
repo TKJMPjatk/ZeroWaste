@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroWaste", "ZeroWaste\ZeroWaste.csproj", "{9DE48DA4-EA23-4D27-97FE-C83113CE2CAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroWaste", "ZeroWaste\ZeroWaste.csproj", "{9DE48DA4-EA23-4D27-97FE-C83113CE2CAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroWaste.DB", "ZeroWaste.DB\ZeroWaste.DB.csproj", "{897416BB-0E62-42CB-A7BC-1DB366225B13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroWaste.DB", "ZeroWaste.DB\ZeroWaste.DB.csproj", "{897416BB-0E62-42CB-A7BC-1DB366225B13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroWaste.Tests", "ZeroWaste.Tests\ZeroWaste.Tests.csproj", "{CFBA9236-4BC2-4F5B-B260-32BB04F68936}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{897416BB-0E62-42CB-A7BC-1DB366225B13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{897416BB-0E62-42CB-A7BC-1DB366225B13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{897416BB-0E62-42CB-A7BC-1DB366225B13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFBA9236-4BC2-4F5B-B260-32BB04F68936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFBA9236-4BC2-4F5B-B260-32BB04F68936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFBA9236-4BC2-4F5B-B260-32BB04F68936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFBA9236-4BC2-4F5B-B260-32BB04F68936}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
