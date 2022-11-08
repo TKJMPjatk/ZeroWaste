@@ -19,22 +19,20 @@
                     @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
                 }
                 <div class="row">
-                    <div class="col-md-6">
-                        <input type="text" id="nameInput" asp-for="@Model.Name" placeholder="składnik"/>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="nameInput" asp-for="@Model.Name" placeholder="składnik"/>
                         <span class="text-danger" asp-validation-for="@Model.Name"></span>
                         <span class="text-danger" id="notExistIgnredient" style="visibility: hidden">Brak składnika na liście</span>
                     </div>
-                    <div class="col-md-4">
-                        <input type="number" id="quantityInput" asp-for="@Model.Quantity" placeholder="ilość"/>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" id="quantityInput" asp-for="@Model.Quantity" placeholder="ilość"/>
                         <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+                    </div>
+                    <div class="col-md-2 offset-1">
+                        <input type="submit" class="btn btn-antique-white text-oxford-blue" id="addIngredientBtn" value="Dodaj"/>
                     </div>
                 </div>
                 <br/>
-                <div class="row">
-                    <div class="col-md-12">
-                        <input type="submit" class="btn btn-antique-white text-oxford-blue float-end" id="addIngredientBtn" value="Dodaj"/>
-                    </div>
-                </div>
             </form>
         <br/>
         <div class="row">

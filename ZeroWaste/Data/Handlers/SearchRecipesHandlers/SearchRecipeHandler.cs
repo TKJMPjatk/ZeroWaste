@@ -2,6 +2,8 @@ using System.Linq.Dynamic.Core;
 using AutoMapper;
 using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Handlers.SearchRecipeStrategy;
+using ZeroWaste.Data.Helpers.RecipeCategoryImage;
+using ZeroWaste.Data.Helpers.SearchByIngredients;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.Recipes;
@@ -22,7 +24,11 @@ public class SearchRecipeHandler : ISearchRecipeHandler
     private readonly ISearchRecipeContext _searchRecipeContext;
     private readonly IPhotoService _photoService;
     private readonly IRecipesService _recipesService;
-    public SearchRecipeHandler(ISearchRecipeContext searchRecipeContext, ICategoryService categoryService, IMapper mapper, IWebHostEnvironment hostEnvironment, IPhotoService photoService, IRecipesService recipesService)
+
+    private readonly ICategorySearchVmMapper _categorySearchVmMapper;
+    private readonly ISearchByIngredientAdder _searchByIngredientAdder; 
+    
+    public SearchRecipeHandler(ISearchRecipeContext searchRecipeContext, ICategoryService categoryService, IMapper mapper, IWebHostEnvironment hostEnvironment, IPhotoService photoService, IRecipesService recipesService, ICategorySearchVmMapper categorySearchVmMapper, ISearchByIngredientAdder searchByIngredientAdder)
     {
         _categoryService = categoryService;
         _mapper = mapper;
@@ -30,44 +36,18 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         _searchRecipeContext = searchRecipeContext;
         _photoService = photoService;
         _recipesService = recipesService;
+        
+        _categorySearchVmMapper = categorySearchVmMapper;
+        _searchByIngredientAdder = searchByIngredientAdder;
     }
     public async Task<List<CategorySearchVm>> GetCategoriesSearchVm()
     {
         List<Category> categories = await _categoryService.GetAllAsync();
-        return MapToCategoriesSearchVms(categories);
-    }
-    private List<CategorySearchVm> MapToCategoriesSearchVms(List<Category> categories)
-    {
-        List<CategorySearchVm> categorySearchVmList = new List<CategorySearchVm>();
-        foreach (var entity in categories)
-        {
-            var categorySearchVm = _mapper.Map<CategorySearchVm>(entity);
-            categorySearchVm.Image = GetMatchedImage(entity);
-            categorySearchVmList.Add(categorySearchVm);
-        }
-        return categorySearchVmList;
-    }
-    private string GetMatchedImage(Category category)
-    {
-        var isFileExist = _hostEnvironment
-            .WebRootFileProvider
-            .GetFileInfo($"/images/categories/{category.Name}.png")
-            .Exists;
-        if (isFileExist)
-            return $"~/images/categories/{category.Name}.png";
-        return $"~/images/categories/Burgery.png";
+        return _categorySearchVmMapper.MapToCategorySearchVmsList(categories);
     }
     public SearchByIngredientsVm AddIngredient(SearchByIngredientsVm searchByIngredientsVm)
     {
-        int tmp = searchByIngredientsVm.SingleIngredientToSearchVm.Count;
-        searchByIngredientsVm.SingleIngredientToSearchVm.Add(new IngredientForSearch() 
-        {
-            Name = searchByIngredientsVm.Name, 
-            Quantity = searchByIngredientsVm.Quantity, 
-            Index = tmp+1,
-        }); 
-        searchByIngredientsVm.Name = string.Empty; 
-        searchByIngredientsVm.Quantity = 0; 
+        _searchByIngredientAdder.AddIngredientToSearchByIngredientsVm(searchByIngredientsVm);
         return searchByIngredientsVm;
     }
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm)

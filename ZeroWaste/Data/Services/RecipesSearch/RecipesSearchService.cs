@@ -1,4 +1,7 @@
+using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using ZeroWaste.DapperModels;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.Recipes;
@@ -24,15 +27,42 @@ public class RecipesSearchService : IRecipesSearchService
             .ToListAsync();
         return list;
     }
-    public async Task<List<Recipe>> GetByIngredients(List<IngredientForSearch> ingredientsForSearchList)
+    public async Task<List<SearchByIngredientsResults>> GetByIngredients(List<IngredientForSearch> ingredientsForSearchList)
     {
-        var list = await _context
-            .Recipes
-            .Include(x => x.RecipesIngredients)
-            .ThenInclude(x=>x.Ingredient)
-            .Where(x => x.StatusId == 1)
-            .ToListAsync();
-        return list;
+        List<string> listOfIds = await GetListOfIds(ingredientsForSearchList);
+        string querySql = @"SELECT
+	                          RecipeId
+	                        , Title 
+                            , EstimatedTime
+                            , DifficultyLevel 
+                            , CategoryId 
+                            , IngredientName 
+                            , UnitOfMeasureShortcut 
+                            , IngredientQuantity 
+                            , Match 
+                            , MissingIngredientsCount 
+                        FROM [dbo].[SearchByIngredients] (@IdsIngredients)";
+        using(var connection = new SqlConnection(_context.Database.GetConnectionString()))
+        {
+            var searchByIngredientsResult = 
+                await connection.QueryAsync<SearchByIngredientsResults>(querySql, new {@IdsIngredients = string.Join(",", listOfIds)});
+            return searchByIngredientsResult.ToList();
+        }
+        return null;
+    }
+
+    private async Task<List<string>> GetListOfIds(List<IngredientForSearch> ingredientsForSearch)
+    {
+        List<string> listOfId = new List<string>();
+        foreach (var ingredient in ingredientsForSearch)
+        {
+            listOfId.Add(await _context
+                .Ingredients
+                .Where(x => x.Name.ToLower() == ingredient.Name.ToLower())
+                .Select(x => x.Id.ToString())
+                .FirstOrDefaultAsync());
+        }
+        return listOfId;
     }
     public async Task<List<Recipe>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId)
     {        
