@@ -229,3 +229,12 @@ footer{
     height: 100%;
     object-fit: cover;
 }
+
+.select2-container--default .select2-selection--single {
+    height: 38px !important;
+    padding: 3px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 3px !important;
+}
