@@ -266,17 +266,36 @@
                                     {
                                         @foreach (var ingredient in @item.Ingredients)
                                         {
-                                            <p class="card-text">@ingredient</p>
+                                            
+                                            if (Model.IngredientsLists != null && Model.IngredientsLists.Select(x => x.Name).Contains(ingredient))
+                                            {
+                                                <p class="card-text" style="color: #20c997">@ingredient</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">@ingredient</p>
+                                            }
                                         }
                                     }
                                 </div>
                                 <hr/>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <a class="btn btn-pale-pink width-max" id="addToShoppingList" data-toggle="tooltip" data-placement="bottom" title="Dodaj do listy zakupów"
-                                           asp-controller="AutomatedShoppingList" asp-action="CreateFromRecipe" asp-route-recipeId="@item.Id">
-                                            <i class="bi bi-cart-plus"></i>
-                                        </a>
+                                        @if (Model.SearchType == SearchType.Admin)
+                                        {
+                                            <form asp-action="ConfirmRecipe" asp-controller="AdminSearchRecipes" asp-route-recipeId="@item.Id">
+                                                <button type="submit" class="btn btn-pale-pink width-max">
+                                                    <i class="bi bi-check"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-pale-pink width-max" id="addToShoppingList" data-toggle="tooltip" data-placement="bottom" title="Dodaj do listy zakupów"
+                                               asp-controller="AutomatedShoppingList" asp-action="CreateFromRecipe" asp-route-recipeId="@item.Id">
+                                                <i class="bi bi-cart-plus"></i>
+                                            </a>   
+                                        }
                                     </div>
                                     <div class="col-md-6">
                                         <a class="btn btn-pale-pink width-max" asp-controller="Recipes" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-search"></i></a>

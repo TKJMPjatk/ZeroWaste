@@ -1,4 +1,5 @@
 using ZeroWaste.Data.Handlers.Account;
+using ZeroWaste.Data.Handlers.AdminSearchHadlers;
 using ZeroWaste.Data.Handlers.AutomatedShoppingList;
 using ZeroWaste.Data.Handlers.SearchRecipesHandlers;
 using ZeroWaste.Data.Handlers.SearchRecipeStrategy;
@@ -40,6 +41,7 @@ public class ServicesConfiguration
         services.AddScoped<ISearchRecipeHandler, SearchRecipeHandler>();
         services.AddScoped<IAutomatedShoppingListHandler, AutomatedShoppingListHandler>();
         services.AddScoped<IAccountHandler, AccountHandler>();
+        services.AddScoped<IAdminSearchHandler, AdminSearchHandler>();
     }
 
     private void ConfigureHelpers(IServiceCollection services)

@@ -148,5 +148,21 @@ namespace ZeroWaste.Data.Services.Recipes
                 .Select(x => x.Id)
                 .ToListAsync();
         }
+
+        public async Task ConfirmRecipe(int recipeId)
+        {
+            var entity = await _context
+                .Recipes
+                .FirstOrDefaultAsync(x => x.Id == recipeId);
+            var confirmStatusId = await _context
+                .Statuses
+                .Where(x => x.Name == "Zatwierdzony")
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+            entity.StatusId = confirmStatusId;
+            EntityEntry entityEntry = _context.Entry(entity);
+            entityEntry.State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }
