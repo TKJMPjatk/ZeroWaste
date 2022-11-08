@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using ZeroWaste;
 using ZeroWaste.Data;
@@ -50,6 +52,12 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images")),
+    RequestPath = "/wwwroot/images"
+});
 if (bool.Parse(builder.Configuration.GetSection("SeedDatabase").Value))
 {
     AppDbInitializer.SeedRolesAndUsersAsync(app).Wait();
