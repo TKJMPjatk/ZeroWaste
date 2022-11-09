@@ -23,9 +23,24 @@
             <span>@TempData["Success"]</span>
         </div>
     }
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <form class="row" asp-action="UpdateRecipeStatus" asp-controller="Recipes">
+            @Html.HiddenFor(m=>m.Id, @ViewData["recipeId"])
+            <div class="col-md-4">
+                <p class="text-end">Obecny status: @ViewData["statusName"]</p>
+            </div>
+            <div class="col-md-4">
+                @Html.DropDownListFor(s => s.StatusId,ViewBag.Statuses as SelectList, new { @class = "form-select" })
+            </div>
+            <div class="col-md-4">
+                <input type="submit" value="Zmień status" class="btn btn-default btn-pale-pink float-left" />
+            </div>
+        </form>
+    }
     <div class="row">
         @Html.HiddenFor(m=>m.NewReviewRecipeId, @ViewData["recipeId"])
-        
+
         <div class="col-md-6">
             <div class="form-group mt-1rem">
                 <i class="bi bi-award form-icon"></i><label asp-for="Title" class="control-label form-label"></label>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Http.Headers;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 using ZeroWaste.Data.Handlers.Account;
 using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.Recipes;
+using ZeroWaste.Data.Services.Statuses;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.ExistingRecipe;
@@ -21,12 +23,14 @@ public class RecipesController : Controller
     private readonly IRecipesService _recipesService;
     private readonly IPhotoService _photoService;
     private readonly IAccountHandler _accountHandler;
+    private readonly IStatusesService _statusesService;
         
-    public RecipesController(IRecipesService recipesService, IPhotoService photoService, IAccountHandler accountHandler)
+    public RecipesController(IRecipesService recipesService, IPhotoService photoService, IAccountHandler accountHandler, IStatusesService statusesService)
     {
         _recipesService = recipesService;
         _photoService = photoService;   
         _accountHandler = accountHandler;
+        _statusesService = statusesService;
     }
     public async Task<IActionResult> Create()
     {
@@ -42,6 +46,13 @@ public class RecipesController : Controller
         {
             return View("NotFound");
         }
+        if (recipeDetails.StatusId != 1)
+        {
+            return View("Unauthorized");
+        }
+        var statutses = await _statusesService.GetAllAsync();
+        ViewBag.Statuses = new SelectList(statutses, "Id", "Name");
+        ViewData["statusName"] = statutses.Where(c => c.Id == recipeDetails.StatusId).Select(c => c.Name).First();
         ViewData["recipeId"] = id;
         TempData["Error"] = error;
         TempData["Success"] = success;
@@ -124,5 +135,21 @@ public class RecipesController : Controller
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         await _recipesService.AddNotLiked(recipeId, userId);
         return RedirectToAction("Details", "Recipes", new { id = recipeId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateRecipeStatus(DetailsRecipeVM detailsRecipeVM)
+    {
+        var recipeDetails = await _recipesService.GetEditByIdAsync(detailsRecipeVM.Id);
+        if (recipeDetails is null)
+        {
+            return View("NotFound");
+        }
+        if (!User.IsInRole("Admin"))
+        {
+            return View("Unauthorized");
+        }
+        await _recipesService.UpdateStateAsync(detailsRecipeVM.Id, detailsRecipeVM.StatusId);
+        return RedirectToAction("Details", "Recipes", new { id = detailsRecipeVM.Id });
     }
 }

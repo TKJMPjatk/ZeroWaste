@@ -19,5 +19,6 @@ namespace ZeroWaste.Data.Services.Recipes
         Task<bool> IsAuthorEqualsEditor(int recipeId, string editorId);
         Task<List<int>> GetRecipeIdList();
         Task ConfirmRecipe(int recipeId);
+        Task UpdateStateAsync(int recipeId, int statusId);
     }
 }

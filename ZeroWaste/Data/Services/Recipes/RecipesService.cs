@@ -164,5 +164,13 @@ namespace ZeroWaste.Data.Services.Recipes
             entityEntry.State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateStateAsync(int recipeId, int statusId)
+        {
+            var recipe = await _context.Recipes.FindAsync(recipeId);
+            recipe.StatusId = statusId;
+            _context.Entry(recipe).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }
