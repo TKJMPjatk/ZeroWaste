@@ -29,5 +29,7 @@ namespace ZeroWaste.Data.ViewModels.ExistingRecipe
         [Display(Name = "Opis")]
         public string NewReviewDescription { get; set; }
         public int NewReviewRecipeId { get; set; }
+        [Display(Name = "Status")]
+        public int StatusId { get; set; }
     }
 }
