@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroWaste.DB", "ZeroWaste.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroWaste.Tests", "ZeroWaste.Tests\ZeroWaste.Tests.csproj", "{CFBA9236-4BC2-4F5B-B260-32BB04F68936}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroWaste.IntegrationTests", "ZeroWaste.IntegrationTests\ZeroWaste.IntegrationTests.csproj", "{E81F6830-64C0-434B-BEBF-A570B4C32F5F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{CFBA9236-4BC2-4F5B-B260-32BB04F68936}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFBA9236-4BC2-4F5B-B260-32BB04F68936}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFBA9236-4BC2-4F5B-B260-32BB04F68936}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E81F6830-64C0-434B-BEBF-A570B4C32F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E81F6830-64C0-434B-BEBF-A570B4C32F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E81F6830-64C0-434B-BEBF-A570B4C32F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E81F6830-64C0-434B-BEBF-A570B4C32F5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
