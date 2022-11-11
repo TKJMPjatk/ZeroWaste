@@ -11,7 +11,7 @@ public interface IRecipesSearchService
 {
     Task<List<Recipe>> GetByCategoryAsync(int categoryId);
     Task<List<SearchByIngredientsResults>> GetByIngredients(List<IngredientForSearch> searchByIngredientsVm);
-    Task<List<Recipe>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId);
+    Task<List<SearchByIngredientsResults>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId);
     Task<List<Recipe>> GetByStatus(int statusId);
     Task<List<Recipe>> GetFavouriteByUserIdAsync(string userId);
     Task<List<Recipe>> GetHatedByUserIdAsync(string userId);

@@ -9,6 +9,8 @@ using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.Helpers.RecipeCategoryImage;
 using ZeroWaste.Data.Helpers.SearchByIngredients;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.FavouriteRecipes;
+using ZeroWaste.Data.Services.HatedRecipes;
 using ZeroWaste.Data.Services.RecipesSearch;
 using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.RecipeIngredients;
@@ -62,6 +64,8 @@ public class ServicesConfiguration
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<IRecipeIngredientService, RecipeIngredientService>();
         services.AddScoped<IStatusesService, StatusesService>();
+        services.AddScoped<IFavouritesRecipesService, FavouritesRecipesService>();
+        services.AddScoped<IHatedRecipesService, HatedRecipesService>();
     }    
     private void ConfigureStrategy(IServiceCollection services)
     {

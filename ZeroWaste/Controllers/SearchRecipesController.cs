@@ -1,6 +1,7 @@
 using System.Security.Claims;
-using System.Web.Http;
+using System.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Enums;
@@ -13,6 +14,9 @@ using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.RecipeSearch;
 using ZeroWaste.Models;
+using Controller = Microsoft.AspNetCore.Mvc.Controller;
+using JsonResult = Microsoft.AspNetCore.Mvc.JsonResult;
+using ViewContext = Microsoft.AspNetCore.Mvc.Rendering.ViewContext;
 
 namespace ZeroWaste.Controllers;
 
@@ -62,6 +66,16 @@ public class SearchRecipesController : Controller
         }
         var newSearchByIngredientsVm = _searchRecipeHandler.AddIngredient(searchByIngredientsVm);
         return View("SearchByIngredients", newSearchByIngredientsVm);
+    }
+
+    [Microsoft.AspNetCore.Mvc.HttpPost]
+    public async Task<IActionResult> DeleteIngredient(SearchByIngredientsVm searchByIngredientsVm)
+    {
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
+        var searchByIngredientsResult = _searchRecipeHandler.DeleteIngredient(searchByIngredientsVm);
+        ModelState.Clear();
+        return View("SearchByIngredients", searchByIngredientsResult);
     }
     [Microsoft.AspNetCore.Mvc.HttpGet]
     public async Task<JsonResult> SearchByIngredientsAuto()
@@ -149,14 +163,16 @@ public class SearchRecipesController : Controller
     }
     [Microsoft.AspNetCore.Mvc.HttpPost]
     public async Task<IActionResult> ReturnToSearchByIngredients(SearchRecipeResultsVm resultsVm)
-    {
+    {        
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
         SearchByIngredientsVm searchByIngredientsVm = new SearchByIngredientsVm()
         {
             SingleIngredientToSearchVm = resultsVm.IngredientsLists
         };
         return View("SearchByIngredients", searchByIngredientsVm);
     }
-    [Authorize(Roles = UserRoles.Admin)]
+    [System.Web.Http.Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> SearchForConfirm(int statusId = 1)
     {
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
