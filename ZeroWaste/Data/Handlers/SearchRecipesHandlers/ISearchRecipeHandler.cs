@@ -8,6 +8,7 @@ public interface ISearchRecipeHandler
 {
     Task<List<CategorySearchVm>> GetCategoriesSearchVm();
     SearchByIngredientsVm AddIngredient(SearchByIngredientsVm searchByIngredientsVm);
+    SearchByIngredientsVm DeleteIngredient(SearchByIngredientsVm searchByIngredientsVm);
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm);
     Task<int> GetRandomRecipeId();
 }

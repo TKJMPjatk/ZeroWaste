@@ -50,6 +50,20 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         _searchByIngredientAdder.AddIngredientToSearchByIngredientsVm(searchByIngredientsVm);
         return searchByIngredientsVm;
     }
+
+    public SearchByIngredientsVm DeleteIngredient(SearchByIngredientsVm searchByIngredientsVm)
+    {
+        var item = searchByIngredientsVm.SingleIngredientToSearchVm.FirstOrDefault(x =>
+            x.Name == searchByIngredientsVm.Name);
+        searchByIngredientsVm.SingleIngredientToSearchVm.Remove(item);
+        searchByIngredientsVm.Name = string.Empty;
+        for (int i = 0; i < searchByIngredientsVm.SingleIngredientToSearchVm.Count; i++)
+        {
+            searchByIngredientsVm.SingleIngredientToSearchVm[i].Index = i + 1;
+        }
+        return searchByIngredientsVm;
+    }
+
     public async Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm)
     {
         resultsVm.RecipesList = GetSortField(resultsVm.RecipesList, resultsVm.SortTypeId);

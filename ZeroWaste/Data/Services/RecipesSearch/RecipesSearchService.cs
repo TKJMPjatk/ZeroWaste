@@ -64,15 +64,28 @@ public class RecipesSearchService : IRecipesSearchService
         }
         return listOfId;
     }
-    public async Task<List<Recipe>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId)
+    public async Task<List<SearchByIngredientsResults>> GetByAll(List<IngredientForSearch> ingredientsForSearchList, int categoryId)
     {        
-        var list = await _context
-            .Recipes
-            .Include(x => x.RecipesIngredients)
-            .ThenInclude(x=>x.Ingredient)
-            .Where(x => x.CategoryId == categoryId && x.StatusId == 1)
-            .ToListAsync();
-        return list;
+        List<string> listOfIds = await GetListOfIds(ingredientsForSearchList);
+        string querySql = @"SELECT
+	                          RecipeId
+	                        , Title 
+                            , EstimatedTime
+                            , DifficultyLevel 
+                            , CategoryId 
+                            , IngredientName 
+                            , UnitOfMeasureShortcut 
+                            , IngredientQuantity 
+                            , Match 
+                            , MissingIngredientsCount 
+                        FROM [dbo].[SearchByIngredientsAndCategory] (@IdsIngredients, @IdCategory)";
+        using(var connection = new SqlConnection(_context.Database.GetConnectionString()))
+        {
+            var searchByIngredientsResult = 
+                await connection.QueryAsync<SearchByIngredientsResults>(querySql, new {@IdsIngredients = string.Join(",", listOfIds), @IdCategory = categoryId});
+            return searchByIngredientsResult.ToList();
+        }
+        return null;
     }
     public async Task<List<Recipe>> GetByStatus(int statusId)
     {
