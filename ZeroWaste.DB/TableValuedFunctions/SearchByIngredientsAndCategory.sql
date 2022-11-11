@@ -14,6 +14,7 @@ GO
 CREATE OR ALTER FUNCTION [dbo].[SearchByIngredients]
 (
 	@IdsVarchar VARCHAR(MAX)
+	, @IdCategory INT
 )
 RETURNS 
 @Result_Table TABLE 
@@ -67,6 +68,7 @@ FROM(
     CategoryId
     FROM	dbo.Recipes
     WHERE	StatusId = 1
+    AND	CategoryId = @IdCategory
     )T
     INNER JOIN	dbo.RecipeIngredients
 ON	RecipeIngredients.RecipeId = T.RecipeId
@@ -80,4 +82,5 @@ WHERE	MatchIngredientsCount > 0
 
     RETURN
 END
+
 GO
