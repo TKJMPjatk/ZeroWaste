@@ -21,6 +21,15 @@ public class ShoppingListsService : IShoppingListsService
             .ToListAsync();
     }
 
+    public async Task<List<ShoppingList>> GetByUserAsync(string userId)
+    {        
+        return await _context
+        .ShoppingLists
+        .Include(x => x.ShoppingListIngredients)
+        .Where(x => x.UserId == userId)
+        .ToListAsync();
+    }
+
     public async Task<ShoppingList> GetByIdAsync(int id)
     {
         return await _context
@@ -70,5 +79,10 @@ public class ShoppingListsService : IShoppingListsService
         EntityEntry entityEntry = _context.Entry(entity);
         entityEntry.State = EntityState.Modified;
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsShoppingListExists(int shoppingListId)
+    {
+        return await _context.ShoppingLists.AnyAsync(x => x.Id == shoppingListId);
     }
 }

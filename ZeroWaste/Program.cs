@@ -52,16 +52,25 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.UseStaticFiles(new StaticFileOptions()
+if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images")))
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images")),
-    RequestPath = "/wwwroot/images"
-});
+    app.UseStaticFiles(new StaticFileOptions()
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images")),
+        RequestPath = "/wwwroot/images"
+    });
+}
+
 if (bool.Parse(builder.Configuration.GetSection("SeedDatabase").Value))
 {
     AppDbInitializer.SeedRolesAndUsersAsync(app).Wait();
     AppDbInitializer.Seed(app);
 }
 app.Run();
+
+public partial class Program
+{
+    
+}
 

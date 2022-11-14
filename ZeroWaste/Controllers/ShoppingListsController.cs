@@ -20,18 +20,15 @@ public class ShoppingListsController : Controller
     }
     public async Task<IActionResult> Index()
     {
-        List<ShoppingList> shoppingLists = await _shoppingListsService.GetAllAsync();
-        shoppingLists = shoppingLists
-            .Where(x => 
-                x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-            .ToList();
-        return View(shoppingLists);
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
+        List<ShoppingList> shoppingLists = await _shoppingListsService.GetByUserAsync(userId);
+        return View(nameof(Index), shoppingLists);
     }
     public async Task<IActionResult> Edit(int id)
     {
         ViewBag.Hidden = "hidden";
         var shoppingList = await _shoppingListsService.GetByIdAsync(id);
-        return View(shoppingList);
+        return View(nameof(Edit),shoppingList);
     }
     public async Task<IActionResult> ChangeIngredientSelection(int ingredientId, int shoppingListId)
     {
@@ -63,6 +60,9 @@ public class ShoppingListsController : Controller
     [HttpPost]
     public async Task<IActionResult> EditTitle(ShoppingList shoppingList)
     {
+        var tmp = await _shoppingListsService.IsShoppingListExists(shoppingList.Id);
+        if (!(tmp))
+            return View("NotFound");
         await _shoppingListsService.EditAsync(shoppingList);
         return RedirectToAction("Edit", new {id = shoppingList.Id});
     }
