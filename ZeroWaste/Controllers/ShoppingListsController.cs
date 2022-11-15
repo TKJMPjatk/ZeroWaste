@@ -20,14 +20,17 @@ public class ShoppingListsController : Controller
     }
     public async Task<IActionResult> Index()
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
-        List<ShoppingList> shoppingLists = await _shoppingListsService.GetByUserAsync(userId);
+        List<ShoppingList> shoppingLists = await _shoppingListHandler
+            .GetShoppingListsByUserId(GetLoggedUser());
         return View(nameof(Index), shoppingLists);
     }
     public async Task<IActionResult> Edit(int id)
     {
         ViewBag.Hidden = "hidden";
-        var shoppingList = await _shoppingListsService.GetByIdAsync(id);
+        var shoppingList = await _shoppingListHandler
+            .GetShoppingListById(id);
+        if (shoppingList is null)
+            return View("NotFound");
         return View(nameof(Edit),shoppingList);
     }
     public async Task<IActionResult> ChangeIngredientSelection(int ingredientId, int shoppingListId)
@@ -37,6 +40,8 @@ public class ShoppingListsController : Controller
     }
     public async Task<IActionResult> Delete(int id)
     {
+        if (!await _shoppingListHandler.IsShoppingListExists(id))
+            return View("NotFound");
         await _shoppingListHandler.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
@@ -52,11 +57,10 @@ public class ShoppingListsController : Controller
     public async Task<IActionResult> Create(NewShoppingListVM shoppingListVm)
     {
         if (!(ModelState.IsValid))
-            return View(shoppingListVm);
+            return View("Create", shoppingListVm);
         var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm, User.FindFirst(ClaimTypes.NameIdentifier).Value);
         return RedirectToAction("NewIngredientForShoppingList", "ShoppingListIngredients", new {id = addedShoppingList.Id});
     }
-
     [HttpPost]
     public async Task<IActionResult> EditTitle(ShoppingList shoppingList)
     {
@@ -65,5 +69,13 @@ public class ShoppingListsController : Controller
             return View("NotFound");
         await _shoppingListsService.EditAsync(shoppingList);
         return RedirectToAction("Edit", new {id = shoppingList.Id});
+    }
+
+    private string GetLoggedUser()
+    {
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (user is null)
+            throw new Exception("There is no logged user");
+        return user.Value;
     }
 }

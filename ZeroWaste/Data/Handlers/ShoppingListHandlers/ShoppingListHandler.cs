@@ -17,6 +17,17 @@ public class ShoppingListHandler : IShoppingListHandler
         _ingredientSelectionService = ingredientSelectionService;
         _mapper = mapper;
     }
+    public async Task<List<ShoppingList>> GetShoppingListsByUserId(string userId)
+    {
+        return await _shoppingListsService
+            .GetByUserIdAsync(userId);
+    }
+    public async Task<ShoppingList> GetShoppingListById(int id)
+    {
+        return await _shoppingListsService
+            .GetByIdAsync(id);
+    }
+
     public async Task<ShoppingList> Create(NewShoppingListVM shoppingListVm, string userId)
     {
         ShoppingList shoppingList = MapNewShoppingListVm(shoppingListVm);
@@ -48,5 +59,10 @@ public class ShoppingListHandler : IShoppingListHandler
     public async Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId)
     {
         return await _shoppingListsService.IsZeroQuantityIngredientsExists(shoppingListId);
+    }
+
+    public Task<bool> IsShoppingListExists(int shoppingListId)
+    {
+        throw new NotImplementedException();
     }
 }

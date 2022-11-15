@@ -3,8 +3,7 @@ using ZeroWaste.Models;
 namespace ZeroWaste.Data.Services.ShoppingLists;
 public interface IShoppingListsService
 {
-    Task<List<ShoppingList>> GetAllAsync();
-    Task<List<ShoppingList>> GetByUserAsync(string userId);
+    Task<List<ShoppingList>> GetByUserIdAsync(string userId);
     Task<ShoppingList> GetByIdAsync(int id);
     Task<ShoppingList> GetAllIngredientsAsync(int id);
     Task<ShoppingList> CreateAsync(ShoppingList shoppingList);

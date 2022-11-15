@@ -13,15 +13,7 @@ public class ShoppingListsService : IShoppingListsService
     {
         _context = context;
     }
-    public async Task<List<ShoppingList>> GetAllAsync()
-    {
-        return await _context
-            .ShoppingLists
-            .Include(x => x.ShoppingListIngredients)
-            .ToListAsync();
-    }
-
-    public async Task<List<ShoppingList>> GetByUserAsync(string userId)
+    public async Task<List<ShoppingList>> GetByUserIdAsync(string userId)
     {        
         return await _context
         .ShoppingLists
@@ -29,7 +21,6 @@ public class ShoppingListsService : IShoppingListsService
         .Where(x => x.UserId == userId)
         .ToListAsync();
     }
-
     public async Task<ShoppingList> GetByIdAsync(int id)
     {
         return await _context
