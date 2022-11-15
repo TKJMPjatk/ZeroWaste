@@ -11,16 +11,16 @@
     <p>
         <h3>Podgląd przepisu</h3>
     </p>
-    @if (TempData["Error"] != null)
+    @if (ViewData["Error"] != null)
     {
         <div class="col-md-12 alert alert-danger">
-            <span>@TempData["Error"]</span>
+            <span>@ViewData["Error"]</span>
         </div>
     }
-    @if (TempData["Success"] != null)
+    @if (ViewData["Success"] != null)
     {
         <div class="col-md-12 alert alert-success">
-            <span>@TempData["Success"]</span>
+            <span>@ViewData["Success"]</span>
         </div>
     }
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))

@@ -36,7 +36,7 @@ public class RecipesController : Controller
     {
         var recipeDropdownsData = await _recipesService.GetDropdownsValuesAsync();
         ViewBag.Categories = new SelectList(recipeDropdownsData.Categories, "Id", "Name");
-        return View();
+        return View(nameof(Create));
     }
     [AllowAnonymous]
     public async Task<IActionResult> Details(int id, string? error, string? success)
@@ -54,10 +54,10 @@ public class RecipesController : Controller
         ViewBag.Statuses = new SelectList(statutses, "Id", "Name");
         ViewData["statusName"] = statutses.Where(c => c.Id == recipeDetails.StatusId).Select(c => c.Name).First();
         ViewData["recipeId"] = id;
-        TempData["Error"] = error;
-        TempData["Success"] = success;
+        ViewData["Error"] = error;
+        ViewData["Success"] = success;
         recipeDetails.NewReviewRecipeId = id;
-        return View(recipeDetails);
+        return View(nameof(Details),recipeDetails);
     }
     public async Task<IActionResult> Edit(int id)
     {
