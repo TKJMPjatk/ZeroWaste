@@ -8,7 +8,7 @@ namespace ZeroWaste.Data.Services
         Task<List<Ingredient>> GetAllAsync();
         Task<List<Ingredient>> GetAllAsync(string searchString);
         Task<NewIngredientDropdownsWM> GetNewIngredientDropdownsWM();
-        Task<Ingredient> GetByIdAsync(int? id);
+        Task<Ingredient?> GetByIdAsync(int? id);
         Task<NewIngredientVM> GetVmByIdAsync(int? id);
         Task<NewIngredientVM> GetVmByNameAsync(string name);
         Task AddNewAsync(NewIngredientVM newIngredient);
