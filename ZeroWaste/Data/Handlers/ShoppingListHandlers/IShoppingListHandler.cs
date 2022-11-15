@@ -8,7 +8,6 @@ public interface IShoppingListHandler
     Task<List<ShoppingList>> GetShoppingListsByUserId(string userId);
     Task<ShoppingList> GetShoppingListById(int id);
     Task<ShoppingList> Create(NewShoppingListVM shoppingListVm, string userId);
-    Task HandleSelection(int ingredientId);
     Task DeleteAsync(int id);
     Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId);
     Task<bool> IsShoppingListExists(int shoppingListId);

@@ -54,4 +54,10 @@ public class ShoppingListIngredientsController : Controller
             .EditQuantityOfNewIngredients(quantityVm);
         return RedirectToAction("Edit","ShoppingLists",new {id = quantityVm.ShoppingListId});
     }
+    public async Task<IActionResult> ChangeIngredientSelection(int shoppingListIngredientId)
+    {
+        int shoppingListId = await _shoppingListIngredientsHandler
+                .ChangeShoppingListIngredientSelection(shoppingListIngredientId);
+        return RedirectToAction("Edit", "ShoppingLists", new {id = shoppingListId});
+    }
 }

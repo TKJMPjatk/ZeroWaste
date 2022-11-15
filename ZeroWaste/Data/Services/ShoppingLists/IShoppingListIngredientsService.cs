@@ -10,4 +10,5 @@ public interface IShoppingListIngredientsService
     Task DeleteIngredientFromShoppingList(int shoppingId, int ingredientId);
     Task<List<ShoppingListIngredient>> GetIngredientsForShoppingList(int shoppingListId);
     Task<List<ShoppingListIngredient>> GetNewIngredientsForShoppingList(int shoppingListId);
+    Task<int> ChangeShoppingListIngredientSelection(int shoppingListIngredientId);
 }

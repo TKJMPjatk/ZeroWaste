@@ -14,7 +14,6 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
     private readonly IIngredientsService _ingredientsService;
     private readonly IMapper _mapper;
     private List<int> _idOfIngredientsInShoppingList = new List<int>();
-
     public ShoppingListIngredientsHandler(IShoppingListIngredientsService shoppingListIngredientService, IIngredientsService ingredientsService, IMapper mapper)
     {
         _shoppingListIngredientService = shoppingListIngredientService;
@@ -76,5 +75,12 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
             await _shoppingListIngredientService
                 .EditQuantityAsync(item.Id, item.Quantity);
         }
+    }
+
+    public async Task<int> ChangeShoppingListIngredientSelection(int shoppingListIngredientId)
+    {
+        int shoppingListId = await _shoppingListIngredientService
+            .ChangeShoppingListIngredientSelection(shoppingListIngredientId);
+        return shoppingListId;
     }
 }

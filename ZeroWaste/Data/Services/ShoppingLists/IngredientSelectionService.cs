@@ -26,7 +26,6 @@ public class IngredientSelectionService : IIngredientSelectionService
         entity.State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
-
     public async Task<ShoppingListIngredient> GetShoppingListIngredientByIdAsync(int id)
     {
         var entity = await _context

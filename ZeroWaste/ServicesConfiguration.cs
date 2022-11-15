@@ -1,3 +1,4 @@
+using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.Handlers.Account;
 using ZeroWaste.Data.Handlers.AdminSearchHadlers;
 using ZeroWaste.Data.Handlers.AutomatedShoppingList;
@@ -44,6 +45,7 @@ public class ServicesConfiguration
         services.AddScoped<IAutomatedShoppingListHandler, AutomatedShoppingListHandler>();
         services.AddScoped<IAccountHandler, AccountHandler>();
         services.AddScoped<IAdminSearchHandler, AdminSearchHandler>();
+        services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
     }
 
     private void ConfigureHelpers(IServiceCollection services)

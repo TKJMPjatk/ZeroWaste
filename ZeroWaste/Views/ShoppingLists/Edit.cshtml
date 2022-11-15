@@ -37,11 +37,11 @@
                                 <div class="col-md-1">
                                     @if (!(item.Selected))
                                     {
-                                        <a class="btn btn-white width-max height-max" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-square"></i></a>
+                                        <a class="btn btn-white width-max height-max" asp-controller="ShoppingListIngredients" asp-action="ChangeIngredientSelection" asp-route-shoppingListIngredientId="@item.Id"><i class="bi bi-square"></i></a>
                                     }
                                     else
                                     {
-                                        <a class="btn btn-white width-max height-max" asp-action="ChangeIngredientSelection" asp-route-ingredientId="@item.Id" asp-route-shoppingListId="@item.ShoppingListId"><i class="bi bi-check-square"></i></a>
+                                        <a class="btn btn-white width-max height-max" asp-controller="ShoppingListIngredients" asp-action="ChangeIngredientSelection" asp-route-shoppingListIngredientId="@item.Id"><i class="bi bi-check-square"></i></a>
                                     }
                                 </div>
                                 <div class="col-md-11">

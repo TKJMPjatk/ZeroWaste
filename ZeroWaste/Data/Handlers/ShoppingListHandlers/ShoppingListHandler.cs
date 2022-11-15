@@ -27,7 +27,6 @@ public class ShoppingListHandler : IShoppingListHandler
         return await _shoppingListsService
             .GetByIdAsync(id);
     }
-
     public async Task<ShoppingList> Create(NewShoppingListVM shoppingListVm, string userId)
     {
         ShoppingList shoppingList = MapNewShoppingListVm(shoppingListVm);
@@ -35,16 +34,6 @@ public class ShoppingListHandler : IShoppingListHandler
         shoppingList.FillTodaysDate();
         var addedShoppingList = await _shoppingListsService.CreateAsync(shoppingList);
         return addedShoppingList;
-    }
-
-    public async Task HandleSelection(int ingredientId)
-    {
-        var ingredient = await _ingredientSelectionService
-            .GetShoppingListIngredientByIdAsync(ingredientId);
-        if (!(ingredient.Selected))
-            await _ingredientSelectionService.SelectIngredient(ingredient);
-        else
-            await _ingredientSelectionService.UnSelectIngredient(ingredient);
     }
     private ShoppingList MapNewShoppingListVm(NewShoppingListVM shoppingListVm)
     {

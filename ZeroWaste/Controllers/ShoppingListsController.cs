@@ -35,7 +35,7 @@ public class ShoppingListsController : Controller
     }
     public async Task<IActionResult> ChangeIngredientSelection(int ingredientId, int shoppingListId)
     {
-        await _shoppingListHandler.HandleSelection(ingredientId);
+        //await _shoppingListHandler.HandleSelection(ingredientId);
         return RedirectToAction(nameof(Edit), new {id = shoppingListId});
     }
     public async Task<IActionResult> Delete(int id)

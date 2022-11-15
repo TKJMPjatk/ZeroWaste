@@ -6,4 +6,5 @@ public interface IShoppingListIngredientsHandler
 {
     Task<ShoppingListIngredientsVm> GetShoppingListIngredientsVm(int shoppingListId, string searchString);
     Task EditQuantityOfNewIngredients(EditQuantityVM editQuantityVm);
+    Task<int> ChangeShoppingListIngredientSelection(int shoppingListIngredientId);
 }
