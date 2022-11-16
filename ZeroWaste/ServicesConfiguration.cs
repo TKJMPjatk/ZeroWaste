@@ -60,7 +60,6 @@ public class ServicesConfiguration
         services.AddScoped<IShoppingListsService, ShoppingListsService>();
         services.AddScoped<IIngredientsService, IngredientsService>();
         services.AddScoped<IShoppingListIngredientsService, ShoppingListIngredientsService>();
-        services.AddScoped<IIngredientSelectionService, IngredientSelectionService>();
         services.AddScoped<IRecipesSearchService, RecipesSearchService>();
         services.AddScoped<IRecipesService, RecipesService>();
         services.AddScoped<IPhotoService, PhotoService>();

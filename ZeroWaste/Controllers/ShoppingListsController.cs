@@ -33,11 +33,6 @@ public class ShoppingListsController : Controller
             return View("NotFound");
         return View(nameof(Edit),shoppingList);
     }
-    public async Task<IActionResult> ChangeIngredientSelection(int ingredientId, int shoppingListId)
-    {
-        //await _shoppingListHandler.HandleSelection(ingredientId);
-        return RedirectToAction(nameof(Edit), new {id = shoppingListId});
-    }
     public async Task<IActionResult> Delete(int id)
     {
         if (!await _shoppingListHandler.IsShoppingListExists(id))

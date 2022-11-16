@@ -30,7 +30,6 @@ public class ShoppingListsService : IShoppingListsService
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
     }
-
     public async Task<ShoppingList> GetAllIngredientsAsync(int id)
     {
         return await _context
@@ -39,7 +38,6 @@ public class ShoppingListsService : IShoppingListsService
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
     }
-
     public async Task<ShoppingList> CreateAsync(ShoppingList shoppingList)
     {
         await _context.ShoppingLists.AddAsync(shoppingList);
@@ -47,7 +45,6 @@ public class ShoppingListsService : IShoppingListsService
         await _context.SaveChangesAsync();
         return shoppingList;
     }
-
     public async Task DeleteAsync(int id)
     {
         var entity = await GetByIdAsync(id);
@@ -55,14 +52,12 @@ public class ShoppingListsService : IShoppingListsService
         entityEntry.State = EntityState.Deleted;
         await _context.SaveChangesAsync();
     }
-
     public async Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId)
     {
         return await _context
             .ShoppingListIngredients
             .AnyAsync(x => x.ShoppingListId == shoppingListId && x.Quantity == 0);
     }
-
     public async Task EditAsync(ShoppingList shoppingList)
     {
         var entity = await GetByIdAsync(shoppingList.Id);
@@ -71,7 +66,6 @@ public class ShoppingListsService : IShoppingListsService
         entityEntry.State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
-
     public async Task<bool> IsShoppingListExists(int shoppingListId)
     {
         return await _context.ShoppingLists.AnyAsync(x => x.Id == shoppingListId);

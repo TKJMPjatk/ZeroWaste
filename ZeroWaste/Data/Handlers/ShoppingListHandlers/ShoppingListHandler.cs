@@ -9,12 +9,10 @@ namespace ZeroWaste.Data.Handlers.ShoppingListHandlers;
 public class ShoppingListHandler : IShoppingListHandler
 {
     private IShoppingListsService _shoppingListsService;
-    private IIngredientSelectionService _ingredientSelectionService;
     private IMapper _mapper;
-    public ShoppingListHandler(IShoppingListsService shoppingListsService, IIngredientSelectionService ingredientSelectionService,IMapper mapper)
+    public ShoppingListHandler(IShoppingListsService shoppingListsService, IMapper mapper)
     {
         _shoppingListsService = shoppingListsService;
-        _ingredientSelectionService = ingredientSelectionService;
         _mapper = mapper;
     }
     public async Task<List<ShoppingList>> GetShoppingListsByUserId(string userId)
@@ -44,12 +42,10 @@ public class ShoppingListHandler : IShoppingListHandler
     {
         await _shoppingListsService.DeleteAsync(id);
     }
-
     public async Task<bool> IsZeroQuantityIngredientsExists(int shoppingListId)
     {
         return await _shoppingListsService.IsZeroQuantityIngredientsExists(shoppingListId);
     }
-
     public Task<bool> IsShoppingListExists(int shoppingListId)
     {
         throw new NotImplementedException();
