@@ -37,6 +37,7 @@ public class AccountHandler : IAccountHandler
             FullName = registerVm.FullName,
             Email = registerVm.EmailAddress,
             UserName = registerVm.EmailAddress,
+            CreatedAt = DateTime.UtcNow,
         };
         var newUserResponse = await _userManager.CreateAsync(newUser, registerVm.Password);
         if (newUserResponse.Succeeded)
