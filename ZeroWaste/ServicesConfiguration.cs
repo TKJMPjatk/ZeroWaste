@@ -18,6 +18,7 @@ using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Data.Services.Reviews;
+using ZeroWaste.Data.Services.ShoppingListIngredients;
 using ZeroWaste.Data.Services.Statuses;
 
 namespace ZeroWaste;
