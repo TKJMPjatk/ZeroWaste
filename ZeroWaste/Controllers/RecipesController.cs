@@ -74,7 +74,7 @@ public class RecipesController : Controller
 
         var recipeDropdownsData = await _recipesService.GetDropdownsValuesAsync();
         ViewBag.Categories = new SelectList(recipeDropdownsData.Categories, "Id", "Name");
-        return View(recipeDetails);
+        return View(nameof(Edit),recipeDetails);
     }
     [HttpPost]
     public async Task<IActionResult> Edit(EditRecipeVM recipe, IEnumerable<IFormFile> filesUpload)
@@ -88,7 +88,7 @@ public class RecipesController : Controller
             var recipePhotos = await _photoService.GetPhotoVMAsync(recipe.Id);
             recipe.Photos = recipePhotos.ToList();
             ViewBag.Categories = new SelectList(recipeDropdownsData.Categories, "Id", "Name");
-            return View(recipe);
+            return View(nameof(Edit), recipe);
         }
 
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
