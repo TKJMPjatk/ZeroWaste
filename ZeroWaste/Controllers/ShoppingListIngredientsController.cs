@@ -11,41 +11,32 @@ namespace ZeroWaste.Controllers;
 [Authorize]
 public class ShoppingListIngredientsController : Controller
 {
-    private readonly IShoppingListIngredientsService _shoppingListIngredientService;
     private readonly IShoppingListIngredientsHandler _shoppingListIngredientsHandler;
-    public ShoppingListIngredientsController(IShoppingListIngredientsService shoppingListIngredientService,  IShoppingListIngredientsHandler shoppingListIngredientsHandler)
+    public ShoppingListIngredientsController(IShoppingListIngredientsHandler shoppingListIngredientsHandler)
     {
-        _shoppingListIngredientService = shoppingListIngredientService;
         _shoppingListIngredientsHandler = shoppingListIngredientsHandler;
     }
-    public async Task<IActionResult> NewIngredientForShoppingList(int id, string searchString)
+    public async Task<IActionResult> IngredientsToAdd(int id, string searchString)
     {
-        var item = await _shoppingListIngredientsHandler
-            .GetShoppingListIngredientsVm(id, searchString);
-        return View(item);
+        var item = await _shoppingListIngredientsHandler.GetShoppingListIngredientsVm(id, searchString);
+        return View(nameof(IngredientsToAdd), item);
     }
-    public async Task<IActionResult> DeleteIngredientFromShoppingList(int shoppingListId, int ingredientId)
+    public async Task<IActionResult> DeleteIngredientFromShoppingList(int id)
     {
-        await _shoppingListIngredientService
-            .DeleteIngredientFromShoppingList(shoppingListId, ingredientId);
+        int shoppingListId = await _shoppingListIngredientsHandler.HandleDeleteIngredientFromShoppingList(id);
         return RedirectToAction( "Edit", "ShoppingLists", new {id = shoppingListId});
     }
     public async Task<IActionResult> AddIngredientToShoppingList(int id, int shoppingListId)
     {
-        await _shoppingListIngredientService
-            .AddIngredientToShoppingList(shoppingListId, id);
-        return RedirectToAction(nameof(NewIngredientForShoppingList), new {id = shoppingListId});
+        //Todo: Poprawić argument z id na ingredientId
+        await _shoppingListIngredientsHandler
+            .AddIngredientToShoppingList(id, shoppingListId);
+        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId});
     }
     public async Task<IActionResult> EditQuantity(int shoppingListId)
     {
-        var items = await _shoppingListIngredientService
-            .GetNewIngredientsForShoppingList(shoppingListId);
-        EditQuantityVM quantityVm = new EditQuantityVM()
-        {
-            ShoppingListId = shoppingListId,
-            IngredientsToEditQuantity = items
-        };
-        return View(quantityVm);
+        var model = await _shoppingListIngredientsHandler.GetEditQuantity(shoppingListId);
+        return View(nameof(EditQuantity), model);
     }
     [HttpPost]
     public async Task<IActionResult> EditQuantity(EditQuantityVM quantityVm)

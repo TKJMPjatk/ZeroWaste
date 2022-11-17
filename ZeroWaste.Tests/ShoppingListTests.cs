@@ -149,7 +149,7 @@ public class ShoppingListTests
         var routeKey = (viewResult.RouteValues.FirstOrDefault().Key);
         var routeValue = (viewResult.RouteValues.FirstOrDefault().Value);
         controllerName.Should().Be("ShoppingListIngredients");
-        actionName.Should().Be("NewIngredientForShoppingList");
+        actionName.Should().Be("IngredientsToAdd");
         routeKey.Should().Be("id");
         Assert.IsType<int>(routeValue);
     }

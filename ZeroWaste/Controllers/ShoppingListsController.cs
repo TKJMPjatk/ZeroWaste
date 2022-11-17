@@ -54,7 +54,7 @@ public class ShoppingListsController : Controller
         if (!(ModelState.IsValid))
             return View("Create", shoppingListVm);
         var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm, User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        return RedirectToAction("NewIngredientForShoppingList", "ShoppingListIngredients", new {id = addedShoppingList.Id});
+        return RedirectToAction("IngredientsToAdd", "ShoppingListIngredients", new {id = addedShoppingList.Id});
     }
     [HttpPost]
     public async Task<IActionResult> EditTitle(ShoppingList shoppingList)

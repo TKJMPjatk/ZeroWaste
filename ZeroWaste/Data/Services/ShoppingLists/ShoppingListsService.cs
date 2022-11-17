@@ -30,6 +30,17 @@ public class ShoppingListsService : IShoppingListsService
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<ShoppingList> GetByShoppingListIngredientIdAsync(int shoppingListIngredientId)
+    {
+        return await _context
+            .ShoppingListIngredients
+            .Include(x => x.ShoppingList)
+            .Where(x => x.Id == shoppingListIngredientId)
+            .Select(x => x.ShoppingList)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<ShoppingList> GetAllIngredientsAsync(int id)
     {
         return await _context
