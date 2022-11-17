@@ -44,7 +44,7 @@ namespace ZeroWaste.Controllers
             {
                 return View("NotFound");
             }
-            return View(ingredientDetails);
+            return View(nameof(Details),ingredientDetails);
         }
 
         public async Task<IActionResult> Create()
@@ -53,7 +53,7 @@ namespace ZeroWaste.Controllers
             ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
             ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
 
-            return View();
+            return View(nameof(Create));
         }
 
         [HttpPost]
@@ -65,7 +65,7 @@ namespace ZeroWaste.Controllers
                 ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
                 ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
 
-                return View(ingredient);
+                return View(nameof(Create),ingredient);
             }
             await _ingredientsService.AddNewAsync(ingredient);
             return RedirectToAction(nameof(Index));
@@ -82,7 +82,7 @@ namespace ZeroWaste.Controllers
             ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
             ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
 
-            return View(ingredientDetail);
+            return View(nameof(Edit), ingredientDetail);
         }
 
         [HttpPost]
@@ -98,7 +98,7 @@ namespace ZeroWaste.Controllers
                 var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
                 ViewBag.IngredientTypes = new SelectList(ingredientDropdownsData.IngredientTypes, "Id", "Name");
                 ViewBag.UnitOfMeasures = new SelectList(ingredientDropdownsData.UnitOfMeasures, "Id", "Name");
-                return View(ingredient);
+                return View(nameof(Edit), ingredient);
             }
 
             await _ingredientsService.UpdateAsync(ingredient);
@@ -112,7 +112,7 @@ namespace ZeroWaste.Controllers
             {
                 return View("NotFound");
             }
-            return View(ingredientDetails);
+            return View(nameof(Delete),ingredientDetails);
         }
 
         [HttpPost, ActionName("Delete")]

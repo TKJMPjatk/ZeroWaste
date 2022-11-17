@@ -19,6 +19,7 @@ using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Data.Services.Reviews;
 using ZeroWaste.Data.Services.Statuses;
+using ZeroWaste.Data.Services.HarmfulIngredients;
 
 namespace ZeroWaste;
 
@@ -67,6 +68,7 @@ public class ServicesConfiguration
         services.AddScoped<IStatusesService, StatusesService>();
         services.AddScoped<IFavouritesRecipesService, FavouritesRecipesService>();
         services.AddScoped<IHatedRecipesService, HatedRecipesService>();
+        services.AddScoped<IHarmfulIngredientsService, HarmfulIngredientsService>();
     }    
     private void ConfigureStrategy(IServiceCollection services)
     {
