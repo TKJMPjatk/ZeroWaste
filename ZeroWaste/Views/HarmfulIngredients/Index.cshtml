@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Lista produktów szkodliwych";
+}
+
+
+<div class="row">
+    <p class="h1">Twoje listy składników</p>
+</div>
+<div class="row mt-2rem">
+    <div class="col-md-5 offset-1">
+        <p class="h3">Nieszkodliwe</p>
+    </div>
+    <div class="col-md-5 offset-1">
+        <p class="h3">Szkodliwe - przepisy z tymi składnikami nie będą wyświetlane</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5 offset-1">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Typ</th>
+                    <th scope="col">Oznacz jako szkodliwy</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var item in ViewBag.SafeIngredients)
+                {
+                    <tr>
+                        <td>
+                            @item.IngredientName
+                        </td>
+                        <td>
+                            @item.IngredientType
+                        </td>
+                        <td class="align-middle">
+                            <form asp-controller="HarmfulIngredients" asp-action="MarkAsHarmful" asp-route-ingredientId="@item.IngredientId">
+                                <button type="submit" class="btn btn-default"><i class="bi bi-box-arrow-right"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-5 offset-1">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Typ</th>
+                    <th scope="col">Oznacz jako bezpieczny</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var item in ViewBag.HarmfulIngredients)
+                {
+                    <tr>
+                        <td>
+                            @item.IngredientName
+                        </td>
+                        <td>
+                            @item.IngredientType
+                        </td>
+                        <td class="align-middle">
+                            <form asp-controller="HarmfulIngredients" asp-action="UnmarkAsHarmful" asp-route-ingredientId="@item.IngredientId">
+                                <button type="submit" class="btn btn-default"><i class="bi bi-box-arrow-left"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-pale-pink float-left">Powrót</a>
+    </div>
+</div>
