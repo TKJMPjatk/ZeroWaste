@@ -5,6 +5,7 @@ using System.Security.Claims;
 using ZeroWaste.Data.Handlers.Account;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.Login;
+using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
 
@@ -19,7 +20,7 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginVm loginVm)
     {
-        if (!ModelState.IsValid) return View(loginVm);
+        if (!ModelState.IsValid) return View(nameof(Login), loginVm);
         var user = await _accountHandler.GetByEmailAsync(loginVm.EmailAddress);
         if (user != null)
         {
@@ -31,10 +32,10 @@ public class AccountController : Controller
                 }
             }
             TempData["Error"] = "Niepoprawny login lub hasło. Spróbuj jeszcze raz!";
-            return View(loginVm);
+            return View(nameof(Login), loginVm);
         }
         TempData["Error"] = "Niepoprawny login lub hasło. Spróbuj jeszcze raz!";
-        return View(loginVm);
+        return View(nameof(Login),loginVm);
     }
     public IActionResult Register() => View(new RegisterVm());
     [HttpPost]

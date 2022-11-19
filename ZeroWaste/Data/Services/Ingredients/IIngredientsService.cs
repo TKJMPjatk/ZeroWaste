@@ -1,4 +1,5 @@
 ﻿using ZeroWaste.Data.ViewModels.NewIngredient;
+using ZeroWaste.Data.ViewModels.ShoppingListIngredients;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services
@@ -15,5 +16,6 @@ namespace ZeroWaste.Data.Services
         Task<int> AddNewReturnsIdAsync(NewIngredientVM newIngredient);
         Task UpdateAsync(NewIngredientVM updatedIngredient);
         Task DeleteAsync(int? id);
+        Task<List<IngredientsToAddVm>> GetIngredientsToAddVmAsync(int shoppingListId, string searchString);
     }
 }

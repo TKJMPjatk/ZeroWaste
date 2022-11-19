@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.ViewModels.NewIngredient;
+using ZeroWaste.Data.ViewModels.ShoppingListIngredients;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services
@@ -11,11 +14,12 @@ namespace ZeroWaste.Data.Services
     {
         private readonly AppDbContext _context;
         private readonly IIngredientMapperHelper _mapperHelper;
-
-        public IngredientsService(AppDbContext context, IIngredientMapperHelper mapperHelper)
+        private readonly IDbConnectionFactory _dbConnectionFactory;
+        public IngredientsService(AppDbContext context, IIngredientMapperHelper mapperHelper, IDbConnectionFactory dbConnectionFactory)
         {
             _context = context;
             _mapperHelper = mapperHelper;
+            _dbConnectionFactory = dbConnectionFactory;
         }
         public async Task AddNewAsync(NewIngredientVM newIngredient)
         {
@@ -38,6 +42,25 @@ namespace ZeroWaste.Data.Services
             EntityEntry entityEntry = _context.Entry<Ingredient>(ingredient);
             entityEntry.State = EntityState.Deleted;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<IngredientsToAddVm>> GetIngredientsToAddVmAsync(int shoppingListId, string searchString)
+        {        
+            List<IngredientsToAddVm> ingredientsToAddVmList = new List<IngredientsToAddVm>();
+            using (var connection = _dbConnectionFactory.GetDbConnection())
+            {
+                string query = @"SELECT 
+                                  [Id]
+                                , [Name]
+                                , [Description]
+                                , [IngredientTypeId]
+                                , [UnitOfMeasureId]
+                                , [IsAdded]
+                            FROM dbo.GetIngredientsToAddToShoppingList(@ShoppingListId, @SearchString)";
+                var paramateres = new {@ShoppingListId = shoppingListId, @SearchString = searchString == null ? "" : searchString };
+                ingredientsToAddVmList = (await connection.QueryAsync<IngredientsToAddVm>(query, paramateres)).ToList();
+            }
+            return ingredientsToAddVmList.OrderBy(x => x.IsAdded).ToList();
         }
 
         public async Task<List<Ingredient>> GetAllAsync()

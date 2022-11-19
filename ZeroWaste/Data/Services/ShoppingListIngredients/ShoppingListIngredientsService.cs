@@ -6,7 +6,7 @@ using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.Models;
 
-namespace ZeroWaste.Data.Services.ShoppingLists;
+namespace ZeroWaste.Data.Services.ShoppingListIngredients;
 
 public class ShoppingListIngredientsService : IShoppingListIngredientsService
 {
@@ -17,7 +17,14 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
         _context = context;
         _dbConnectionFactory = dbConnectionFactory;
     }
-    public async Task AddIngredientToShoppingList(int shoppingListId, int ingredientId)
+
+    public async Task<ShoppingListIngredient> GetByIdAsync(int id)
+    {
+        return await _context.ShoppingListIngredients
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task AddAsync(int shoppingListId, int ingredientId)
     {
         ShoppingListIngredient entity = new ShoppingListIngredient
         {
@@ -28,7 +35,6 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
         await _context.ShoppingListIngredients.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
-
     public async Task EditQuantityAsync(int ingredientId, double quantity)
     {
         var entity = await _context
@@ -39,17 +45,15 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
         entityEntry.State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteIngredientFromShoppingList(int shoppingId, int ingredientId)
+    public async Task<int> DeleteByIdAsync(int id)
     {
-        var entity = await _context
-            .ShoppingListIngredients
-            .Where(x => x.ShoppingListId == shoppingId && x.Id == ingredientId)
-            .FirstOrDefaultAsync();
+        var entity = await GetByIdAsync(id);
         EntityEntry entityEntry = _context.Entry(entity);
         entityEntry.State = EntityState.Deleted;
         await _context.SaveChangesAsync();
+        return entity.ShoppingListId;
     }
-    public async Task<List<ShoppingListIngredient>> GetIngredientsForShoppingList(int shoppingListId)
+    public async Task<List<ShoppingListIngredient>> GetByShoppingListIdAsync(int shoppingListId)
     {
         var list = await _context
             .ShoppingListIngredients
@@ -59,15 +63,14 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
             .ToListAsync();
         return list;
     }
-    public async Task<List<ShoppingListIngredient>> GetNewIngredientsForShoppingList(int shoppingListId)
+    public async Task<List<ShoppingListIngredient>> GetAllWithZeroQuantityAsync()
     {
-        var list = await GetIngredientsForShoppingList(shoppingListId);
-        return list
-            .Where(x => 
-                x.Quantity == 0)
-            .ToList();
+        return await _context
+            .ShoppingListIngredients
+            .Where(x => x.Quantity == 0)
+            .ToListAsync();
     }
-    public async Task<int> ChangeShoppingListIngredientSelection(int shoppingListIngredientId)
+    public async Task<int> ChangeSelection(int shoppingListIngredientId)
     {
         int shoppingListId;
         using(var connection = _dbConnectionFactory.GetDbConnection())
