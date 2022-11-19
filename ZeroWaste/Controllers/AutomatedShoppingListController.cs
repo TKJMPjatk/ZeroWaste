@@ -23,6 +23,6 @@ public class AutomatedShoppingListController : Controller
             AddedShoppingListId = adddedItem.Id,
             RecipeId = recipeId
         };
-        return View(addedShoppingListVm);
+        return View(nameof(CreateFromRecipe), addedShoppingListVm);
     }
 }
