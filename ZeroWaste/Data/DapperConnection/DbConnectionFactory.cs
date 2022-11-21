@@ -6,11 +6,12 @@ namespace ZeroWaste.Data.DapperConnection;
 
 public class DbConnectionFactory : IDbConnectionFactory
 {
-    private readonly string _connectionString;
+    private readonly string _connectionString = "Server=tcp:zero-waste.database.windows.net,1433;Initial Catalog=zeroWaste;Persist Security Info=False;User ID=zerowaste-admin;Password=RUCH200nowe;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
     private IDbConnection _connection;
     public DbConnectionFactory(AppDbContext appDbContext)
     {
-        _connectionString = appDbContext.Database.GetConnectionString();
+        //_connectionString = appDbContext.Database.GetConnectionString();
+        _connectionString = "Server=tcp:zero-waste.database.windows.net,1433;Initial Catalog=zeroWaste;Persist Security Info=False;User ID=zerowaste-admin;Password=RUCH200nowe;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
     }
     public IDbConnection GetDbConnection()
     {

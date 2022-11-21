@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Models;
 
@@ -12,6 +13,7 @@ namespace ZeroWaste.Data
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
+
                 context.Database.EnsureCreated();
 
                 if (!context.IngredientTypes.Any())
