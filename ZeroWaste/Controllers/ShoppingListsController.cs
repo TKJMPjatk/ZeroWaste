@@ -18,10 +18,12 @@ public class ShoppingListsController : Controller
         _shoppingListsService = shoppingListsService;
         _shoppingListHandler = shoppingListHandler;
     }
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         List<ShoppingList> shoppingLists = await _shoppingListHandler
             .GetShoppingListsByUserId(GetLoggedUser());
+        var tmp = User.FindFirst(ClaimTypes.NameIdentifier);
         return View(nameof(Index), shoppingLists);
     }
     public async Task<IActionResult> Edit(int id)
