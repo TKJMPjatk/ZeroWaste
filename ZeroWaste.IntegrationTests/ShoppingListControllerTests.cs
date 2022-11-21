@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,7 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
                     var dbContextOptions = services.SingleOrDefault(service =>
                         service.ServiceType == typeof(DbContextOptions<AppDbContext>)
                     );
+                    services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
                     services.AddMvc(option => option.Filters.Add(new FakeUserFilter()));
                     services.Remove(dbContextOptions);
                     services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("TestDb"));
