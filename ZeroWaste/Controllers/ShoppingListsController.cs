@@ -8,7 +8,7 @@ using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
 
-//[Authorize]
+[Authorize]
 public class ShoppingListsController : Controller
 {
     private readonly IShoppingListsService _shoppingListsService;
