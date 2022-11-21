@@ -8,7 +8,7 @@ using ZeroWaste.Models;
 
 namespace ZeroWaste.Controllers;
 
-[Authorize]
+//[Authorize]
 public class ShoppingListsController : Controller
 {
     private readonly IShoppingListsService _shoppingListsService;
@@ -49,7 +49,7 @@ public class ShoppingListsController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Create(NewShoppingListVM shoppingListVm)
+    public async Task<IActionResult> Create([FromBody]NewShoppingListVM shoppingListVm)
     {
         if (!(ModelState.IsValid))
             return View("Create", shoppingListVm);
