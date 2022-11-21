@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Enums;
@@ -16,7 +15,6 @@ using ZeroWaste.Data.ViewModels.RecipeSearch;
 using ZeroWaste.Models;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using JsonResult = Microsoft.AspNetCore.Mvc.JsonResult;
-using ViewContext = Microsoft.AspNetCore.Mvc.Rendering.ViewContext;
 
 namespace ZeroWaste.Controllers;
 
@@ -55,7 +53,7 @@ public class SearchRecipesController : Controller
         ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
         return View(new SearchByIngredientsVm());
     }
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> AddIngredientAsync(SearchByIngredientsVm searchByIngredientsVm)
     {
         var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
@@ -68,7 +66,7 @@ public class SearchRecipesController : Controller
         return View("SearchByIngredients", newSearchByIngredientsVm);
     }
 
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> DeleteIngredient(SearchByIngredientsVm searchByIngredientsVm)
     {
         var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
@@ -103,7 +101,7 @@ public class SearchRecipesController : Controller
         });
         return View("SearchResult", resultVm);
     }
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> SearchByIngredientsResult(SearchByIngredientsVm searchByIngredientsVm)
     {
         ViewBag.PageTitle = "Wyszukiwanie po składnikach";
@@ -117,7 +115,7 @@ public class SearchRecipesController : Controller
             });
         return View("SearchResult", searchRecipeResultsVm);
     }
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> SearchRecipesFilteredResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
@@ -137,13 +135,12 @@ public class SearchRecipesController : Controller
         return View("SearchResult", resultsVm);
     }
 
-    [Microsoft.AspNetCore.Mvc.HttpPost]
-    public async Task<IActionResult> SearchRecipeSentenceResult(SearchRecipeResultsVm resultsVm)
+    [HttpPost]
+    public IActionResult SearchRecipeSentenceResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
-        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
-        if(resultsVm.RecipesListBase.IsRecipeResultNullOrEmpty())
+        if (resultsVm.RecipesListBase.IsRecipeResultNullOrEmpty())
             resultsVm.RecipesListBase = resultsVm.RecipesList;
         if (string.IsNullOrEmpty(resultsVm.SearchSentence))
             resultsVm.RecipesList = resultsVm.RecipesListBase;
@@ -156,7 +153,6 @@ public class SearchRecipesController : Controller
     public async Task<IActionResult> SearchRecipesSortedResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
-        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
         var result = await _searchRecipeHandler.GetSearchRecipeResultVmSorted(resultsVm);
         return View("SearchResult", resultsVm);

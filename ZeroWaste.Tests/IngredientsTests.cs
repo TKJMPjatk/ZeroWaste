@@ -15,7 +15,7 @@ namespace ZeroWaste.Tests
 {
     public class IngredientsTests
     {
-        private Mock<IIngredientsService> _ingredientsServiceMock;
+        private readonly Mock<IIngredientsService> _ingredientsServiceMock;
 
         public IngredientsTests()
         {
@@ -53,7 +53,7 @@ namespace ZeroWaste.Tests
         public async Task GetDetails_WhenIngredientsIsNotExists_ReturnsNotFoundResult()
         {
             // Arrange
-            _ingredientsServiceMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Ingredient)null);
+            _ingredientsServiceMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(null as Ingredient);
             var controller = new IngredientsController(_ingredientsServiceMock.Object);
 
             // Act
@@ -221,7 +221,7 @@ namespace ZeroWaste.Tests
         public async Task GetDelete_WhenIngredientNotExists_ReturnsNotFoundView()
         {
             // Arrange
-            _ingredientsServiceMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Ingredient)null);
+            _ingredientsServiceMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(null as Ingredient);
             var controller = new IngredientsController(_ingredientsServiceMock.Object);
 
             // Act
@@ -250,7 +250,7 @@ namespace ZeroWaste.Tests
         public async Task PostDelete_WhenIngredientNotExists_ReturnsNotFoundView()
         {
             // Arrange
-            _ingredientsServiceMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Ingredient)null);
+            _ingredientsServiceMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(null as Ingredient);
             var controller = new IngredientsController(_ingredientsServiceMock.Object);
 
             // Act

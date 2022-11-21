@@ -7,9 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroWaste", "ZeroWaste\Zero
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroWaste.DB", "ZeroWaste.DB\ZeroWaste.DB.csproj", "{897416BB-0E62-42CB-A7BC-1DB366225B13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroWaste.Tests", "ZeroWaste.Tests\ZeroWaste.Tests.csproj", "{CFBA9236-4BC2-4F5B-B260-32BB04F68936}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroWaste.Tests", "ZeroWaste.Tests\ZeroWaste.Tests.csproj", "{CFBA9236-4BC2-4F5B-B260-32BB04F68936}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroWaste.IntegrationTests", "ZeroWaste.IntegrationTests\ZeroWaste.IntegrationTests.csproj", "{936BFDBD-D1D3-4EE3-9583-4BCE785322C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroWaste.IntegrationTests", "ZeroWaste.IntegrationTests\ZeroWaste.IntegrationTests.csproj", "{936BFDBD-D1D3-4EE3-9583-4BCE785322C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6EC933D5-0D94-4E51-8F44-4517D6056A33}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

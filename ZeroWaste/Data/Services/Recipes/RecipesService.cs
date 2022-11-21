@@ -25,13 +25,14 @@ namespace ZeroWaste.Data.Services.Recipes
 
             Recipe recipe = _mapperHelper.Map(newRecipeVM);
             recipe.AuthorId = userId;
-            recipe.Status = await _context.Statuses.Where(c => c.Name == "Niepotwierdzony").FirstOrDefaultAsync();
+            recipe.Status = await _context.Statuses.Where(c => c.Name == "Niepotwierdzony")
+                .FirstOrDefaultAsync();
             await _context.Recipes.AddAsync(recipe);
             await _context.SaveChangesAsync();
             return recipe.Id;
         }
 
-        public async Task<Recipe> GetByIdAsync(int id)
+        public async Task<Recipe?> GetByIdAsync(int id)
         {
             var entity = await _context
             .Recipes
@@ -41,7 +42,7 @@ namespace ZeroWaste.Data.Services.Recipes
             return entity;
         }
 
-        public async Task<EditRecipeVM> GetEditByIdAsync(int id)
+        public async Task<EditRecipeVM?> GetEditByIdAsync(int id)
         {
             var entity = await _context
                .Recipes
@@ -54,7 +55,7 @@ namespace ZeroWaste.Data.Services.Recipes
 
         }
 
-        public async Task<DetailsRecipeVM> GetDetailsByIdAsync(int id)
+        public async Task<DetailsRecipeVM?> GetDetailsByIdAsync(int id)
         {
             var recipe = await _context.Recipes
                 .AsNoTracking()

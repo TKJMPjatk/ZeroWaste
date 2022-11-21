@@ -21,7 +21,7 @@ public class SearchByAllStrategy : ISearchRecipeStrategy
     {
         var recipeResult = await _recipesSearchService
             .GetByAll(searchRecipeResultsVm.IngredientsLists, searchRecipeResultsVm.CategoryId);
-        List<RecipeResult> newRecipesResultList = new List<RecipeResult>();
+        List<RecipeResult> newRecipesResultList = new();
         MapToRecipeResult(recipeResult, newRecipesResultList);
         return newRecipesResultList;
     }
@@ -59,9 +59,9 @@ public class SearchByAllStrategy : ISearchRecipeStrategy
             Ingredients = GetRecipeIngredient(item.RecipeId, searchByIngredientsResults)
         };
     }
-    private List<string> GetRecipeIngredient(int id, List<SearchByIngredientsResults> searchByIngredientsResultsList)
+    private List<string?> GetRecipeIngredient(int id, List<SearchByIngredientsResults> searchByIngredientsResultsList)
     {
-        var items = searchByIngredientsResultsList
+        List<string?> items = searchByIngredientsResultsList
             .Where(x => x.RecipeId == id)
             .Select(x => x.IngredientName)
             .ToList();
@@ -69,8 +69,6 @@ public class SearchByAllStrategy : ISearchRecipeStrategy
     }
     public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)
     {
-        //if (IsRecipeListNullOrEmpty(searchRecipeResultsVm.IngredientsLists))
             return SearchType.Categories;
-        return SearchType.Ingredients;
     }
 }

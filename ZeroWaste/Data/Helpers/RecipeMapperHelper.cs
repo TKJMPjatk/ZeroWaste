@@ -26,13 +26,13 @@ namespace ZeroWaste.Data.Helpers
             return recipe;
         }
 
-        public DetailsRecipeVM MapToDetails(Recipe recipe)
+        public DetailsRecipeVM MapToDetails(Recipe? recipe)
         {
             DetailsRecipeVM detailsRecipe = _mapper.Map<DetailsRecipeVM>(recipe);
             return detailsRecipe;
         }
 
-        public EditRecipeVM MapToEdit(Recipe recipe)
+        public EditRecipeVM MapToEdit(Recipe? recipe)
         {
             EditRecipeVM editRecipe = _mapper.Map<EditRecipeVM>(recipe);
             return editRecipe;

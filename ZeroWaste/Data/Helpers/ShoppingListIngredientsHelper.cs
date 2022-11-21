@@ -20,18 +20,18 @@ public class ShoppingListIngredientsHelper : IShoppingListIngredientsHelper
     }
     public async Task<ShoppingListIngredientsVm> GetShoppingListIngredients(int id)
     {
-        ShoppingListIngredientsVm listIngredientsVm = new ShoppingListIngredientsVm()
+        ShoppingListIngredientsVm listIngredientsVm = new()
         {
-            ShoppingListId = id
+            ShoppingListId = id,
+            IngredientsToAddVm = await GetNewIngredientShoppingListVM(id)
         };
-        listIngredientsVm.IngredientsToAddVm = await GetNewIngredientShoppingListVM(id);
         return listIngredientsVm;
     }
     private async Task<List<IngredientsToAddVm>> GetNewIngredientShoppingListVM(int id)
     {
         List<Ingredient> ingredients = await _ingredientsService.GetAllAsync();
-        List<IngredientsToAddVm> ingredientShoppingListVms = new List<IngredientsToAddVm>();
-        ShoppingList shoppingListWithIngredients = await _shoppingListsService.GetAllIngredientsAsync(id);
+        List<IngredientsToAddVm> ingredientShoppingListVms = new();
+        ShoppingList? shoppingListWithIngredients = await _shoppingListsService.GetAllIngredientsAsync(id);
         List<int> listOfIds = shoppingListWithIngredients.ShoppingListIngredients.Select(x => x.Ingredient.Id).ToList();
         foreach (var item in ingredients)
         {

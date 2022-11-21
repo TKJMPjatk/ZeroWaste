@@ -40,18 +40,18 @@ public class ShoppingListsController : Controller
         await _shoppingListHandler.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
-    public async Task<IActionResult> ConfirmShoppingList(int id)
+    public IActionResult ConfirmShoppingList(int id)
     {
         return RedirectToAction(nameof(Index));
     }
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         return View();
     }
     [HttpPost]
     public async Task<IActionResult> Create([FromBody]NewShoppingListVM shoppingListVm)
     {
-        if (!(ModelState.IsValid))
+        if (!ModelState.IsValid)
             return View("Create", shoppingListVm);
         var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm, User.FindFirst(ClaimTypes.NameIdentifier).Value);
         return RedirectToAction("IngredientsToAdd", "ShoppingListIngredients", new {id = addedShoppingList.Id});
