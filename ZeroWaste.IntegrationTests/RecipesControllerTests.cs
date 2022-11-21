@@ -46,5 +46,15 @@ namespace ZeroWaste.IntegrationTests
             Assert.Equal(HttpStatusCode.OK,defaultPage.StatusCode);
 
         }
+        [Fact]
+        public async Task GetCreate_Always_ReturnsCreateView2()
+        {
+            // Arrange & Act
+            var defaultPage = await _client.GetAsync("/Recipes/Create");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, defaultPage.StatusCode);
+
+        }
     }
 }
