@@ -1,12 +1,11 @@
-using System.Net;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using ZeroWaste.Data;
-using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.IntegrationTests.Helpers;
 
@@ -27,14 +26,14 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
                         service.ServiceType == typeof(DbContextOptions<AppDbContext>)
                     );
                     services.Remove(dbContextOptions);
-                    services.AddScoped<IPolicyEvaluator, FakePolicyEvaluator>();
+                    services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
                     services.AddMvc(option => option.Filters.Add(new FakeUserFilter()));
                     services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("TestDb"));
-                    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                 });
             });
         _client = _factory.CreateClient();
     }
+
     [Fact]
     public async Task Create_ForValidViewModel_ShouldReturnStatusCodeOkAndPathToIngredientsToAddWithId()
     {
@@ -47,9 +46,10 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
         var response = await _client.PostAsync("/ShoppingLists/Create", httpContent);
         var absolutPath = response.RequestMessage.RequestUri.AbsolutePath;
         var statusCode = response.StatusCode;
-        Assert.Equal("/ShoppingListIngredients/IngredientsToAdd/1",absolutPath);
+        Assert.Equal("/ShoppingListIngredients/IngredientsToAdd/1", absolutPath);
         Assert.Equal(HttpStatusCode.OK, statusCode);
     }
+
     [Fact]
     public async Task Create_ForInvalidViewModel_ShouldReturnStatusCodeOkAndPathToCreateMethod()
     {
@@ -58,8 +58,7 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
         var response = await _client.PostAsync("/ShoppingLists/Create", httpContent);
         var absolutPath = response.RequestMessage.RequestUri.AbsolutePath;
         var statusCode = response.StatusCode;
-        Assert.Equal("/ShoppingLists/Create",absolutPath);
+        Assert.Equal("/ShoppingLists/Create", absolutPath);
         Assert.Equal(HttpStatusCode.OK, statusCode);
     }
-    
 }

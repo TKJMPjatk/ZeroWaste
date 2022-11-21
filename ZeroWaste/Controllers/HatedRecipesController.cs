@@ -12,7 +12,7 @@ public class HatedRecipesController : Controller
         _hatedRecipesService = hatedRecipesService;
     }
 
-    [System.Web.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> UnmarkHatedRecipes(int recipeId)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

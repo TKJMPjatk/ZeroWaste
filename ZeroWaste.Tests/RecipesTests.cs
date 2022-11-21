@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using ZeroWaste.Controllers;
@@ -11,6 +13,7 @@ using ZeroWaste.Data.Handlers.Account;
 using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Services.Statuses;
+using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.ExistingRecipe;
 using ZeroWaste.Data.ViewModels.NewRecepie;
 using ZeroWaste.Models;
@@ -98,12 +101,127 @@ namespace ZeroWaste.Tests
             var action = viewResult.ViewName;
             action.Should().Be("Details");
             var viewData = viewResult.ViewData;
-            //Assert.IsTrue(viewData["Country"] != null);
             viewData["Error"].Should().Be(errorDataMessage);
             viewData["Success"].Should().Be(successDataMessage);
             viewData["recipeId"].Should().Be(GetRecipeDetails().Id);
             viewData["statusName"].Should().NotBeNull();
             viewData["Statuses"].Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task GetEdit_WhenRecipeIsNotFound_ReturnsViewNotFound()
+        {
+            // Arrange
+            _recipesServiceMock.Setup(c => c.GetEditByIdAsync(It.IsAny<int>())).ReturnsAsync((EditRecipeVM)null);
+            var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
+
+            // Act
+            var result = await controller.Edit(It.IsAny<int>());
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var action = viewResult.ViewName;
+            action.Should().Be("NotFound");
+        }
+
+        [Fact]
+        public async Task GetEdit_WhenUserIsNotAuthor_ReturnsViewUnauthorized()
+        {
+            // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId)
+            }));
+            _recipesServiceMock.Setup(c => c.GetEditByIdAsync(It.IsAny<int>())).ReturnsAsync(new EditRecipeVM());
+            _recipesServiceMock.Setup(c => c.IsAuthorEqualsEditor(It.IsAny<int>(), userId)).ReturnsAsync(false);
+            var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            // Act
+            var result = await controller.Edit(It.IsAny<int>());
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var action = viewResult.ViewName;
+            action.Should().Be("Unauthorized");
+        }
+
+        [Fact]
+        public async Task GetEdit_WhenUserIsAuthor_ReturnsViewEdit()
+        {
+            // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId)
+            }));
+            _recipesServiceMock.Setup(c => c.GetEditByIdAsync(It.IsAny<int>())).ReturnsAsync(new EditRecipeVM());
+            _recipesServiceMock.Setup(c => c.IsAuthorEqualsEditor(It.IsAny<int>(), userId)).ReturnsAsync(true);
+            _recipesServiceMock.Setup(c => c.GetDropdownsValuesAsync()).ReturnsAsync(GetDropdown());
+            var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext() { User = user }
+                }
+            };
+            // Act
+            var result = await controller.Edit(It.IsAny<int>());
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var viewDataCount = viewResult.ViewData.Count;
+            viewDataCount.Should().Be(1);
+            var action = viewResult.ViewName;
+            action.Should().Be("Edit");
+        }
+
+        [Fact]
+        public async Task PostEdit_WhenModelStateIsNotValid_ReturnsEditView()
+        {
+            // Arrange
+            _recipesServiceMock.Setup(c => c.GetDropdownsValuesAsync()).ReturnsAsync(GetDropdown());
+            _photoServiceMock.Setup(c => c.GetPhotoVMAsync(It.IsAny<int>())).ReturnsAsync(new List<PhotoVM>());
+            var userId = Guid.NewGuid().ToString();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId)
+            }));
+            var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext() { User = user }
+                }
+            };
+            controller.ModelState.AddModelError("Title", "Required");
+            controller.ModelState.AddModelError("Photos", "Required");
+            controller.ModelState.AddModelError("NewPhotosNamesToSkip", "Required");
+            controller.ModelState.AddModelError("PhotosToDelete", "Required");
+
+            // Act
+            var result = await controller.Edit(GetBlankObject(), new List<IFormFile>());
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var viewDataCount = viewResult.ViewData.Count;
+            viewDataCount.Should().Be(1);
+            var action = viewResult.ViewName;
+            action.Should().Be("Edit");
+        }
+
+        private static EditRecipeVM GetBlankObject()
+        {
+            var editRecipeVM = new EditRecipeVM()
+            {
+                Photos = new List<PhotoVM>(),
+                NewPhotosNamesToSkip = "",
+                PhotosToDelete = "",
+            };
+            return editRecipeVM;
         }
 
         private static List<Status> GetStatuses()

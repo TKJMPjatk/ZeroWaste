@@ -13,7 +13,7 @@ public class FavouritesRecipesController : Controller
     {
         _favouritesRecipesService = favouritesRecipesService;
     }
-    [System.Web.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> UnmarkFavouriteRecipes(int recipeId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
