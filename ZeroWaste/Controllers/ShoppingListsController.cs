@@ -49,7 +49,7 @@ public class ShoppingListsController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Create(NewShoppingListVM shoppingListVm)
+    public async Task<IActionResult> Create([FromBody]NewShoppingListVM shoppingListVm)
     {
         if (!(ModelState.IsValid))
             return View("Create", shoppingListVm);
