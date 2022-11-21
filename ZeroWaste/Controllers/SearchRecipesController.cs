@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -171,7 +172,7 @@ public class SearchRecipesController : Controller
         };
         return View("SearchByIngredients", searchByIngredientsVm);
     }
-    [System.Web.Http.Authorize(Roles = UserRoles.Admin)]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> SearchForConfirm(int statusId = 1)
     {
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();

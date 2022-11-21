@@ -1,4 +1,4 @@
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Handlers.AdminSearchHadlers;
@@ -22,7 +22,7 @@ public class AdminSearchRecipesController : Controller
         return RedirectToAction("SearchForConfirm", "SearchRecipes", resultsVm);
     }
     [Authorize(Roles = "Admin")]
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> ConfirmRecipe(int recipeId)
     {
         SearchRecipeResultsVm resultsVm = await _adminSearchHandler
