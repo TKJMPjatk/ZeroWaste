@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ZeroWaste.Data;
+using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.IntegrationTests.Helpers;
 
@@ -24,9 +26,9 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
                     var dbContextOptions = services.SingleOrDefault(service =>
                         service.ServiceType == typeof(DbContextOptions<AppDbContext>)
                     );
+                    services.Remove(dbContextOptions);
                     services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
                     services.AddMvc(option => option.Filters.Add(new FakeUserFilter()));
-                    services.Remove(dbContextOptions);
                     services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("TestDb"));
                 });
             });
@@ -34,7 +36,7 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
     }
 
     [Fact]
-    public async Task Create_Tests()
+    public async Task Create_ForValidViewModel_ShouldReturnStatusCodeOkAndPathToIngredientsToAddWithId()
     {
         NewShoppingListVM shoppingListVm = new NewShoppingListVM()
         {
@@ -42,6 +44,22 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
             Title = "Title"
         };
         var httpContent = shoppingListVm.ToJsonHttpContent();
-        var respone = await _client.PostAsync("https://localhost:7227/ShoppingLists/Create", httpContent);
+        var response = await _client.PostAsync("/ShoppingLists/Create", httpContent);
+        var absolutPath = response.RequestMessage.RequestUri.AbsolutePath;
+        var statusCode = response.StatusCode;
+        Assert.Equal("/ShoppingListIngredients/IngredientsToAdd/1",absolutPath);
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+    }
+
+    [Fact]
+    public async Task Create_ForInvalidViewModel_ShouldReturnStatusCodeOkAndPathToCreateMethod()
+    {
+        NewShoppingListVM shoppingListVm = new NewShoppingListVM();
+        var httpContent = shoppingListVm.ToJsonHttpContent();
+        var response = await _client.PostAsync("/ShoppingLists/Create", httpContent);
+        var absolutPath = response.RequestMessage.RequestUri.AbsolutePath;
+        var statusCode = response.StatusCode;
+        Assert.Equal("/ShoppingLists/Create",absolutPath);
+        Assert.Equal(HttpStatusCode.OK, statusCode);
     }
 }
