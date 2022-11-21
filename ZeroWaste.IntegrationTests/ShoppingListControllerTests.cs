@@ -27,14 +27,14 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
                         service.ServiceType == typeof(DbContextOptions<AppDbContext>)
                     );
                     services.Remove(dbContextOptions);
-                    services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
+                    services.AddScoped<IPolicyEvaluator, FakePolicyEvaluator>();
                     services.AddMvc(option => option.Filters.Add(new FakeUserFilter()));
                     services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("TestDb"));
+                    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                 });
             });
         _client = _factory.CreateClient();
     }
-
     [Fact]
     public async Task Create_ForValidViewModel_ShouldReturnStatusCodeOkAndPathToIngredientsToAddWithId()
     {
@@ -50,7 +50,6 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
         Assert.Equal("/ShoppingListIngredients/IngredientsToAdd/1",absolutPath);
         Assert.Equal(HttpStatusCode.OK, statusCode);
     }
-
     [Fact]
     public async Task Create_ForInvalidViewModel_ShouldReturnStatusCodeOkAndPathToCreateMethod()
     {
@@ -62,4 +61,5 @@ public class ShoppingListControllerTests : IClassFixture<WebApplicationFactory<P
         Assert.Equal("/ShoppingLists/Create",absolutPath);
         Assert.Equal(HttpStatusCode.OK, statusCode);
     }
+    
 }
