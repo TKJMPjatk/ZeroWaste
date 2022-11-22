@@ -62,7 +62,7 @@ public class SearchByIngredientsStrategy : ISearchRecipeStrategy
             Ingredients = GetRecipeIngredient(item.RecipeId, searchByIngredientsResults)
         };
     }
-    private List<string> GetRecipeIngredient(int id, List<SearchByIngredientsResults> searchByIngredientsResultsList)
+    private List<string?> GetRecipeIngredient(int id, List<SearchByIngredientsResults> searchByIngredientsResultsList)
     {
         var items = searchByIngredientsResultsList
             .Where(x => x.RecipeId == id)

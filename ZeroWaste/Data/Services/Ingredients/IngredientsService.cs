@@ -80,7 +80,7 @@ namespace ZeroWaste.Data.Services
                 .ToListAsync();
         }
 
-        public async Task<Ingredient> GetByIdAsync(int? id)
+        public async Task<Ingredient?> GetByIdAsync(int? id)
         {
             var ingredientDetails = await _context.Ingredients
                 .Where(n => n.Id == id)

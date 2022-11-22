@@ -33,12 +33,14 @@ namespace ZeroWaste.Controllers
             var recipe = await _recipesService.GetByIdAsync(recipeId);
             if (recipe is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
 
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (!await _recipesService.IsAuthorEqualsEditor(recipeId, userId))
             {
+                Response.StatusCode = 401;
                 return View("Unauthorized");
             }
 
@@ -70,12 +72,14 @@ namespace ZeroWaste.Controllers
             var recipe = await _recipesService.GetByIdAsync(newRecipeIngredient.RecipeId);
             if (recipe is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
 
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (!await _recipesService.IsAuthorEqualsEditor(newRecipeIngredient.RecipeId, userId))
             {
+                Response.StatusCode = 401;
                 return View("Unauthorized");
             }
 
@@ -120,6 +124,7 @@ namespace ZeroWaste.Controllers
             var recipeIngredient = await _recipeIngredientService.GetByIdAsync(id);
             if (recipeIngredient is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
 
@@ -127,6 +132,7 @@ namespace ZeroWaste.Controllers
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (!await _recipesService.IsAuthorEqualsEditor(recipeId, userId))
             {
+                Response.StatusCode = 401;
                 return View("Unauthorized");
             }
 

@@ -32,28 +32,34 @@ public class ShoppingListsController : Controller
         var shoppingList = await _shoppingListHandler
             .GetShoppingListById(id);
         if (shoppingList is null)
+        {
+            Response.StatusCode = 404;
             return View("NotFound");
+        }
         return View(nameof(Edit),shoppingList);
     }
     public async Task<IActionResult> Delete(int id)
     {
         if (!await _shoppingListHandler.IsShoppingListExists(id))
+        {
+            Response.StatusCode = 404;
             return View("NotFound");
+        }
         await _shoppingListHandler.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
-    public async Task<IActionResult> ConfirmShoppingList(int id)
+    public IActionResult ConfirmShoppingList(int id)
     {
         return RedirectToAction(nameof(Index));
     }
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         return View();
     }
     [HttpPost]
     public async Task<IActionResult> Create([FromBody]NewShoppingListVM shoppingListVm)
     {
-        if (!(ModelState.IsValid))
+        if (!ModelState.IsValid)
             return View("Create", shoppingListVm);
         var addedShoppingList = await _shoppingListHandler.Create(shoppingListVm, User.FindFirst(ClaimTypes.NameIdentifier).Value);
         return RedirectToAction("IngredientsToAdd", "ShoppingListIngredients", new {id = addedShoppingList.Id});

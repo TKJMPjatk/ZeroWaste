@@ -52,7 +52,7 @@ public class AccoutControllerTests
         //Arrange
         _accountHandlerMock
             .Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
-            .ReturnsAsync((ApplicationUser) null);
+            .ReturnsAsync(null as ApplicationUser);
         var controller = new AccountController(_accountHandlerMock.Object)
         {
             TempData = ITempDataDictionaryProvider.GetTempDataDictionary()

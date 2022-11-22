@@ -92,7 +92,7 @@ namespace ZeroWaste.Data.Services.Photo
             var mappedPhotos = _mapperHelper.Map(photos);
             return mappedPhotos;
         }
-        public async Task<byte[]> GetFirstByRecipeAsync(int recipeId)
+        public async Task<byte[]?> GetFirstByRecipeAsync(int recipeId)
         {
             var result = await _context
                 .Photos

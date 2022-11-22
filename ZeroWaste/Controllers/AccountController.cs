@@ -59,7 +59,7 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
     [Authorize]
-    public async Task<IActionResult> ChangePassword()
+    public IActionResult ChangePassword()
     {
         return View(new ChangePasswordVM());
     }

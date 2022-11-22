@@ -7,6 +7,6 @@ namespace ZeroWaste.Data.Services.Photo
         Task AddReviewPhotoAsync(IFormFile file, int? reviewId);
         Task DeleteRecipePhotosAsync(IEnumerable<int> ids, int recipeId);
         Task<IEnumerable<PhotoVM>> GetPhotoVMAsync(int recipeId);
-        Task<byte[]> GetFirstByRecipeAsync(int recipeId);
+        Task<byte[]?> GetFirstByRecipeAsync(int recipeId);
     }
 }

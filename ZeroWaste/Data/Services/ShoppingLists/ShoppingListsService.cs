@@ -21,7 +21,7 @@ public class ShoppingListsService : IShoppingListsService
         .Where(x => x.UserId == userId)
         .ToListAsync();
     }
-    public async Task<ShoppingList> GetByIdAsync(int id)
+    public async Task<ShoppingList?> GetByIdAsync(int id)
     {
         return await _context
             .ShoppingLists
@@ -31,7 +31,7 @@ public class ShoppingListsService : IShoppingListsService
             .FirstOrDefaultAsync();
     }
 
-    public async Task<ShoppingList> GetByShoppingListIngredientIdAsync(int shoppingListIngredientId)
+    public async Task<ShoppingList?> GetByShoppingListIngredientIdAsync(int shoppingListIngredientId)
     {
         return await _context
             .ShoppingListIngredients
@@ -41,7 +41,7 @@ public class ShoppingListsService : IShoppingListsService
             .FirstOrDefaultAsync();
     }
 
-    public async Task<ShoppingList> GetAllIngredientsAsync(int id)
+    public async Task<ShoppingList?> GetAllIngredientsAsync(int id)
     {
         return await _context
             .ShoppingLists

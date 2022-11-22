@@ -55,7 +55,7 @@ namespace ZeroWaste.Tests
         public async Task GetDetails_WhenRecipeNotExists_ReturnsViewNotFound()
         {
             // Arrange
-            _recipesServiceMock.Setup(c => c.GetDetailsByIdAsync(It.IsAny<int>())).ReturnsAsync((DetailsRecipeVM)null);
+            _recipesServiceMock.Setup(c => c.GetDetailsByIdAsync(It.IsAny<int>())).ReturnsAsync(null as DetailsRecipeVM);
             var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
 
             // Act
@@ -112,7 +112,7 @@ namespace ZeroWaste.Tests
         public async Task GetEdit_WhenRecipeIsNotFound_ReturnsViewNotFound()
         {
             // Arrange
-            _recipesServiceMock.Setup(c => c.GetEditByIdAsync(It.IsAny<int>())).ReturnsAsync((EditRecipeVM)null);
+            _recipesServiceMock.Setup(c => c.GetEditByIdAsync(It.IsAny<int>())).ReturnsAsync(null as EditRecipeVM);
             var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
 
             // Act
