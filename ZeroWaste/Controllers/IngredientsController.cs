@@ -42,6 +42,7 @@ namespace ZeroWaste.Controllers
             var ingredientDetails = await _ingredientsService.GetByIdAsync(id);
             if (ingredientDetails is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
             return View(nameof(Details),ingredientDetails);
@@ -76,6 +77,7 @@ namespace ZeroWaste.Controllers
             var ingredientDetail = await _ingredientsService.GetVmByIdAsync(id);
             if (ingredientDetail is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
             var ingredientDropdownsData = await _ingredientsService.GetNewIngredientDropdownsWM();
@@ -90,6 +92,7 @@ namespace ZeroWaste.Controllers
         {
             if (id != ingredient.Id)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
 
@@ -110,6 +113,7 @@ namespace ZeroWaste.Controllers
             var ingredientDetails = await _ingredientsService.GetByIdAsync(id);
             if (ingredientDetails is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
             return View(nameof(Delete),ingredientDetails);
@@ -121,6 +125,7 @@ namespace ZeroWaste.Controllers
             var ingredientDetails = await _ingredientsService.GetByIdAsync(id);
             if (ingredientDetails is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
             await _ingredientsService.DeleteAsync(id);

@@ -10,13 +10,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeroWaste.Data;
 using ZeroWaste.IntegrationTests.Helpers;
+using ZeroWaste.Models;
 
 namespace ZeroWaste.IntegrationTests
 {
     public class RecipesControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private HttpClient _client;
-        private WebApplicationFactory<Program> _factory;
+        private readonly HttpClient _client;
+        private readonly WebApplicationFactory<Program> _factory;
 
         public RecipesControllerTests(WebApplicationFactory<Program> factory)
         {
@@ -33,6 +34,7 @@ namespace ZeroWaste.IntegrationTests
                     services.Remove(dbContextOptions);
                     services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("TestDb"));
                 });
+                builder.UseSetting("SeedDatabase", "true");
             });
             _client = _factory.CreateClient();
         }
@@ -47,14 +49,48 @@ namespace ZeroWaste.IntegrationTests
 
         }
         [Fact]
-        public async Task GetCreate_Always_ReturnsCreateView2()
+        public async Task GetDetails_RecipeIsNotFound_ReturnsNotFound()
         {
-            // Arrange & Act
-            var defaultPage = await _client.GetAsync("/Recipes/Create");
+            var response = await _client.GetAsync("/Recipes/Details/999");
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, defaultPage.StatusCode);
+        [Fact]
+        public async Task GetDetails_RecipeFound_ReturnsDetailsView()
+        {
+            //SeedConfirmedRecipe();
+            var response = await _client.GetAsync("/Recipes/Details/1");
+            var absolutPath = response.RequestMessage.RequestUri.AbsolutePath;
+            var statusCode = response.StatusCode;
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
+        }
+
+        [Fact]
+        public async Task GetDetails_RecipeUnconfirmed_ReturnsUnauthorizedView()
+        {
+            var response = await _client.GetAsync("/Recipes/Details/3");
+            var absolutPath = response.RequestMessage.RequestUri.AbsolutePath;
+            var statusCode = response.StatusCode;
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        }
+
+        private void SeedConfirmedRecipe()
+        {
+            var recipeConfirmed = new Recipe()
+            {
+                Id = 1,
+                StatusId = 1,
+                AuthorId = "1",
+                Description = "a kot ma alę",
+                Title = "ala ma kota"
+            };
+            var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+            using var scope = scopeFactory.CreateScope();
+            var _dbContext = scope.ServiceProvider.GetService<AppDbContext>();
+            _dbContext.Recipes.Add(recipeConfirmed);
+            _dbContext.SaveChanges();
         }
     }
 }

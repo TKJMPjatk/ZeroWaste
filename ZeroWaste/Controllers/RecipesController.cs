@@ -44,10 +44,12 @@ public class RecipesController : Controller
         var recipeDetails = await _recipesService.GetDetailsByIdAsync(id);
         if (recipeDetails is null)
         {
+            Response.StatusCode = 404;
             return View("NotFound");
         }
         if (recipeDetails.StatusId != 1)
         {
+            Response.StatusCode = 401;
             return View("Unauthorized");
         }
         var statutses = await _statusesService.GetAllAsync();
@@ -64,11 +66,13 @@ public class RecipesController : Controller
         var recipeDetails = await _recipesService.GetEditByIdAsync(id);
         if (recipeDetails is null)
         {
+            Response.StatusCode = 404;
             return View("NotFound");
         }
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         if (!await _recipesService.IsAuthorEqualsEditor(id, userId))
         {
+            Response.StatusCode = 401;
             return View("Unauthorized");
         }
 
@@ -143,10 +147,12 @@ public class RecipesController : Controller
         var recipeDetails = await _recipesService.GetEditByIdAsync(detailsRecipeVM.Id);
         if (recipeDetails is null)
         {
+            Response.StatusCode = 404;
             return View("NotFound");
         }
         if (!User.IsInRole("Admin"))
         {
+            Response.StatusCode = 401;
             return View("Unauthorized");
         }
         await _recipesService.UpdateStateAsync(detailsRecipeVM.Id, detailsRecipeVM.StatusId);

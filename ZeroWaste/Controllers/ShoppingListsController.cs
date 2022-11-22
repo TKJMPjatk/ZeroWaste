@@ -30,13 +30,19 @@ public class ShoppingListsController : Controller
         var shoppingList = await _shoppingListHandler
             .GetShoppingListById(id);
         if (shoppingList is null)
+        {
+            Response.StatusCode = 404;
             return View("NotFound");
+        }
         return View(nameof(Edit),shoppingList);
     }
     public async Task<IActionResult> Delete(int id)
     {
         if (!await _shoppingListHandler.IsShoppingListExists(id))
+        {
+            Response.StatusCode = 404;
             return View("NotFound");
+        }
         await _shoppingListHandler.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }

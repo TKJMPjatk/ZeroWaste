@@ -30,12 +30,14 @@ namespace ZeroWaste.Controllers
         {
             if (details is null)
             {
+                Response.StatusCode = 400;
                 return View("BadRequest");
             }
 
             var recipe = await _recipeService.GetByIdAsync(details.NewReviewRecipeId);
             if (recipe is null)
             {
+                Response.StatusCode = 404;
                 return View("NotFound");
             }
 
