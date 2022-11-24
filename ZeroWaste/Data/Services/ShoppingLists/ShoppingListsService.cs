@@ -73,6 +73,7 @@ public class ShoppingListsService : IShoppingListsService
     {
         var entity = await GetByIdAsync(shoppingList.Id);
         entity.Title = shoppingList.Title;
+        entity.Note = shoppingList.Note;
         EntityEntry entityEntry = _context.Entry(entity);
         entityEntry.State = EntityState.Modified;
         await _context.SaveChangesAsync();
