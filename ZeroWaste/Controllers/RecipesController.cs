@@ -47,7 +47,7 @@ public class RecipesController : Controller
             Response.StatusCode = 404;
             return View("NotFound");
         }
-        if (recipeDetails.StatusId != 1)
+        if (recipeDetails.StatusId != 1 && !User.IsInRole("Admin"))
         {
             Response.StatusCode = 401;
             return View("Unauthorized");

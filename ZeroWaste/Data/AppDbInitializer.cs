@@ -116,6 +116,10 @@ namespace ZeroWaste.Data
                         {
                             Name = "Ryż"
                         },
+                        new IngredientType()
+                        {
+                            Name = "Ziarno"
+                        }
                     });
                     context.SaveChanges();
                 }
