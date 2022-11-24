@@ -15,7 +15,43 @@
             </div>
         </div>
         <br />
-                <form asp-action="AddIngredient" asp-controller="SearchRecipes">
+        <form asp-action="AddIngredient" asp-controller="SearchRecipes">
+            @if (@Model.SingleIngredientToSearchVm != null)
+            {
+                @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
+                {
+                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
+                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
+                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
+                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
+                }
+            }
+            <div class="row">
+                <div class="col-md-4">
+                    @*<input type="text" id="nameInput" asp-for="@Model.Name" placeholder="składnik"/>*@
+                    @Html.DropDownListFor(x => x.Name, new SelectList(ViewBag.Ingredients, "Name", "Name"), new {@class = "form-select js-example-basic-single"})
+                    <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                    <span class="text-danger" id="notExistIgnredient" style="visibility: hidden">Brak składnika na liście</span>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" id="unitOfMeasure" asp-for="@Model.Unit" tabindex="-1" style="pointer-events: none;"/>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control" id="quantityInput" asp-for="@Model.Quantity"/>
+                    <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-antique-white text-oxford-blue" id="addIngredientBtn">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <form asp-action="SearchByIngredientsResult">
+                    @if (@Model.SingleIngredientToSearchVm != null)
+                    {
                         @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
                         {
                             @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
@@ -23,38 +59,8 @@
                             @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
                             @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
                         }
-            <div class="row">
-                    <div class="col-md-4">
-                        @*<input type="text" id="nameInput" asp-for="@Model.Name" placeholder="składnik"/>*@
-                        @Html.DropDownListFor(x => x.Name, new SelectList(ViewBag.Ingredients, "Name", "Name"), new { @class = "form-select js-example-basic-single" })
-                        <span class="text-danger" asp-validation-for="@Model.Name"></span>
-                        <span class="text-danger" id="notExistIgnredient" style="visibility: hidden">Brak składnika na liście</span>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="unitOfMeasure" asp-for="@Model.Unit" tabindex="-1" style="pointer-events: none;"/>
-                    </div>
-                    <div class="col-md-3">
-                        <input type="number" class="form-control" id="quantityInput" asp-for="@Model.Quantity"/>
-                        <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
-                    </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-antique-white text-oxford-blue" id="addIngredientBtn">
-                        <i class="bi bi-plus"></i>
-                    </button>
-                </div>
-            </div>
-                </form>
-        <div class="row">
-            <div class="col-md-6 offset-3">
-                <form asp-action="SearchByIngredientsResult">
-                    @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
-                    {
-                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
-                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
-                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
-                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
                     }
-                    <input type="submit" class="btn btn-umber text-platinum width-max" value="Wyszukaj" />
+                    <input type="submit" class="btn btn-umber text-platinum width-max" value="Wyszukaj"/>
                 </form>
             </div>
         </div>
@@ -78,6 +84,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                @if(@Model.SingleIngredientToSearchVm != null){
                     @foreach (var item in @Model.SingleIngredientToSearchVm)
                     {
                         <tr>
@@ -102,6 +109,7 @@
                             </td>
                         </tr>
                     }
+                }
                 </tbody>
             </table>
         </div>

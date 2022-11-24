@@ -213,7 +213,7 @@
                                 </form>
                 }
             </div>
-            @if (ViewBag.Statuses != null && User.IsInRole("Admin"))
+            @if (ViewBag.Statuses != null && User.IsInRole("Admin") && Model.SearchType == SearchType.Admin)
             {
                 <div class="col-md-3">
                     <button class="btn btn-umber text-white width-max dropdown-toggle" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
