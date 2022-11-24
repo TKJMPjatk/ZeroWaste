@@ -8,73 +8,79 @@
     var data = JsonConvert.SerializeObject(ingredients);
 }
 <div class="view-search">
-    <div class="col-md-4 offset-4">
-        <div class="row">
-            <div class="text-center">
-                <h3>Uzupełnij składniki do wyszukania przepisu</h3>
-            </div>
+    <div class="row">
+        <div class="col-md-3">
+            <p class="h6">1. Wybierz składnik</p>
+            <p class="h6">2. Wpisz ilość</p>
+            <p class="h6">3. Naciśnij przycisk "+"</p>
         </div>
-        <br />
-        <form asp-action="AddIngredient" asp-controller="SearchRecipes">
-            @if (@Model.SingleIngredientToSearchVm != null)
-            {
-                @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
-                {
-                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
-                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
-                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
-                    @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
-                }
-            }
+        <div class="col-md-4 offset-1">
             <div class="row">
-                <div class="col-md-4">
-                    @*<input type="text" id="nameInput" asp-for="@Model.Name" placeholder="składnik"/>*@
-                    @Html.DropDownListFor(x => x.Name, new SelectList(ViewBag.Ingredients, "Name", "Name"), new {@class = "form-select js-example-basic-single"})
-                    <span class="text-danger" asp-validation-for="@Model.Name"></span>
-                    <span class="text-danger" id="notExistIgnredient" style="visibility: hidden">Brak składnika na liście</span>
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="unitOfMeasure" asp-for="@Model.Unit" tabindex="-1" style="pointer-events: none;"/>
-                </div>
-                <div class="col-md-3">
-                    <input type="number" class="form-control" id="quantityInput" asp-for="@Model.Quantity"/>
-                    <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-antique-white text-oxford-blue" id="addIngredientBtn">
-                        <i class="bi bi-plus"></i>
-                    </button>
+                <div class="text-center">
+                    <h3>Uzupełnij składniki do wyszukania przepisu</h3>
                 </div>
             </div>
-        </form>
-        <div class="row">
-            <div class="col-md-6 offset-3">
-                <form asp-action="SearchByIngredientsResult">
-                    @if (@Model.SingleIngredientToSearchVm != null)
+            <br/>
+            <form asp-action="AddIngredient" asp-controller="SearchRecipes">
+                @if (@Model.SingleIngredientToSearchVm != null)
+                {
+                    @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
                     {
-                        @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
-                        {
-                            @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
-                            @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
-                            @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
-                            @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
-                        }
+                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
+                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
+                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
+                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
                     }
-                    <input type="submit" class="btn btn-umber text-platinum width-max" value="Wyszukaj"/>
-                </form>
+                }
+                <div class="row">
+                    <div class="col-md-4">
+                        @*<input type="text" id="nameInput" asp-for="@Model.Name" placeholder="składnik"/>*@
+                        @Html.DropDownListFor(x => x.Name, new SelectList(ViewBag.Ingredients, "Name", "Name"), new {@class = "form-select js-example-basic-single"})
+                        <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                        <span class="text-danger" id="notExistIgnredient" style="visibility: hidden">Brak składnika na liście</span>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="unitOfMeasure" asp-for="@Model.Unit" tabindex="-1" style="pointer-events: none;"/>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" id="quantityInput" asp-for="@Model.Quantity"/>
+                        <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-antique-white text-oxford-blue" id="addIngredientBtn">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-md-6 offset-3">
+                    <form asp-action="SearchByIngredientsResult">
+                        @if (@Model.SingleIngredientToSearchVm != null)
+                        {
+                            @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
+                            {
+                                @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
+                                @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Quantity)
+                                @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
+                                @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
+                            }
+                        }
+                        <input type="submit" class="btn btn-umber text-platinum width-max" value="Wyszukaj"/>
+                    </form>
+                </div>
             </div>
+            <br/>
         </div>
-        <br />
-    </div>
-    <div class="col-md-6 offset-3">
-        <div class="row">
-            <div class="text-center">
-                <p>Składniki</p>
+        <div class="col-md-6 offset-3">
+            <div class="row">
+                <div class="text-center">
+                    <p>Składniki</p>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <table>
-                <thead>
+            <div class="row">
+                <table>
+                    <thead>
                     <tr>
                         <th>#</th>
                         <th>Produkt</th>
@@ -82,36 +88,38 @@
                         <th>Jednostka</th>
                         <th></th>
                     </tr>
-                </thead>
-                <tbody>
-                @if(@Model.SingleIngredientToSearchVm != null){
-                    @foreach (var item in @Model.SingleIngredientToSearchVm)
+                    </thead>
+                    <tbody>
+                    @if (@Model.SingleIngredientToSearchVm != null)
                     {
-                        <tr>
-                            <td>@item.Index</td>
-                            <td>@item.Name</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Unit</td>
-                            <td>
-                                <form asp-controller="SearchRecipes" asp-action="DeleteIngredient">
-                                    @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
-                                    {
-                                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
-                                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
-                                        @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
-                                        <input type="hidden" asp-for="SingleIngredientToSearchVm[i].Quantity" value="@Model.SingleIngredientToSearchVm[i].Quantity"/>
-                                    }
-                                    <input type="hidden" asp-for="Name" value="@item.Name"/>
-                                    <button class="btn btn-pale-pink">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                        @foreach (var item in @Model.SingleIngredientToSearchVm)
+                        {
+                            <tr>
+                                <td>@item.Index</td>
+                                <td>@item.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Unit</td>
+                                <td>
+                                    <form asp-controller="SearchRecipes" asp-action="DeleteIngredient">
+                                        @for (int i = 0; i < @Model.SingleIngredientToSearchVm.Count; i++)
+                                        {
+                                            @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Name)
+                                            @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Unit)
+                                            @Html.HiddenFor(x => x.SingleIngredientToSearchVm[i].Index)
+                                            <input type="hidden" asp-for="SingleIngredientToSearchVm[i].Quantity" value="@Model.SingleIngredientToSearchVm[i].Quantity"/>
+                                        }
+                                        <input type="hidden" asp-for="Name" value="@item.Name"/>
+                                        <button class="btn btn-pale-pink">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
                     }
-                }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
