@@ -18,7 +18,6 @@ public class ShoppingListsController : Controller
         _shoppingListsService = shoppingListsService;
         _shoppingListHandler = shoppingListHandler;
     }
-    [HttpGet]
     public async Task<IActionResult> Index()
     {
         List<ShoppingList> shoppingLists = await _shoppingListHandler
@@ -32,13 +31,19 @@ public class ShoppingListsController : Controller
         var shoppingList = await _shoppingListHandler
             .GetShoppingListById(id);
         if (shoppingList is null)
+        {
+            Response.StatusCode = 404;
             return View("NotFound");
+        }
         return View(nameof(Edit),shoppingList);
     }
     public async Task<IActionResult> Delete(int id)
     {
         if (!await _shoppingListHandler.IsShoppingListExists(id))
+        {
+            Response.StatusCode = 404;
             return View("NotFound");
+        }
         await _shoppingListHandler.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
@@ -51,7 +56,7 @@ public class ShoppingListsController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody]NewShoppingListVM shoppingListVm)
+    public async Task<IActionResult> Create(NewShoppingListVM shoppingListVm)
     {
         if (!(ModelState.IsValid))
             return View("Create", shoppingListVm);

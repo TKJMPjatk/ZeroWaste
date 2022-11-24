@@ -12,7 +12,7 @@
     <br/>
     <div class="row">
         <div class="col-md-8 offset-2">
-            <form asp-controller="ShoppingListIngredients">
+            <form asp-controller="ShoppingListIngredients" asp-action="EditQuantity" id="test1">
                 @for (int i = 0; i < @Model.IngredientsToEditQuantity.Count(); i++)
                 {
                     <div class="row">
@@ -20,7 +20,7 @@
                             <h5>@Model.IngredientsToEditQuantity[i].Ingredient.Name</h5>
                         </div>
                         <div class="col-md-4">
-                            <input type="number" class="form-control" asp-for="IngredientsToEditQuantity[i].Quantity"/>
+                            <input type="number" class="form-control" asp-for="IngredientsToEditQuantity[i].Quantity" id=@i/>
                         </div>
                         <div class="col-md-4">
                             @Model.IngredientsToEditQuantity[i].Ingredient.UnitOfMeasure.Name
@@ -34,7 +34,7 @@
                         <input type="number" asp-for="@Model.ShoppingListId" style="visibility: hidden" value="@Model.ShoppingListId"/>
                     </div>
                     <div class="col-md-3">
-                        <input type="submit" class="btn btn-dark" value="Zatwierdź"/>
+                        <button type="submit" class="btn btn-dark" value="Zatwierdź" id="test2"></button>
                     </div>
                 </div>
             </form>

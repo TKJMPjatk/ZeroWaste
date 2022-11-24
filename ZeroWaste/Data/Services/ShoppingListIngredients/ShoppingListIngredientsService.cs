@@ -65,10 +65,13 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
     }
     public async Task<List<ShoppingListIngredient>> GetAllWithZeroQuantityAsync()
     {
-        return await _context
+        var tmp =  await _context
             .ShoppingListIngredients
+            .Include(x => x.Ingredient)
+            .ThenInclude(x => x.UnitOfMeasure)
             .Where(x => x.Quantity == 0)
             .ToListAsync();
+        return tmp;
     }
     public async Task<int> ChangeSelection(int shoppingListIngredientId)
     {

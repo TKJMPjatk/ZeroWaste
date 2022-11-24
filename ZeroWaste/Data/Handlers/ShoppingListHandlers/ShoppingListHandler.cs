@@ -46,8 +46,8 @@ public class ShoppingListHandler : IShoppingListHandler
     {
         return await _shoppingListsService.IsZeroQuantityIngredientsExists(shoppingListId);
     }
-    public Task<bool> IsShoppingListExists(int shoppingListId)
+    public async Task<bool> IsShoppingListExists(int shoppingListId)
     {
-        throw new NotImplementedException();
+        return await _shoppingListsService.IsShoppingListExists(shoppingListId);
     }
 }
