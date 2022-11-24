@@ -66,7 +66,7 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
         return new EditQuantityVM
         {
             ShoppingListId = shoppingListId,
-            IngredientsToEditQuantity = await _shoppingListIngredientService.GetAllWithZeroQuantityAsync()
+            IngredientsToEditQuantity = await _shoppingListIngredientService.GetByShoppingListIdAsync(shoppingListId)
         };
     }
 }
