@@ -10,6 +10,7 @@ using Xunit;
 using ZeroWaste.Data;
 using ZeroWaste.Data.ViewModels.ExistingRecipe;
 using ZeroWaste.IntegrationTests.Helpers;
+using ZeroWaste.IntegrationTests.Helpers.Tests;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.IntegrationTests
