@@ -19,4 +19,13 @@ public class AdminSearchHandler : IAdminSearchHandler
             SearchType = SearchType.Admin
         };
     }
+
+    public async Task<SearchRecipeResultsVm> RejectRecipe(int recipeId)
+    {        
+        await _recipesService.RejectRecipe(recipeId);
+        return new SearchRecipeResultsVm()
+        {
+            SearchType = SearchType.Admin
+        };
+    }
 }

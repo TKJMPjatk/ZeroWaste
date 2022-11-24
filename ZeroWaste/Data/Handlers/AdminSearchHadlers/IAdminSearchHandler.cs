@@ -5,4 +5,5 @@ namespace ZeroWaste.Data.Handlers.AdminSearchHadlers;
 public interface IAdminSearchHandler
 {
     Task<SearchRecipeResultsVm> ConfirmRecipe(int recipeId);
+    Task<SearchRecipeResultsVm> RejectRecipe(int recipeId);
 }

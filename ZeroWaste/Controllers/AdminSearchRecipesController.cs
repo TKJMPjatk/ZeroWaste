@@ -29,4 +29,12 @@ public class AdminSearchRecipesController : Controller
             .ConfirmRecipe(recipeId);
         return RedirectToAction("SearchForConfirm", "SearchRecipes");
     }
+    [Authorize(Roles = "Admin")]
+    [Microsoft.AspNetCore.Mvc.HttpPost]
+    public async Task<IActionResult> RejectRecipe(int recipeId)
+    {
+        SearchRecipeResultsVm resultsVm = await _adminSearchHandler
+            .RejectRecipe(recipeId);
+        return RedirectToAction("SearchForConfirm", "SearchRecipes");
+    }
 }
