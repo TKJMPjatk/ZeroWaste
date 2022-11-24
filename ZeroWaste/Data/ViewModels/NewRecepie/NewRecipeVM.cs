@@ -20,6 +20,6 @@ namespace ZeroWaste.Data.ViewModels
         [Display(Name = "Kategoria przepisu")]
         [Required(ErrorMessage = "Wskaż kategorię")]
         public int CategoryId { get; set; }
-
+        public IEnumerable<IFormFile> filesUpload { get; set; }
     }
 }

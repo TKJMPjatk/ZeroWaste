@@ -81,7 +81,7 @@ public class RecipesController : Controller
         return View(nameof(Edit),recipeDetails);
     }
     [HttpPost]
-    public async Task<IActionResult> Edit(EditRecipeVM recipe, IEnumerable<IFormFile> filesUpload)
+    public async Task<IActionResult> Edit([FromForm] EditRecipeVM recipe)//, IEnumerable<IFormFile> filesUpload)
     {
         ModelState["Photos"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
         ModelState["NewPhotosNamesToSkip"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
@@ -105,17 +105,17 @@ public class RecipesController : Controller
                 .Select(c => Convert.ToInt32(c));
             await _photoService.DeleteRecipePhotosAsync(photosToDelete, recipe.Id);
         }
-        var newPhotos = filesUpload;
+        var newPhotos = recipe.filesUpload;
         if (!string.IsNullOrEmpty(recipe.NewPhotosNamesToSkip))
         {
             var newPhotosToSkip = recipe.NewPhotosNamesToSkip.Split('|');
-            newPhotos = filesUpload.Where(c => !newPhotosToSkip.Contains(c.FileName));
+            newPhotos = recipe.filesUpload.Where(c => !newPhotosToSkip.Contains(c.FileName));
         }
         await _photoService.AddRecipePhotosAsync(newPhotos, recipe.Id);
         return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = recipe.Id, success = "Przepis zaktualizowano pomyœlnie - sprawdŸ sk³adniki." });
     }
     [HttpPost]
-    public async Task<IActionResult> Create(NewRecipeVM recipeVM, IEnumerable<IFormFile> filesUpload)
+    public async Task<IActionResult> Create(NewRecipeVM recipeVM)//, IEnumerable<IFormFile> filesUpload)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         if (!ModelState.IsValid)
@@ -125,7 +125,7 @@ public class RecipesController : Controller
             return View(recipeVM);
         }
         int recipeId = await _recipesService.AddNewReturnsIdAsync(recipeVM, userId);
-        await _photoService.AddRecipePhotosAsync(filesUpload, recipeId);
+        await _photoService.AddRecipePhotosAsync(recipeVM.filesUpload, recipeId);
         return RedirectToAction("Edit", "RecipeIngredients", new { recipeId, success = "Pomyœlnie zapisaliœmy Twój przepis - teraz dodaj sk³adniki." });
     }
     public async Task<IActionResult> AddLiked(int recipeId)

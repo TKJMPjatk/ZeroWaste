@@ -131,7 +131,7 @@ namespace ZeroWaste.Data.Services.Recipes
            .AsNoTracking()
            .FirstOrDefaultAsync(x =>
                x.Id == recipeId);
-            if (entity is null || Equals(entity.AuthorId, editorId))
+            if (entity is null || !Equals(entity.AuthorId, editorId))
             {
                 return false;
             }

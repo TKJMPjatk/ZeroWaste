@@ -13,7 +13,7 @@
             <h3>Edycja istniejącego przepisu</h3>
         </p>
 
-        <form class="row" asp-action="Edit" asp-controller="Recipes" enctype="multipart/form-data">
+        <form id="RecipeEdit" class="row" asp-action="Edit" asp-controller="Recipes" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-md-12 mt-1rem">
@@ -88,7 +88,7 @@
 
             <div class="col-md-12 mt-2rem">
                 <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-pale-pink float-left">Powrót</a>
-                <input type="submit" value="Zapisz przepis i przejdź do składników" class="btn btn-default btn-pale-pink fr" />
+                <button id="RecipeEditSubmit" type="submit" value="Zapisz przepis i przejdź do składników" class="btn btn-default btn-pale-pink fr" ></button>
             </div>
         </form>
     </div>

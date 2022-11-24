@@ -25,5 +25,6 @@ namespace ZeroWaste.Data.ViewModels.ExistingRecipe
         public string PhotosToDelete { get; set; }
         public string NewPhotosNamesToSkip { get; set; }
         public string PhotoAlt { get; set; } = $"/images/Review/alt.png";
+        public IEnumerable<IFormFile> filesUpload { get; set; }
     }
 }

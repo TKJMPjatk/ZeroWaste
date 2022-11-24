@@ -203,7 +203,7 @@ namespace ZeroWaste.Tests
             controller.ModelState.AddModelError("PhotosToDelete", "Required");
 
             // Act
-            var result = await controller.Edit(GetBlankObject(), new List<IFormFile>());
+            var result = await controller.Edit(GetBlankObject());
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -220,6 +220,7 @@ namespace ZeroWaste.Tests
                 Photos = new List<PhotoVM>(),
                 NewPhotosNamesToSkip = "",
                 PhotosToDelete = "",
+                filesUpload = new List<IFormFile>()
             };
             return editRecipeVM;
         }
