@@ -21,6 +21,7 @@ using ZeroWaste.Data.Services.Reviews;
 using ZeroWaste.Data.Services.ShoppingListIngredients;
 using ZeroWaste.Data.Services.Statuses;
 using ZeroWaste.Data.Services.HarmfulIngredients;
+using ZeroWaste.Data.Handlers.RecipeIngredientsHandlers;
 
 namespace ZeroWaste;
 
@@ -48,6 +49,7 @@ public class ServicesConfiguration
         services.AddScoped<IAccountHandler, AccountHandler>();
         services.AddScoped<IAdminSearchHandler, AdminSearchHandler>();
         services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
+        services.AddScoped<IRecipeIngredientsHandler, RecipeIngredientsHandler>();
     }
 
     private void ConfigureHelpers(IServiceCollection services)

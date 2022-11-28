@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ZeroWaste.Data.Handlers.RecipeIngredientsHandlers;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Recipes;
@@ -20,12 +21,14 @@ namespace ZeroWaste.Controllers
         private readonly IRecipeIngredientService _recipeIngredientService;
         private readonly IIngredientsService _ingredientService;
         private readonly IRecipesService _recipesService;
+        private readonly IRecipeIngredientsHandler _recipeIngredientsHandler;
 
-        public RecipeIngredientsController(IRecipeIngredientService service, IIngredientsService ingredientService, IRecipesService recipeService)
+        public RecipeIngredientsController(IRecipeIngredientService service, IIngredientsService ingredientService, IRecipesService recipeService, IRecipeIngredientsHandler recipeIngredientsHandler)
         {
             _recipeIngredientService = service;
             _ingredientService = ingredientService;
             _recipesService = recipeService;
+            _recipeIngredientsHandler = recipeIngredientsHandler;
         }
 
         public async Task<IActionResult> Edit(int recipeId, string? error, string? success)
@@ -83,38 +86,15 @@ namespace ZeroWaste.Controllers
                 return View("Unauthorized");
             }
 
-            if (newRecipeIngredient.ExistingIngredientId > 0 && newRecipeIngredient.ExistingIngredientQuantity > 0)
+            try
             {
-                await _recipeIngredientService.AddIngredientAsync(newRecipeIngredient.RecipeId, newRecipeIngredient.ExistingIngredientId, (double)newRecipeIngredient.ExistingIngredientQuantity);
+                await _recipeIngredientsHandler.AddIngredient(newRecipeIngredient);
             }
-            else if (newRecipeIngredient.NewIngredientName is not null && 
-                newRecipeIngredient.NewIngredientUnitOfMeasureId > 0 && 
-                newRecipeIngredient.NewIngredientQuantity > 0 && 
-                newRecipeIngredient.NewIngredientTypeId > 0)
+            catch (ArgumentException ex)
             {
-                var existingIngredient = await _ingredientService.GetVmByNameAsync(newRecipeIngredient.NewIngredientName);
-                if (existingIngredient is not null)
-                {
-                    await _recipeIngredientService.AddIngredientAsync(newRecipeIngredient.RecipeId, existingIngredient.Id, (double)newRecipeIngredient.NewIngredientQuantity);
-                }
-                else
-                {
-                    var ingredient = new NewIngredientVM()
-                    {
-                        Name = newRecipeIngredient.NewIngredientName,
-                        Description = "",
-                        UnitOfMeasureId = newRecipeIngredient.NewIngredientUnitOfMeasureId,
-                        IngredientTypeId = newRecipeIngredient.NewIngredientTypeId
-                    };
-                    int newIngredientId = await _ingredientService.AddNewReturnsIdAsync(ingredient);
-                    await _recipeIngredientService.AddIngredientAsync(newRecipeIngredient.RecipeId, newIngredientId, (double)newRecipeIngredient.NewIngredientQuantity);
-                }
+                return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, error = ex.Message });
             }
-            else
-            {
-                var message = "Uwaga błędy!\nNie rozpoznano rodzaju operacji!";
-                return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, error = message });
-            }
+
             return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, success = "Pomyślnie dodano składnik" });
         }
 

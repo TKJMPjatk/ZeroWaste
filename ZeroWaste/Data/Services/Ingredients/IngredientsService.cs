@@ -134,5 +134,21 @@ namespace ZeroWaste.Data.Services
             entityEntry.State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> IngredientExistsAsync(string ingredientName)
+        {
+            bool ingredientExists = await _context.Ingredients
+                .Where(n => n.Name == ingredientName)
+                .AnyAsync();
+            return ingredientExists;
+        }
+
+        public async Task<Ingredient?> GetByNameAsync(string ingredientName)
+        {
+            var ingredient = await _context.Ingredients
+                .Where(n => n.Name == ingredientName)
+                .FirstOrDefaultAsync();
+            return ingredient;
+        }
     }
 }
