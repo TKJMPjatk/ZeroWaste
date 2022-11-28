@@ -223,7 +223,14 @@
                     @foreach (var item in ViewBag.Statuses)
                     {
                         <li>
-                            <a class="btn btn-umber text text-white" asp-action="SearchForConfirm" asp-route-statusId="@item.Id">@item.Name</a>
+                            @if (Model.StatusId == item.Id)
+                            {
+                                <a class="btn btn-khaki-web text text-white" asp-action="SearchForConfirm" asp-route-statusId="@item.Id">@item.Name</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-umber text text-white" asp-action="SearchForConfirm" asp-route-statusId="@item.Id">@item.Name</a>
+                            }
                         </li>
                     }
                     </ul>

@@ -169,7 +169,7 @@ public class SearchRecipesController : Controller
         return View("SearchByIngredients", searchByIngredientsVm);
     }
     [Authorize(Roles = UserRoles.Admin)]
-    public async Task<IActionResult> SearchForConfirm(int statusId = 1)
+    public async Task<IActionResult> SearchForConfirm(int statusId = 2)
     {
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
