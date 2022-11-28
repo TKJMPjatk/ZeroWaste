@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.RecipeIngredients;
+using ZeroWaste.Data.Services.Recipes;
 using ZeroWaste.Data.Static;
 using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Models;
@@ -18,9 +20,11 @@ namespace ZeroWaste.Controllers
     public class IngredientsController : Controller
     {
         private readonly IIngredientsService _ingredientsService;
-        public IngredientsController(IIngredientsService ingredientsService)
+        private readonly IRecipeIngredientService _recipeIngredientsService;
+        public IngredientsController(IIngredientsService ingredientsService, IRecipeIngredientService recipeIngredientsService)
         {
             _ingredientsService = ingredientsService;
+            _recipeIngredientsService = recipeIngredientsService;
         }
         [AllowAnonymous]
         public async Task<IActionResult> Index(string searchString)
@@ -108,7 +112,7 @@ namespace ZeroWaste.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, string? message)
         {
             var ingredientDetails = await _ingredientsService.GetByIdAsync(id);
             if (ingredientDetails is null)
@@ -116,6 +120,7 @@ namespace ZeroWaste.Controllers
                 Response.StatusCode = 404;
                 return View("NotFound");
             }
+            ViewData["Error"] = message;
             return View(nameof(Delete),ingredientDetails);
         }
 
@@ -128,6 +133,11 @@ namespace ZeroWaste.Controllers
                 Response.StatusCode = 404;
                 return View("NotFound");
             }
+            if (await _recipeIngredientsService.RecipeIngredientsExisting(id))
+            {
+                return RedirectToAction("Delete", "Ingredients", new { id, message = "Składnik jest powiązany z przepisem! Nie można go usunąć." });
+            }
+
             await _ingredientsService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }

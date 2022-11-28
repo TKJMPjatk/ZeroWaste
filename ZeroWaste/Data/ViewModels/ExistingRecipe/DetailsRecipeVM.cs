@@ -31,5 +31,6 @@ namespace ZeroWaste.Data.ViewModels.ExistingRecipe
         public int NewReviewRecipeId { get; set; }
         [Display(Name = "Status")]
         public int StatusId { get; set; }
+        public string AuthorId { get; set; }
     }
 }

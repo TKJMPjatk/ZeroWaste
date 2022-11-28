@@ -53,7 +53,8 @@
 
             <div class="col-md-12 mt-1rem">
                 <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcia</label>
-                <input type="file" class="form-control" id="filesUpload" name="filesUpload" multiple/>
+                <input type="file" accept="image/*" class="form-control" id="filesUpload" name="filesUpload" multiple />
+                <span asp-validation-for="filesUpload" class="text-danger"></span>
             </div>
 
             <div class="col-md-8 offset-1 mt-2rem">

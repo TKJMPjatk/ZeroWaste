@@ -52,6 +52,16 @@ public class RecipesController : Controller
             Response.StatusCode = 401;
             return View("Unauthorized");
         }
+        string? userId = null;
+        if (User.FindFirst(ClaimTypes.NameIdentifier) is not null)
+        {
+            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+        ViewBag.Author = false;
+        if (!string.IsNullOrEmpty(userId) && userId == recipeDetails.AuthorId)
+        {
+            ViewBag.Author = true;
+        }
         var statutses = await _statusesService.GetAllAsync();
         ViewBag.Statuses = new SelectList(statutses, "Id", "Name");
         ViewData["statusName"] = statutses.Where(c => c.Id == recipeDetails.StatusId).Select(c => c.Name).First();
@@ -86,6 +96,7 @@ public class RecipesController : Controller
         ModelState["Photos"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
         ModelState["NewPhotosNamesToSkip"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
         ModelState["PhotosToDelete"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+        ModelState["filesUpload"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
         if (!ModelState.IsValid)
         {
             var recipeDropdownsData = await _recipesService.GetDropdownsValuesAsync();
@@ -111,7 +122,10 @@ public class RecipesController : Controller
             var newPhotosToSkip = recipe.NewPhotosNamesToSkip.Split('|');
             newPhotos = recipe.filesUpload.Where(c => !newPhotosToSkip.Contains(c.FileName));
         }
-        await _photoService.AddRecipePhotosAsync(newPhotos, recipe.Id);
+        if (newPhotos is not null)
+        {
+            await _photoService.AddRecipePhotosAsync(newPhotos, recipe.Id);
+        }
         return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = recipe.Id, success = "Przepis zaktualizowano pomyúlnie - sprawdü sk≥adniki." });
     }
     [HttpPost]

@@ -10,6 +10,12 @@
             <h3>Czy jesteś pewny że chcesz to usunąć?</h3>
         </p>
     </div>
+    @if (ViewData["Error"] != null)
+    {
+        <div class="col-md-12 alert alert-danger">
+            <span>@ViewData["Error"]</span>
+        </div>
+    }
     <hr />
     <div class="col-md-8 offset-md-2">
         <dl class="row">
