@@ -14,7 +14,7 @@
             <p>Notatka: @Model.Note</p>
         </div>
         <div class="col-md-2">
-            <button id="btnEditTitleShow" style="background: transparent">
+            <button id="btnEditTitleShow" style="background: transparent" data-toggle="tooltip" data-placement="bottom" title="Edytuj tytuł">
                 <i class="bi bi-pencil-square"></i>
             </button>
         </div>
@@ -40,11 +40,15 @@
                                 <div class="col-md-1">
                                     @if (!(item.Selected))
                                     {
-                                        <a class="btn btn-white width-max height-max" asp-controller="ShoppingListIngredients" asp-action="ChangeIngredientSelection" asp-route-shoppingListIngredientId="@item.Id"><i class="bi bi-square"></i></a>
+                                        <a class="btn btn-white width-max height-max" asp-controller="ShoppingListIngredients" asp-action="ChangeIngredientSelection" asp-route-shoppingListIngredientId="@item.Id">
+                                            <i class="bi bi-square"></i>
+                                        </a>
                                     }
                                     else
                                     {
-                                        <a class="btn btn-white width-max height-max" asp-controller="ShoppingListIngredients" asp-action="ChangeIngredientSelection" asp-route-shoppingListIngredientId="@item.Id"><i class="bi bi-check-square"></i></a>
+                                        <a class="btn btn-white width-max height-max" asp-controller="ShoppingListIngredients" asp-action="ChangeIngredientSelection" asp-route-shoppingListIngredientId="@item.Id">
+                                            <i class="bi bi-check-square"></i>
+                                        </a>
                                     }
                                 </div>
                                 <div class="col-md-11">
@@ -59,7 +63,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="col-md-4 offset-4">
-                                <a class="btn btn-oxford-blue text-platinum height-max width-max" asp-controller="ShoppingListIngredients" asp-action="DeleteIngredientFromShoppingList" asp-route-id="@item.Id">
+                                <a class="btn btn-oxford-blue text-platinum height-max width-max" asp-controller="ShoppingListIngredients" asp-action="DeleteIngredientFromShoppingList" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Usuń">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </div>    
@@ -83,5 +87,10 @@
            $("#partialEditTitleSection").css("visibility", "hidden")
        }
     })
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 }

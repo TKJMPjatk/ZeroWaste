@@ -499,6 +499,10 @@ namespace ZeroWaste.Data
                         {
                             Name = "Kolacje"
                         },
+                        new Category()
+                        {
+                            Name = "Obiady"
+                        }
                     });
                     context.SaveChanges();
                 }

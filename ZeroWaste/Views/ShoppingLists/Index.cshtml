@@ -32,10 +32,14 @@
                                 <div class="col-md-6"></div>
                                 <div class="col-md-5">
                                     <br/>
-                                    <a class="btn btn-pale-pink width-max" asp-controller="ShoppingLists" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-search"></i></a>
+                                    <a class="btn btn-pale-pink width-max" asp-controller="ShoppingLists" asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Podgląd">
+                                        <i class="bi bi-search"></i>
+                                    </a>
                                     <br/>
                                     <br/>
-                                    <a class="btn btn-pale-pink width-max" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                                    <a class="btn btn-pale-pink width-max" asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Usuń">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
                                 </div>
                                 <div class="col-md-1"></div>
                             </div>
@@ -48,3 +52,12 @@
     }
 </div>
 @await Html.PartialAsync("_CreateNewShoppingList")
+
+@section Scripts
+{
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+}

@@ -290,14 +290,14 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <form asp-action="ConfirmRecipe" asp-controller="AdminSearchRecipes" asp-route-recipeId="@item.Id">
-                                                        <button type="submit" class="btn btn-pale-pink width-max">
+                                                        <button type="submit" class="btn btn-pale-pink width-max" data-toggle="tooltip" data-placement="bottom" title="Potwierdź przepis">
                                                             <i class="bi bi-check"></i>
                                                         </button>
                                                     </form>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <form asp-action="RejectRecipe" asp-controller="AdminSearchRecipes" asp-route-recipeId="@item.Id">
-                                                        <button type="submit" class="btn btn-pale-pink width-max">
+                                                        <button type="submit" class="btn btn-pale-pink width-max" data-toggle="tooltip" data-placement="bottom" title="Odrzuć przepis">
                                                             <i class="bi bi-dash"></i>
                                                         </button>
                                                     </form>
@@ -307,7 +307,7 @@
                                         else if (Model.SearchType == SearchType.Favourite)
                                         {
                                             <form asp-action="UnmarkFavouriteRecipes" asp-controller="FavouritesRecipes" asp-route-recipeId="@item.Id">
-                                                <button type="submit" class="btn btn-pale-pink width-max">
+                                                <button type="submit" class="btn btn-pale-pink width-max" data-toggle="tooltip" data-placement="bottom" title="Odznacz ulubiony">
                                                     <i class="bi bi-trash3"></i>
                                                 </button>
                                             </form>
@@ -315,7 +315,7 @@
                                         else if (Model.SearchType == SearchType.Hated)
                                         {
                                             <form asp-action="UnmarkHatedRecipes" asp-controller="HatedRecipes" asp-route-recipeId="@item.Id">
-                                                <button type="submit" class="btn btn-pale-pink width-max">
+                                                <button type="submit" class="btn btn-pale-pink width-max" data-toggle="tooltip" data-placement="bottom" title="Odznacz nie ulubiony">
                                                     <i class="bi bi-trash3"></i>
                                                 </button>
                                             </form>
@@ -331,13 +331,17 @@
                                     @if (Model.SearchType == SearchType.EditMine)
                                     {
                                         <div class="col-md-6">
-                                            <a class="btn btn-pale-pink width-max" asp-controller="Recipes" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                                            <a class="btn btn-pale-pink width-max" asp-controller="Recipes" asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edytuj">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="col-md-6">
-                                            <a class="btn btn-pale-pink width-max" asp-controller="Recipes" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-search"></i></a>
+                                            <a class="btn btn-pale-pink width-max" asp-controller="Recipes" asp-action="Details" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Podgląd">
+                                                <i class="bi bi-search"></i>
+                                            </a>
                                         </div>
                                     }
                                 </div>
