@@ -65,10 +65,25 @@ namespace ZeroWaste.Data.Services.RecipeIngredients
             return response;
         }
 
-        public async Task<bool> RecipeIngredientsExisting(int ingredientId)
+        public async Task<bool> RecipeIngredientAlredyExistsAsync(int recipeId, int ingredientId)
+        {
+            bool ingredientsExists = await _context.RecipeIngredients.Where(c => c.IngredientId == ingredientId && c.RecipeId == recipeId).AnyAsync();
+            return ingredientsExists;
+        }
+
+        public async Task<bool> RecipeIngredientsExistingAsync(int ingredientId)
         {
             bool ingredientsExists = await _context.RecipeIngredients.Where(c => c.IngredientId == ingredientId).AnyAsync();
             return ingredientsExists;
+        }
+
+        public async Task UpdateRecipeIngredientQuantity(int recipeId, int ingredientId, double quantity)
+        {
+            var ingredient = await _context.RecipeIngredients.Where(c => c.IngredientId == ingredientId && c.RecipeId == recipeId).FirstOrDefaultAsync();
+            ingredient.Quantity += quantity;
+            EntityEntry entityEntry = _context.Entry(ingredient);
+            entityEntry.State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }

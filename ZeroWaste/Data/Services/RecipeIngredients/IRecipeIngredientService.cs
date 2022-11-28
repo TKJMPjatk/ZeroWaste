@@ -10,6 +10,8 @@ namespace ZeroWaste.Data.Services.RecipeIngredients
         Task AddIngredientAsync(int recipeId, int ingredientId, double quantity);
         Task DeleteAsync(int id);
         Task<RecipeIngredient> GetByIdAsync(int id);
-        Task<bool> RecipeIngredientsExisting(int ingredientId);
+        Task<bool> RecipeIngredientsExistingAsync(int ingredientId);
+        Task<bool> RecipeIngredientAlredyExistsAsync(int recipeId, int ingredientId);
+        Task UpdateRecipeIngredientQuantity(int recipeId, int ingredientId, double quantity);
     }
 }

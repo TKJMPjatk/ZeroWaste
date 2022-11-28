@@ -133,7 +133,7 @@ namespace ZeroWaste.Controllers
                 Response.StatusCode = 404;
                 return View("NotFound");
             }
-            if (await _recipeIngredientsService.RecipeIngredientsExisting(id))
+            if (await _recipeIngredientsService.RecipeIngredientsExistingAsync(id))
             {
                 return RedirectToAction("Delete", "Ingredients", new { id, message = "Składnik jest powiązany z przepisem! Nie można go usunąć." });
             }
