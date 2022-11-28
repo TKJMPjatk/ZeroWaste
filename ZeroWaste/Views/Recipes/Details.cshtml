@@ -255,12 +255,18 @@
     </div>
 
     <div class="row mt-1rem">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-pale-pink float-left">Powrót</a>
             <a asp-action="AddLiked" asp-controller="Recipes" asp-route-recipeId="@Model.Id" class="btn btn-default btn-pale-pink fr">Lubię</a>
         </div>
-        <div class="col-md-6">
-            <a asp-action="AddNotLiked" asp-controller="Recipes" asp-route-recipeId="@Model.Id" class="btn btn-default btn-pale-pink float-left">Nie lubię</a>
+        <div class="col-md-4 text-center">
+            @if (ViewBag.Author == true)
+            {
+                <a asp-action="Edit" asp-controller="Recipes" asp-route-id="@Model.Id" class="btn btn-default btn-pale-pink">Edytuj</a>
+            }
+        </div>
+        <div class="col-md-4">
+            <a asp-action="AddNotLiked" asp-controller="Recipes" asp-route-id="@Model.Id" class="btn btn-default btn-pale-pink float-left">Nie lubię</a>
             <a asp-action="CreateFromRecipe" asp-controller="AutomatedShoppingList" asp-route-id="@Model.Id" class="btn btn-default btn-pale-pink fr">Składniki do listy zakupów</a>
         </div>
     </div>

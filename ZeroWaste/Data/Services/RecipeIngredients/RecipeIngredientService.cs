@@ -65,5 +65,10 @@ namespace ZeroWaste.Data.Services.RecipeIngredients
             return response;
         }
 
+        public async Task<bool> RecipeIngredientsExisting(int ingredientId)
+        {
+            bool ingredientsExists = await _context.RecipeIngredients.Where(c => c.IngredientId == ingredientId).AnyAsync();
+            return ingredientsExists;
+        }
     }
 }

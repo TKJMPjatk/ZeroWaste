@@ -149,9 +149,11 @@
                                 @item.Quantity
                             </td>
                             <td class="align-middle">
-                                <a class="btn btn-default" type="button" asp-action="Delete" asp-route-id="@item.Id">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                <form asp-controller="RecipeIngredients" asp-action="Delete" asp-route-id="@item.Id">
+                                    <button class="btn btn-default" type="submit" >
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     }

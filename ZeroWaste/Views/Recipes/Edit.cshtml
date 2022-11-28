@@ -14,6 +14,7 @@
         </p>
 
         <form id="RecipeEdit" class="row" asp-action="Edit" asp-controller="Recipes" enctype="multipart/form-data">
+            @Html.HiddenFor(model => model.Id);
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-md-12 mt-1rem">
@@ -51,7 +52,7 @@
             @Html.HiddenFor(model => model.NewPhotosNamesToSkip)
             <div class="col-md-12 mt-1rem">
                 <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcia</label>
-                <input type="file" class="form-control" id="filesUpload" name="filesUpload" multiple />
+                <input type="file" accept="image/*" class="form-control" id="filesUpload" name="filesUpload" multiple />
             </div>
 
             <div class="col-md-12 mt-2rem">
@@ -88,7 +89,7 @@
 
             <div class="col-md-12 mt-2rem">
                 <a asp-action="Index" asp-controller="Home" class="btn btn-default btn-pale-pink float-left">Powrót</a>
-                <button id="RecipeEditSubmit" type="submit" value="Zapisz przepis i przejdź do składników" class="btn btn-default btn-pale-pink fr" ></button>
+                <input id="RecipeEditSubmit" type="submit" value="Zapisz przepis i przejdź do składników" class="btn btn-default btn-pale-pink fr" />
             </div>
         </form>
     </div>

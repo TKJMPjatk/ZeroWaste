@@ -56,7 +56,7 @@ namespace ZeroWaste.Controllers
             return View();
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Add(NewRecipeIngredient newRecipeIngredient)
         {
             var errors = ModelState.Values
@@ -118,7 +118,7 @@ namespace ZeroWaste.Controllers
             return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, success = "Pomyślnie dodano składnik" });
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var recipeIngredient = await _recipeIngredientService.GetByIdAsync(id);
