@@ -266,7 +266,7 @@
             }
         </div>
         <div class="col-md-4">
-            <a asp-action="AddNotLiked" asp-controller="Recipes" asp-route-id="@Model.Id" class="btn btn-default btn-pale-pink float-left">Nie lubię</a>
+            <a asp-action="AddNotLiked" asp-controller="Recipes" asp-route-recipeId="@Model.Id" class="btn btn-default btn-pale-pink float-left">Nie lubię</a>
             <a asp-action="CreateFromRecipe" asp-controller="AutomatedShoppingList" asp-route-id="@Model.Id" class="btn btn-default btn-pale-pink fr">Składniki do listy zakupów</a>
         </div>
     </div>
