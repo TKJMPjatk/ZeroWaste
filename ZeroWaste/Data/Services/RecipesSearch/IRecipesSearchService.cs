@@ -10,8 +10,9 @@ namespace ZeroWaste.Data.Services.RecipesSearch;
 public interface IRecipesSearchService
 {
     Task<List<Recipe>> GetByCategoryAsync(int categoryId);
-    Task<List<SearchByIngredientsResults>> GetByIngredients(List<IngredientForSearch> searchByIngredientsVm);
-    Task<List<SearchByIngredientsResults>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId);
+    Task<List<SearchByCategoryResults>> GetByCategoryAsync(int categoryId, string userId);
+    Task<List<SearchByIngredientsResults>> GetByIngredients(List<IngredientForSearch> searchByIngredientsVm, string userId);
+    Task<List<SearchByIngredientsResults>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId, string userId);
     Task<List<Recipe>> GetByStatus(int statusId);
     Task<List<Recipe>> GetFavouriteByUserIdAsync(string userId);
     Task<List<Recipe>> GetHatedByUserIdAsync(string userId);

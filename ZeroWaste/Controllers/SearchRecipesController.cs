@@ -97,7 +97,8 @@ public class SearchRecipesController : Controller
         var resultVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
         {
             CategoryId = categoryId,
-            SearchType = SearchType.Categories
+            SearchType = SearchType.Categories,
+            UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
         });
         return View("SearchResult", resultVm);
     }
@@ -125,11 +126,13 @@ public class SearchRecipesController : Controller
         {
             resultsVm.SearchType = SearchType.IngredientsFiltered;
             resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
+            resultsVm.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
         else
         {
             resultsVm.SearchType = SearchType.Categories;
             resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
+            resultsVm.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
         //resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmFiltered(resultsVm);
         return View("SearchResult", resultsVm);

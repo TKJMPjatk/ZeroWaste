@@ -20,7 +20,7 @@ public class SearchByAllStrategy : ISearchRecipeStrategy
     public async Task<List<RecipeResult>> SearchRecipe(SearchRecipeResultsVm searchRecipeResultsVm)
     {
         var recipeResult = await _recipesSearchService
-            .GetByAll(searchRecipeResultsVm.IngredientsLists, searchRecipeResultsVm.CategoryId);
+            .GetByAll(searchRecipeResultsVm.IngredientsLists, searchRecipeResultsVm.CategoryId, searchRecipeResultsVm.UserId);
         List<RecipeResult> newRecipesResultList = new();
         MapToRecipeResult(recipeResult, newRecipesResultList);
         return newRecipesResultList;

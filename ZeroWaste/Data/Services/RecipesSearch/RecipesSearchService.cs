@@ -2,6 +2,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ZeroWaste.DapperModels;
+using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.Structs;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.Recipes;
@@ -13,9 +14,11 @@ namespace ZeroWaste.Data.Services.RecipesSearch;
 public class RecipesSearchService : IRecipesSearchService
 {
     private readonly AppDbContext _context;
-    public RecipesSearchService(AppDbContext context)
+    private readonly IDbConnectionFactory _connectionFactory;
+    public RecipesSearchService(AppDbContext context, IDbConnectionFactory connectionFactory)
     {
         _context = context;
+        _connectionFactory = connectionFactory;
     }
     public async Task<List<Recipe>> GetByCategoryAsync(int categoryId)
     {
@@ -27,7 +30,25 @@ public class RecipesSearchService : IRecipesSearchService
             .ToListAsync();
         return list;
     }
-    public async Task<List<SearchByIngredientsResults>> GetByIngredients(List<IngredientForSearch> ingredientsForSearchList)
+
+    public async Task<List<SearchByCategoryResults>> GetByCategoryAsync(int categoryId, string userId)
+    {
+        string querySql = @"SELECT 
+                                  RecipeId 
+	                            , Title
+	                            , EstimatedTime	
+                                , DifficultyLevel
+	                            , IngredientName
+                            FROM [dbo].[SearchByCategory] (@CategoryId, @UserId)";
+        using var connection = _connectionFactory.GetDbConnection();
+        var searchByCategory = await connection.QueryAsync<SearchByCategoryResults>
+        (
+            querySql,
+            new { @CategoryId = categoryId, @UserId = userId}
+        );
+        return searchByCategory.ToList();
+    }
+    public async Task<List<SearchByIngredientsResults>> GetByIngredients(List<IngredientForSearch> ingredientsForSearchList, string userId)
     {
         List<string> listOfIds = await GetListOfIds(ingredientsForSearchList);
         string querySql = @"SELECT
@@ -41,10 +62,10 @@ public class RecipesSearchService : IRecipesSearchService
                             , IngredientQuantity 
                             , Match 
                             , MissingIngredientsCount 
-                        FROM [dbo].[SearchByIngredients] (@IdsIngredients)";
+                        FROM [dbo].[SearchByIngredients_2] (@IdsIngredients, @UserId)";
         using var connection = new SqlConnection(_context.Database.GetConnectionString());
         var searchByIngredientsResult =
-            await connection.QueryAsync<SearchByIngredientsResults>(querySql, new { @IdsIngredients = string.Join(",", listOfIds) });
+            await connection.QueryAsync<SearchByIngredientsResults>(querySql, new { @IdsIngredients = string.Join(",", listOfIds), @UserId = userId});
         return searchByIngredientsResult.ToList();
     }
 
@@ -61,7 +82,7 @@ public class RecipesSearchService : IRecipesSearchService
         }
         return listOfId;
     }
-    public async Task<List<SearchByIngredientsResults>> GetByAll(List<IngredientForSearch> ingredientsForSearchList, int categoryId)
+    public async Task<List<SearchByIngredientsResults>> GetByAll(List<IngredientForSearch> ingredientsForSearchList, int categoryId, string userId)
     {        
         List<string> listOfIds = await GetListOfIds(ingredientsForSearchList);
         string querySql = @"SELECT
@@ -75,10 +96,10 @@ public class RecipesSearchService : IRecipesSearchService
                             , IngredientQuantity 
                             , Match 
                             , MissingIngredientsCount 
-                        FROM [dbo].[SearchByIngredientsAndCategory] (@IdsIngredients, @IdCategory)";
+                        FROM [dbo].[SearchByIngredientsAndCategory_2] (@IdsIngredients, @IdCategory, @UserId)";
         using var connection = new SqlConnection(_context.Database.GetConnectionString());
         var searchByIngredientsResult =
-            await connection.QueryAsync<SearchByIngredientsResults>(querySql, new { @IdsIngredients = string.Join(",", listOfIds), @IdCategory = categoryId });
+            await connection.QueryAsync<SearchByIngredientsResults>(querySql, new { @IdsIngredients = string.Join(",", listOfIds), @IdCategory = categoryId, @UserId = userId });
         return searchByIngredientsResult.ToList();
     }
     public async Task<List<Recipe>> GetByStatus(int statusId)
