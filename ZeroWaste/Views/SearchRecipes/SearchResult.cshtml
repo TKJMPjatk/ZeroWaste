@@ -8,6 +8,12 @@
     ViewData["Title"] = "Wyszukiwanie po składnikach";
 }
 <div class="col-md-10 offset-1">
+    @if (ViewBag.Success != null)
+    {
+        <div class="col-md-8 offset-2 alert alert-success">
+            <span>@ViewBag.Success</span>
+        </div>
+    }
     <div class="row">
         <div class="col-md-5">
             <h3>@ViewBag.PageTitle</h3>
