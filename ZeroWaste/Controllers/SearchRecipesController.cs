@@ -208,12 +208,13 @@ public class SearchRecipesController : Controller
         });
         return View("SearchResult", resultsVm);
     }
-    public async Task<IActionResult> SearchMineToEdit()
+    public async Task<IActionResult> SearchMineToEdit(string? success)
     {
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.Statuses = await _statusesService.GetAllAsync();
         ViewBag.PageTitle = "Moje przepisy";
+        ViewBag.Success = success;
         var resultVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
         {
             UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
