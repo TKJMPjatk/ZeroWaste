@@ -1,14 +1,10 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ZeroWaste.Data.Handlers.RecipeIngredientsHandlers;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Recipes;
-using ZeroWaste.Data.Static;
-using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
-using ZeroWaste.Models;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using SelectList = Microsoft.AspNetCore.Mvc.Rendering.SelectList;
@@ -95,6 +91,8 @@ namespace ZeroWaste.Controllers
                 return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, error = ex.Message });
             }
 
+            await _recipesService.UnconfirmRecipe(newRecipeIngredient.RecipeId);
+
             return RedirectToAction("Edit", "RecipeIngredients", new { recipeId = newRecipeIngredient.RecipeId, success = "Pomyślnie dodano składnik" });
         }
 
@@ -119,6 +117,12 @@ namespace ZeroWaste.Controllers
             string success = $"Usunięto składnik: {recipeIngredient.Ingredient.Name}";
             await _recipeIngredientService.DeleteAsync(id);
             return RedirectToAction("Edit", "RecipeIngredients", new { recipeId, success });
+        }
+
+        public IActionResult FakeSaveRedirect()
+        {
+            string success = "Zmiany w przepisie i składnikach zostały zapisane pomyślnie!";
+            return RedirectToAction("SearchMineToEdit", "SearchRecipes", new { success });
         }
     }
 }
