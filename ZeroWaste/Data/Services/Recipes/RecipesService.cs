@@ -152,36 +152,25 @@ namespace ZeroWaste.Data.Services.Recipes
 
         public async Task ConfirmRecipe(int recipeId)
         {
-            var entity = await _context
-                .Recipes
-                .FirstOrDefaultAsync(x => x.Id == recipeId);
-            var confirmStatusId = await _context
-                .Statuses
-                .Where(x => x.Name == "Zatwierdzony")
-                .Select(x => x.Id)
-                .FirstOrDefaultAsync();
-            entity.StatusId = confirmStatusId;
-            EntityEntry entityEntry = _context.Entry(entity);
-            entityEntry.State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await ChangeRecipeState(recipeId, "Zatwierdzony");
         }
-
         public async Task RejectRecipe(int recipeId)
-        {            
-            var entity = await _context
-                .Recipes
-                .FirstOrDefaultAsync(x => x.Id == recipeId);
-            var confirmStatusId = await _context
+        {
+            await ChangeRecipeState(recipeId, "Odrzucony");
+        }
+        public async Task UnconfirmRecipe(int recipeId)
+        {
+            await ChangeRecipeState(recipeId, "Niepotwierdzony");
+        }
+        private async Task ChangeRecipeState(int recipeId, string targetStateName)
+        {
+            var statusId = await _context
                 .Statuses
-                .Where(x => x.Name == "Odrzucony")
+                .Where(x => x.Name == targetStateName)
                 .Select(x => x.Id)
                 .FirstOrDefaultAsync();
-            entity.StatusId = confirmStatusId;
-            EntityEntry entityEntry = _context.Entry(entity);
-            entityEntry.State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await UpdateStateAsync(recipeId, statusId);
         }
-
         public async Task UpdateStateAsync(int recipeId, int statusId)
         {
             var recipe = await _context.Recipes.FindAsync(recipeId);
