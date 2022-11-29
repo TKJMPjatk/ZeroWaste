@@ -112,7 +112,8 @@ public class SearchRecipesController : Controller
             await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
             {
                 IngredientsLists = searchByIngredientsVm.SingleIngredientToSearchVm,
-                SearchType = SearchType.Ingredients
+                SearchType = SearchType.Ingredients,
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value
             });
         return View("SearchResult", searchRecipeResultsVm);
     }
@@ -125,14 +126,14 @@ public class SearchRecipesController : Controller
         if(resultsVm.IngredientsLists != null)
         {
             resultsVm.SearchType = SearchType.IngredientsFiltered;
-            resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
             resultsVm.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
         }
         else
         {
             resultsVm.SearchType = SearchType.Categories;
-            resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
             resultsVm.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
         }
         //resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmFiltered(resultsVm);
         return View("SearchResult", resultsVm);
