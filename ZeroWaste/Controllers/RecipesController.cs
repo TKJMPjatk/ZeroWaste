@@ -108,6 +108,7 @@ public class RecipesController : Controller
 
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         await _recipesService.UpdateAsync(recipe, userId);
+        await _recipesService.UnconfirmRecipe(recipe.Id);
         if (!string.IsNullOrEmpty(recipe.PhotosToDelete))
         {
             var photosToDelete = recipe.PhotosToDelete
@@ -146,13 +147,15 @@ public class RecipesController : Controller
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         await _recipesService.AddLiked(recipeId, userId);
-        return RedirectToAction("Details", "Recipes", new { id = recipeId });
+        string success = "Pomyœlnie dodano przepis do ulubionych!";
+        return RedirectToAction("Details", "Recipes", new { id = recipeId, success });
     }
     public async Task<IActionResult> AddNotLiked(int recipeId)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         await _recipesService.AddNotLiked(recipeId, userId);
-        return RedirectToAction("Details", "Recipes", new { id = recipeId });
+        string success = "Pomyœlnie dodano przepis do listy nie lubianych!";
+        return RedirectToAction("Details", "Recipes", new { id = recipeId, success });
     }
 
     [HttpPost]
