@@ -21,5 +21,6 @@ namespace ZeroWaste.Data.Services.Recipes
         Task ConfirmRecipe(int recipeId);
         Task RejectRecipe(int recipeId);
         Task UpdateStateAsync(int recipeId, int statusId);
+        Task UnconfirmRecipe(int recipeId);
     }
 }
