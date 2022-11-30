@@ -44,7 +44,12 @@ public class SearchRecipesController : Controller
 
     public async Task<IActionResult> SupriseMeResult()
     {
-        int recipeId = await _searchRecipeHandler.GetRandomRecipeId();
+        string userId = null;
+        if (User.FindFirst(ClaimTypes.NameIdentifier) != null)
+        {
+            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+        int recipeId = await _searchRecipeHandler.GetRandomRecipeId(userId);
         return RedirectToAction("Details", "Recipes", new {id = recipeId});
     }
     public async Task<IActionResult> SearchByIngredientsAsync()
