@@ -64,9 +64,12 @@
                             <a class="btn btn-default" type="button" asp-action="Details" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Podgląd">
                                 <i class="bi bi-search"></i>
                             </a>
-                            <a class="btn btn-default" type="button" asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edytuj">
-                                <i class="bi bi-pencil"></i>
-                            </a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="btn btn-default" type="button" asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edytuj">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            }
                             @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                             {
                                 <a class="btn btn-default" type="button" asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Usuń">
