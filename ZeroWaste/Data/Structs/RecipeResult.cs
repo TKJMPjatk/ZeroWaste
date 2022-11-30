@@ -6,6 +6,7 @@ public class RecipeResult
     public string? Title { get; set; }
     public int EstimatedTime { get; set; }
     public int DifficultyLevel { get; set; }
+    public double Stars { get; set; }
     public int CategoryId { get; set; }
     public List<string?> Ingredients { get; set; }
     public byte[] Photo { get; set; }

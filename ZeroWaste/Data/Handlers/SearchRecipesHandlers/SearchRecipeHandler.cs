@@ -87,6 +87,8 @@ public class SearchRecipeHandler : ISearchRecipeHandler
             return recipeResults.OrderBy(x => x.Title).ToList();
         if (sortTypeId == (int) SortTypes.FromZToA)
             return recipeResults.OrderByDescending(x => x.Title).ToList();
+        if (sortTypeId == (int) SortTypes.ByGrades)
+            return recipeResults.OrderByDescending(x => x.Stars).ToList();
         return recipeResults;
     }
     private async Task FillRecipesWithPhotos(List<RecipeResult> recipeResults)

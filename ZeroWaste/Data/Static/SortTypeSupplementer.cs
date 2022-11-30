@@ -24,6 +24,9 @@ public class SortTypeSupplementer
                 case SortTypes.ByTime:
                     typeDisplayVmsList.Add(new SortTypeDisplayVm(){SearchType = type, DisplayText = "Od najkrótszych"});
                     break;
+                case SortTypes.ByGrades:
+                    typeDisplayVmsList.Add(new SortTypeDisplayVm(){SearchType = type, DisplayText = "Oceny malejąco"});
+                    break;
             }
         }
         return typeDisplayVmsList;

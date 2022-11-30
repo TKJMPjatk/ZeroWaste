@@ -9,7 +9,6 @@ namespace ZeroWaste.Data.Services.RecipesSearch;
 
 public interface IRecipesSearchService
 {
-    Task<List<Recipe>> GetByCategoryAsync(int categoryId);
     Task<List<SearchByCategoryResults>> GetByCategoryAsync(int categoryId, string userId);
     Task<List<SearchByIngredientsResults>> GetByIngredients(List<IngredientForSearch> searchByIngredientsVm, string userId);
     Task<List<SearchByIngredientsResults>> GetByAll(List<IngredientForSearch> searchByIngredientsVm, int categoryId, string userId);
