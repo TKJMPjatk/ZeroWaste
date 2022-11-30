@@ -31,7 +31,7 @@
                     <th>@Html.DisplayNameFor(model => model.IngredientType.Name)</th>
                     @*@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
-                        <th>Actions</th>
+                    <th>Actions</th>
                     }*@
                     <th>Actions</th>
                 </tr>
@@ -40,26 +40,26 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td >
+                        <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                        <td >
+                        <td>
                             @Html.DisplayFor(modelItem => item.UnitOfMeasure.Shortcut)
                         </td>
-                        <td >
+                        <td>
                             @Html.DisplayFor(modelItem => item.IngredientType.Name)
                         </td>
                         @*@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                        {
-                            <td class="align-middle">
-                                <a class="btn btn-default" type="button" asp-action="Edit" asp-route-id="@item.Id">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a class="btn btn-default" type="button" asp-action="Delete" asp-route-id="@item.Id">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        }*@
+                    {
+                    <td class="align-middle">
+                    <a class="btn btn-default" type="button" asp-action="Edit" asp-route-id="@item.Id">
+                    <i class="bi bi-pencil"></i>
+                    </a>
+                    <a class="btn btn-default" type="button" asp-action="Delete" asp-route-id="@item.Id">
+                    <i class="bi bi-trash"></i>
+                    </a>
+                    </td>
+                    }*@
                         <td class="align-middle">
                             <a class="btn btn-default" type="button" asp-action="Details" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Podgląd">
                                 <i class="bi bi-search"></i>
@@ -67,9 +67,12 @@
                             <a class="btn btn-default" type="button" asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edytuj">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <a class="btn btn-default" type="button" asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Usuńw">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <a class="btn btn-default" type="button" asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Usuń">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            }
                         </td>
                     </tr>
                 }
@@ -77,16 +80,17 @@
         </table>
     </div>
 </div>
+
 @if (User.Identity.IsAuthenticated)
 {
     @await Html.PartialAsync("_CreateItem", "Ingredients")
 }
 
 @section Scripts
-{
+    {
     <script>
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip()
         })
     </script>
 }
