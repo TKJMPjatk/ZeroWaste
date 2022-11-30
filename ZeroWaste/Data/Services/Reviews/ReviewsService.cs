@@ -18,7 +18,7 @@ namespace ZeroWaste.Data.Services.Reviews
             {
                 AuthorId = userId,
                 CreatedAt = DateTime.Now,
-                Description = description,
+                Description = description ?? "",
                 RecipeId = recipeId,
                 Stars = stars,
             };
