@@ -77,8 +77,10 @@
         </table>
     </div>
 </div>
-
-@await Html.PartialAsync("_CreateItem", "Ingredients")
+@if (User.Identity.IsAuthenticated)
+{
+    @await Html.PartialAsync("_CreateItem", "Ingredients")
+}
 
 @section Scripts
 {
