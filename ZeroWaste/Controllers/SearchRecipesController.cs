@@ -93,12 +93,18 @@ public class SearchRecipesController : Controller
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
-
+        //coś w tym stylu trzeba wszędzie zrobić
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        string userId = null;
+        if (user is not null)
+        {
+            userId = user.Value;
+        }
         var resultVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
         {
             CategoryId = categoryId,
             SearchType = SearchType.Categories,
-            UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+            UserId = userId//User.FindFirst(ClaimTypes.NameIdentifier).Value,
         });
         return View("SearchResult", resultVm);
     }
