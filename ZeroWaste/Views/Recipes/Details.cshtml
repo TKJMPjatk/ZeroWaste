@@ -223,31 +223,40 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <form class="row" asp-action="Create" asp-controller="Reviews" enctype="multipart/form-data" method="post">
-                            @Html.HiddenFor(m=>m.NewReviewRecipeId, @ViewData["recipeId"])
-                            <div class="col-md-12">
-                                <i class="bi bi-star form-icon"></i><label asp-for="NewReviewStars" class="control-label form-label"></label>
-                                <select asp-for="NewReviewStars" class="form-select" aria-label="Jak bardzo podobał Ci się przepis">
-                                    <option value="1">Nie podoba się dla mnie</option>
-                                    <option value="2">Mało smaczny</option>
-                                    <option value="3" selected>W porządku</option>
-                                    <option value="4">Bardzo dobre</option>
-                                    <option value="5">Rewelacja</option>
-                                </select>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form class="row" asp-action="Create" asp-controller="Reviews" enctype="multipart/form-data" method="post">
+                                @Html.HiddenFor(m=>m.NewReviewRecipeId, @ViewData["recipeId"])
+                                <div class="col-md-12">
+                                    <i class="bi bi-star form-icon"></i><label asp-for="NewReviewStars" class="control-label form-label"></label>
+                                    <select asp-for="NewReviewStars" class="form-select" aria-label="Jak bardzo podobał Ci się przepis">
+                                        <option value="1">Nie podoba się dla mnie</option>
+                                        <option value="2">Mało smaczny</option>
+                                        <option value="3" selected>W porządku</option>
+                                        <option value="4">Bardzo dobre</option>
+                                        <option value="5">Rewelacja</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcie</label>
+                                    <input type="file" class="form-control" id="filesUpload" name="filesUpload" />
+                                </div>
+                                <div class="col-md-12">
+                                    <i class="bi bi-chat-square-text form-icon"></i><label asp-for="NewReviewDescription" class="control-label form-label"></label>
+                                    <textarea class="form-control" asp-for="NewReviewDescription" rows="2"></textarea>
+                                    <span asp-validation-for="NewReviewDescription" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-12 mt-1rem">
+                                    <input type="submit" value="Dodaj" class="btn btn-default btn-pale-pink fr" />
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="col-md-12 alert alert-danger">
+                                <span>Jeżeli chcesz dodać przepis musisz być zalogowany :)</span>
                             </div>
-                            <div class="col-md-12">
-                                <i class="bi bi-camera form-icon"></i><label class="control-label form-label">Wybierz zdjęcie</label>
-                                <input type="file" class="form-control" id="filesUpload" name="filesUpload" />
-                            </div>
-                            <div class="col-md-12">
-                                <i class="bi bi-chat-square-text form-icon"></i><label asp-for="NewReviewDescription" class="control-label form-label"></label>
-                                <textarea class="form-control" asp-for="NewReviewDescription" rows="2"></textarea>
-                                <span asp-validation-for="NewReviewDescription" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-12 mt-1rem">
-                                <input type="submit" value="Dodaj" class="btn btn-default btn-pale-pink fr" />
-                            </div>
-                        </form>
+                        }
                     </div>
                 </div>
             </div>
