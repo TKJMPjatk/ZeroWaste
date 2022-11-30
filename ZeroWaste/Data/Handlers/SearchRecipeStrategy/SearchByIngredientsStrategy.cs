@@ -50,7 +50,8 @@ public class SearchByIngredientsStrategy : ISearchRecipeStrategy
                 x.Title,
                 x.EstimatedTime,
                 x.DifficultyLevel,
-                x.CategoryId
+                x.CategoryId,
+                x.Stars
             }).FirstOrDefault();
         return new RecipeResult()
         {
@@ -59,7 +60,8 @@ public class SearchByIngredientsStrategy : ISearchRecipeStrategy
             EstimatedTime = item.EstimatedTime,
             DifficultyLevel = item.DifficultyLevel,
             CategoryId = item.CategoryId,
-            Ingredients = GetRecipeIngredient(item.RecipeId, searchByIngredientsResults)
+            Ingredients = GetRecipeIngredient(item.RecipeId, searchByIngredientsResults),
+            Stars = item.Stars
         };
     }
     private List<string?> GetRecipeIngredient(int id, List<SearchByIngredientsResults> searchByIngredientsResultsList)

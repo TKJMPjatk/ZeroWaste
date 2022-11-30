@@ -45,7 +45,8 @@ public class SearchByCategoryStrategy : ISearchRecipeStrategy
                 x.Title,
                 x.EstimatedTime,
                 x.DifficultyLevel,
-                x.CategoryId
+                x.CategoryId,
+                x.Stars
             }).FirstOrDefault();
         return new RecipeResult()
         {
@@ -54,6 +55,7 @@ public class SearchByCategoryStrategy : ISearchRecipeStrategy
             EstimatedTime = item.EstimatedTime,
             DifficultyLevel = item.DifficultyLevel,
             CategoryId = item.CategoryId,
+            Stars = item.Stars,
             Ingredients = GetRecipeIngredient(item.RecipeId, searchByIngredientsResults)
         };
     }    

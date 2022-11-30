@@ -8,4 +8,5 @@ public class SearchByCategoryResults
     public int DifficultyLevel { get; set; }
     public int CategoryId { get; set; }
     public string? IngredientName { get; set; }
+    public double Stars { get; set; }
 }

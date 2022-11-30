@@ -20,17 +20,6 @@ public class RecipesSearchService : IRecipesSearchService
         _context = context;
         _connectionFactory = connectionFactory;
     }
-    public async Task<List<Recipe>> GetByCategoryAsync(int categoryId)
-    {
-        var list = await _context
-            .Recipes
-            .Include(x => x.RecipesIngredients)
-            .ThenInclude(x=>x.Ingredient)
-            .Where(x => x.CategoryId == categoryId && x.StatusId == 1)
-            .ToListAsync();
-        return list;
-    }
-
     public async Task<List<SearchByCategoryResults>> GetByCategoryAsync(int categoryId, string userId)
     {
         string querySql = @"SELECT 
@@ -39,6 +28,7 @@ public class RecipesSearchService : IRecipesSearchService
 	                            , EstimatedTime	
                                 , DifficultyLevel
 	                            , IngredientName
+                                , Stars
                             FROM [dbo].[SearchByCategory] (@CategoryId, @UserId)";
         using var connection = _connectionFactory.GetDbConnection();
         var searchByCategory = await connection.QueryAsync<SearchByCategoryResults>
@@ -56,6 +46,7 @@ public class RecipesSearchService : IRecipesSearchService
 	                        , Title 
                             , EstimatedTime
                             , DifficultyLevel 
+                            , Stars
                             , CategoryId 
                             , IngredientName 
                             , UnitOfMeasureShortcut 
@@ -89,7 +80,8 @@ public class RecipesSearchService : IRecipesSearchService
 	                          RecipeId
 	                        , Title 
                             , EstimatedTime
-                            , DifficultyLevel 
+                            , DifficultyLevel
+                            , Stars
                             , CategoryId 
                             , IngredientName 
                             , UnitOfMeasureShortcut 
