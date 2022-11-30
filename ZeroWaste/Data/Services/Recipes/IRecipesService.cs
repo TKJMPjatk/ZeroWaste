@@ -18,6 +18,7 @@ namespace ZeroWaste.Data.Services.Recipes
         Task AddNotLiked(int recipeId, string userId);
         Task<bool> IsAuthorEqualsEditor(int recipeId, string editorId);
         Task<List<int>> GetRecipeIdList();
+        Task<List<int>> GetRecipeIdList(string UserId);
         Task ConfirmRecipe(int recipeId);
         Task RejectRecipe(int recipeId);
         Task UpdateStateAsync(int recipeId, int statusId);

@@ -77,6 +77,14 @@ public class SearchRecipeHandler : ISearchRecipeHandler
         int randomNumber = r.Next(0, recipeIdsList.Count - 1);
         return recipeIdsList[randomNumber];
     }
+
+    public async Task<int> GetRandomRecipeId(string UserId)
+    {
+        List<int> recipeIdsList = await _recipesService.GetRecipeIdList();
+        Random r = new();
+        int randomNumber = r.Next(0, recipeIdsList.Count - 1);
+        return recipeIdsList[randomNumber];
+    }
     private List<RecipeResult> GetSortField(List<RecipeResult> recipeResults, int sortTypeId)
     {
         if (sortTypeId == (int) SortTypes.ByTime)

@@ -10,5 +10,6 @@ public interface ISearchRecipeHandler
     SearchByIngredientsVm AddIngredient(SearchByIngredientsVm searchByIngredientsVm);
     SearchByIngredientsVm DeleteIngredient(SearchByIngredientsVm searchByIngredientsVm);
     Task<SearchRecipeResultsVm> GetSearchRecipeResultVmSorted(SearchRecipeResultsVm resultsVm);
-    Task<int> GetRandomRecipeId();
+    Task<int> GetRandomRecipeId();    
+    Task<int> GetRandomRecipeId(string UserId);
 }

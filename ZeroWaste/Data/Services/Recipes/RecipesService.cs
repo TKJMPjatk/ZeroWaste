@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.Helpers;
 using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.ExistingRecipe;
@@ -13,13 +15,13 @@ namespace ZeroWaste.Data.Services.Recipes
     {
         private readonly AppDbContext _context;
         private readonly IRecipeMapperHelper _mapperHelper;
-
-        public RecipesService(AppDbContext context, IRecipeMapperHelper mapperHelper)
+        private readonly IDbConnectionFactory _dbConnectionFactory;
+        public RecipesService(AppDbContext context, IRecipeMapperHelper mapperHelper, IDbConnectionFactory dbConnectionFactory)
         {
             _context = context;
             _mapperHelper = mapperHelper;
+            _dbConnectionFactory = dbConnectionFactory;
         }
-
         public async Task<int> AddNewReturnsIdAsync(NewRecipeVM newRecipeVM, string userId)
         {
 
@@ -31,7 +33,6 @@ namespace ZeroWaste.Data.Services.Recipes
             await _context.SaveChangesAsync();
             return recipe.Id;
         }
-
         public async Task<Recipe?> GetByIdAsync(int id)
         {
             var entity = await _context
@@ -41,7 +42,6 @@ namespace ZeroWaste.Data.Services.Recipes
                 x.Id == id);
             return entity;
         }
-
         public async Task<EditRecipeVM?> GetEditByIdAsync(int id)
         {
             var entity = await _context
@@ -54,7 +54,6 @@ namespace ZeroWaste.Data.Services.Recipes
             return mappedEntity;
 
         }
-
         public async Task<DetailsRecipeVM?> GetDetailsByIdAsync(int id)
         {
             var recipe = await _context.Recipes
@@ -73,7 +72,6 @@ namespace ZeroWaste.Data.Services.Recipes
             var detailsRecipe = _mapperHelper.MapToDetails(recipe);
             return detailsRecipe;
         }
-
         public async Task<RecipeDropdownVM> GetDropdownsValuesAsync()
         {
             var response = new RecipeDropdownVM()
@@ -82,7 +80,6 @@ namespace ZeroWaste.Data.Services.Recipes
             };
             return response;
         }
-
         public async Task UpdateAsync(EditRecipeVM editRecipeVM, string userId)
         {
             var recipe = _mapperHelper.MapFromEdit(editRecipeVM);
@@ -91,7 +88,6 @@ namespace ZeroWaste.Data.Services.Recipes
             _context.Update(recipe);
             await _context.SaveChangesAsync();
         }
-
         public async Task AddLiked(int recipeId, string userId)
         {
             var likedRecipe = await _context.FavouriteRecipes
@@ -107,7 +103,6 @@ namespace ZeroWaste.Data.Services.Recipes
                 await _context.SaveChangesAsync();
             }
         }
-
         public async Task AddNotLiked(int recipeId, string userId)
         {
             var hatedRecipe = await _context.HatedRecipes
@@ -123,7 +118,6 @@ namespace ZeroWaste.Data.Services.Recipes
                 await _context.SaveChangesAsync();
             }
         }
-
         public async Task<bool> IsAuthorEqualsEditor(int recipeId, string editorId)
         {
             var entity = await _context
@@ -140,7 +134,6 @@ namespace ZeroWaste.Data.Services.Recipes
                 return true;
             }
         }
-
         public async Task<List<int>> GetRecipeIdList()
         {
             return await _context
@@ -148,6 +141,13 @@ namespace ZeroWaste.Data.Services.Recipes
                 .Where(x => x.StatusId == 1)
                 .Select(x => x.Id)
                 .ToListAsync();
+        }        
+        public async Task<List<int>> GetRecipeIdList(string UserId)
+        {
+            var connection = _dbConnectionFactory.GetDbConnection();
+            string querySql = "SELECT Id FROM dbo.GetRecipeIdsListForSupriseMe(@UserId)";
+            var idList = await connection.QueryAsync<int>(querySql, new {@UserId = UserId});
+            return idList.ToList();
         }
 
         public async Task ConfirmRecipe(int recipeId)
