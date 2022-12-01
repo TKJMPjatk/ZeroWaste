@@ -45,6 +45,7 @@
                     <div class="col-md-3">
                         <input type="number" class="form-control" id="quantityInput" asp-for="@Model.Quantity"/>
                         <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+                        <span class="text-danger" id="nanQuantity" style="visibility: hidden">Ilość musi być większa od 1</span>
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-antique-white text-oxford-blue" id="addIngredientBtn">
@@ -124,11 +125,11 @@
     </div>
 </div>
 @section Scripts
-    {
+{
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
-    <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -168,6 +169,18 @@
         });
     </script>
     @*<script>
+        $('#quantityInput').on('change', function (){
+            var quantityInputVal = $('#quantityInput').val();
+            if (!(parseInt(quantityInputVal))){
+                $('#quantityInput').val(0);
+                $("#nanQuantity").css('visibility', 'visible');
+            }
+            else{
+                $("#nanQuantity").css('visibility', 'hidden');
+            }
+        });
+    </script>
+    @*<script>
         $("#nameInput").focusout(function (){
             var _url = '/SearchRecipes/SearchByIngredientsAuto';
             var ingredientsList = [];
@@ -192,4 +205,4 @@
             });
             })
     </script>*@
-    }
+}

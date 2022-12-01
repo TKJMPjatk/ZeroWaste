@@ -138,21 +138,25 @@ public class SearchRecipesController : Controller
     public async Task<IActionResult> SearchRecipesFilteredResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
-        //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        string userId = null;
+        if (user is not null)
+        {
+            userId = user.Value;
+        }
         if(resultsVm.IngredientsLists != null)
         {
             resultsVm.SearchType = SearchType.IngredientsFiltered;
-            resultsVm.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            resultsVm.UserId = userId;
             resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
         }
         else
         {
             resultsVm.SearchType = SearchType.Categories;
-            resultsVm.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            resultsVm.UserId = userId;
             resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(resultsVm);
         }
-        //resultsVm = await _searchRecipeHandler.GetSearchRecipeResultVmFiltered(resultsVm);
         return View("SearchResult", resultsVm);
     }
 

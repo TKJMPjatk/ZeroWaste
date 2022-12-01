@@ -24,7 +24,7 @@ public class SearchByIngredientAdder : ISearchByIngredientAdder
         var item = searchByIngredientsVm
             .SingleIngredientToSearchVm
             .FirstOrDefault(x => x.Name == searchByIngredientsVm.Name);
-        item.Quantity += searchByIngredientsVm.Quantity;
+        item.Quantity += (int)searchByIngredientsVm.Quantity;
     }
 
     private void AddNotExistedIngredient(SearchByIngredientsVm searchByIngredientsVm)
@@ -33,7 +33,7 @@ public class SearchByIngredientAdder : ISearchByIngredientAdder
         searchByIngredientsVm.SingleIngredientToSearchVm.Add(new IngredientForSearch() 
         {
             Name = searchByIngredientsVm.Name, 
-            Quantity = searchByIngredientsVm.Quantity,
+            Quantity = (int)searchByIngredientsVm.Quantity,
             Unit = searchByIngredientsVm.Unit,
             Index = ingredientsListQuantity+1,
         }); 
