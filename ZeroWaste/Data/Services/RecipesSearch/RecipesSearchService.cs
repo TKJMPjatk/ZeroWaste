@@ -20,7 +20,7 @@ public class RecipesSearchService : IRecipesSearchService
         _context = context;
         _connectionFactory = connectionFactory;
     }
-    public async Task<List<SearchByCategoryResults>> GetByCategoryAsync(int categoryId, string userId)
+    public async Task<List<SearchRecipesResults>> GetByCategoryAsync(int categoryId, string userId)
     {
         string querySql = @"SELECT 
                                   RecipeId 
@@ -31,7 +31,7 @@ public class RecipesSearchService : IRecipesSearchService
                                 , Stars
                             FROM [dbo].[SearchByCategory] (@CategoryId, @UserId)";
         using var connection = _connectionFactory.GetDbConnection();
-        var searchByCategory = await connection.QueryAsync<SearchByCategoryResults>
+        var searchByCategory = await connection.QueryAsync<SearchRecipesResults>
         (
             querySql,
             new { @CategoryId = categoryId, @UserId = userId}
@@ -135,5 +135,81 @@ public class RecipesSearchService : IRecipesSearchService
             .Where(x => x.AuthorId == userId)
             .ToListAsync();
         return list;
+    }
+
+    public async Task<List<SearchRecipesResults>> GetByStatus1(int statusId)
+    {
+        string querySql = @"SELECT 
+                                  RecipeId 
+	                            , Title
+	                            , EstimatedTime	
+                                , DifficultyLevel
+	                            , IngredientName
+                                , Stars
+                            FROM [dbo].[SearchRecipesByStatus] (@StatusId)";
+        using var connection = _connectionFactory.GetDbConnection();
+        var searchByCategory = await connection.QueryAsync<SearchRecipesResults>
+        (
+            querySql,
+            new { @StatusId = statusId}
+        );
+        return searchByCategory.ToList();
+    }
+
+    public async Task<List<SearchRecipesResults>> GetFavouriteByUserIdAsync1(string userId)
+    {
+        string querySql = @"SELECT 
+                                  RecipeId 
+	                            , Title
+	                            , EstimatedTime	
+                                , DifficultyLevel
+	                            , IngredientName
+                                , Stars
+                            FROM [dbo].[SearchFavouriteRecipesByUserId] (@UserId)";
+        using var connection = _connectionFactory.GetDbConnection();
+        var searchByCategory = await connection.QueryAsync<SearchRecipesResults>
+        (
+            querySql,
+            new { @UserId = userId}
+        );
+        return searchByCategory.ToList();
+    }
+
+    public async Task<List<SearchRecipesResults>> GetHatedByUserIdAsync1(string userId)
+    {
+        string querySql = @"SELECT 
+                                  RecipeId 
+	                            , Title
+	                            , EstimatedTime	
+                                , DifficultyLevel
+	                            , IngredientName
+                                , Stars
+                            FROM [dbo].[SearchHatedRecipesByUserId] (@UserId)";
+        using var connection = _connectionFactory.GetDbConnection();
+        var searchByCategory = await connection.QueryAsync<SearchRecipesResults>
+        (
+            querySql,
+            new { @UserId = userId}
+        );
+        return searchByCategory.ToList();
+    }
+
+    public async Task<List<SearchRecipesResults>> GetEditMineByUserAsync1(string userId)
+    {
+        string querySql = @"SELECT 
+                                  RecipeId 
+	                            , Title
+	                            , EstimatedTime	
+                                , DifficultyLevel
+	                            , IngredientName
+                                , Stars
+                            FROM [dbo].[SearchMineRecipesByUserId] (@UserId)";
+        using var connection = _connectionFactory.GetDbConnection();
+        var searchByCategory = await connection.QueryAsync<SearchRecipesResults>
+        (
+            querySql,
+            new { @UserId = userId}
+        );
+        return searchByCategory.ToList();
     }
 }

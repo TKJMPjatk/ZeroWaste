@@ -17,7 +17,7 @@ public class SearchHated : ISearchRecipeStrategy
     }
     public async Task<List<RecipeResult>> SearchRecipe(SearchRecipeResultsVm searchRecipeResultsVm)
     {
-        var list = await _recipesSearchService.GetHatedByUserIdAsync(searchRecipeResultsVm.UserId);
+        var list = await _recipesSearchService.GetHatedByUserIdAsync1(searchRecipeResultsVm.UserId);
         return list.MapToRecipeResult();
     }
     public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)

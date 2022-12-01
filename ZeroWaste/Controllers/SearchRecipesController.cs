@@ -119,12 +119,18 @@ public class SearchRecipesController : Controller
         ViewBag.PageTitle = "Wyszukiwanie po składnikach";
         ViewBag.SortTypes = _sortTypeDisplayVmList;
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        string userId = null;
+        if (user is not null)
+        {
+            userId = user.Value;
+        }
         SearchRecipeResultsVm searchRecipeResultsVm =
             await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
             {
                 IngredientsLists = searchByIngredientsVm.SingleIngredientToSearchVm,
                 SearchType = SearchType.Ingredients,
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value
+                UserId = userId
             });
         return View("SearchResult", searchRecipeResultsVm);
     }

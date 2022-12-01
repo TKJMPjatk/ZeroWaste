@@ -80,7 +80,7 @@ public class SearchRecipeHandler : ISearchRecipeHandler
 
     public async Task<int> GetRandomRecipeId(string UserId)
     {
-        List<int> recipeIdsList = await _recipesService.GetRecipeIdList();
+        List<int> recipeIdsList = await _recipesService.GetRecipeIdList(UserId);
         Random r = new();
         int randomNumber = r.Next(0, recipeIdsList.Count - 1);
         return recipeIdsList[randomNumber];
@@ -95,8 +95,10 @@ public class SearchRecipeHandler : ISearchRecipeHandler
             return recipeResults.OrderBy(x => x.Title).ToList();
         if (sortTypeId == (int) SortTypes.FromZToA)
             return recipeResults.OrderByDescending(x => x.Title).ToList();
-        if (sortTypeId == (int) SortTypes.ByGrades)
+        if (sortTypeId == (int) SortTypes.ByGradesDesc)
             return recipeResults.OrderByDescending(x => x.Stars).ToList();
+        if (sortTypeId == (int) SortTypes.ByGradesAsc)
+            return recipeResults.OrderBy(x => x.Stars).ToList();
         return recipeResults;
     }
     private async Task FillRecipesWithPhotos(List<RecipeResult> recipeResults)

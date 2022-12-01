@@ -6,5 +6,6 @@ public enum SortTypes
     FromZToA = 2,
     ByTime = 3,
     ByDifficultyLevel = 4,
-    ByGrades = 5
+    ByGradesDesc = 5,
+    ByGradesAsc = 6
 }

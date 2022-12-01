@@ -1,6 +1,6 @@
 namespace ZeroWaste.DapperModels;
 
-public class SearchByCategoryResults
+public class SearchRecipesResults
 {
     public int RecipeId { get; set; }
     public string? Title { get; set; }

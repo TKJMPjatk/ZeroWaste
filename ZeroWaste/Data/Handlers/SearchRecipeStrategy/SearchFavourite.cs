@@ -18,7 +18,7 @@ public class SearchFavourite : ISearchRecipeStrategy
     public async Task<List<RecipeResult>> SearchRecipe(SearchRecipeResultsVm searchRecipeResultsVm)
     {
         var recipeResult = await _recipesSearchService
-            .GetFavouriteByUserIdAsync(searchRecipeResultsVm.UserId);
+            .GetFavouriteByUserIdAsync1(searchRecipeResultsVm.UserId);
         return recipeResult.MapToRecipeResult();
     }
     public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)

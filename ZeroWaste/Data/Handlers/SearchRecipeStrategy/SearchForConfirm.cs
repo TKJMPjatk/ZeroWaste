@@ -18,7 +18,7 @@ public class SearchForConfirm : ISearchRecipeStrategy
     public async Task<List<RecipeResult>> SearchRecipe(SearchRecipeResultsVm searchRecipeResultsVm)
     {
         var recipeResult = await _recipesSearchService
-            .GetByStatus(searchRecipeResultsVm.StatusId);
+            .GetByStatus1(searchRecipeResultsVm.StatusId);
         return recipeResult.MapToRecipeResult();
     }
     public SearchType GetSearchType(SearchRecipeResultsVm searchRecipeResultsVm)
