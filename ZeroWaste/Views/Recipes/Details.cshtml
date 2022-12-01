@@ -223,7 +223,7 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated && ViewBag.Author != true)
                         {
                             <form class="row" asp-action="Create" asp-controller="Reviews" enctype="multipart/form-data" method="post">
                                 @Html.HiddenFor(m=>m.NewReviewRecipeId, @ViewData["recipeId"])
@@ -251,6 +251,12 @@
                                 </div>
                             </form>
                         }
+                        else if (ViewBag.Author == true)
+                        {
+                            <div class="col-md-12 alert alert-danger">
+                                <span>Jesteś autorem przepisu. Nie możesz dodać opinii.</span>
+                            </div>
+                        }
                         else
                         {
                             <div class="col-md-12 alert alert-danger">
@@ -276,7 +282,7 @@
         </div>
         <div class="col-md-4">
             <a asp-action="AddNotLiked" asp-controller="Recipes" asp-route-recipeId="@Model.Id" class="btn btn-default btn-pale-pink float-left">Nie lubię</a>
-            <a asp-action="CreateFromRecipe" asp-controller="AutomatedShoppingList" asp-route-id="@Model.Id" class="btn btn-default btn-pale-pink fr">Składniki do listy zakupów</a>
+            <a asp-action="CreateFromRecipe" asp-controller="AutomatedShoppingList" asp-route-recipeId="@Model.Id" class="btn btn-default btn-pale-pink fr">Składniki do listy zakupów</a>
         </div>
     </div>
 </div>

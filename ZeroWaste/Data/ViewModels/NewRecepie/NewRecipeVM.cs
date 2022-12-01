@@ -13,10 +13,12 @@ namespace ZeroWaste.Data.ViewModels
         public string Description { get; set; }
         [Display(Name = "Przybliżony czas przygotowania w minutach")]
         [Required(ErrorMessage = "Czas przygotowania jest wymagany")]
-        public int EstimatedTime { get; set; }
+        [Range(1, 1000, ErrorMessage = "Wprowadź prawidłowy czas od 1 do 1000")]
+        public int? EstimatedTime { get; set; }
         [Display(Name = "Poziom trudności")]
         [Required(ErrorMessage = "Określ poziom trudności")]
-        public int DifficultyLevel { get; set; }
+        [Range(1, 5, ErrorMessage = "Określ poziom trudności")]
+        public int? DifficultyLevel { get; set; }
         [Display(Name = "Kategoria przepisu")]
         [Required(ErrorMessage = "Wskaż kategorię")]
         public int CategoryId { get; set; }
