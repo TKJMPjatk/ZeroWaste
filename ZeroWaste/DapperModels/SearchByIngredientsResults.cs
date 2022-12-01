@@ -12,5 +12,5 @@ public class SearchByIngredientsResults
     public string? UnitOfMeasureShortcut { get; set; }
     public double IngredientQuantity { get; set; }
     public bool Match { get; set; }
-    public int MissingIngredientCount { get; set; }
+    public int MissingIngredientsCount { get; set; }
 }

@@ -30,7 +30,13 @@ public class SearchByIngredientsStrategy : ISearchRecipeStrategy
     }
     private void MapToRecipeResult(List<SearchByIngredientsResults> searchByIngredientsResultsList, List<RecipeResult> recipeResultsList)
     {
+        var tmp = searchByIngredientsResultsList
+            .OrderByDescending(x => x.MissingIngredientsCount)
+            //.Select(x => x.RecipeId)
+            //.Distinct()
+            .ToList();
         List<int> recipesIdList = searchByIngredientsResultsList
+            .OrderByDescending(x => x.MissingIngredientsCount)
             .Select(x => x.RecipeId)
             .Distinct()
             .ToList();
@@ -68,6 +74,7 @@ public class SearchByIngredientsStrategy : ISearchRecipeStrategy
     {
         var items = searchByIngredientsResultsList
             .Where(x => x.RecipeId == id)
+            .OrderByDescending(x => x.Match)
             .Select(x => x.IngredientName)
             .ToList();
         return items;
