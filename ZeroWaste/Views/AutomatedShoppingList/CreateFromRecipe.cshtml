@@ -3,7 +3,7 @@
 @section Scripts
 {
     <script>
-        var val = confirm("Przenieść cię do listy zakupów?");
+        var val = confirm("Pomyślnie dodano nową listę zakupów.\nPrzenieść cię do listy zakupów?");
         if (val === true){
             window.location.href = "@Url.Action("Edit", "ShoppingLists", new {id = @Model.AddedShoppingListId})";
         }
