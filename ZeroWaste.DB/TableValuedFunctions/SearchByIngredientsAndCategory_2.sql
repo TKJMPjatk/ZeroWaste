@@ -1,6 +1,4 @@
--- ==================================================================
--- Create Multi-Statement Function template for Azure SQL Database
--- ==================================================================
+/****** Object:  UserDefinedFunction [dbo].[SearchByIngredientsAndCategory_2]    Script Date: 01.12.2022 19:44:57 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -11,7 +9,7 @@ GO
 -- Create date: 2022.11.07
 -- Description:	function that returns a list of recipes based on the given ingredient id
 -- =============================================
-CREATE OR ALTER FUNCTION [dbo].[SearchByIngredientsAndCategory_2]
+ALTER   FUNCTION [dbo].[SearchByIngredientsAndCategory_2]
 (
 	@IdsVarchar VARCHAR(MAX), @IdCategory INT, @UserId VARCHAR(450)
 )
@@ -22,6 +20,7 @@ RETURNS
 	Title VARCHAR(1000),
 	EstimatedTime INT,
 	DifficultyLevel INT,
+	Stars FLOAT,
 	CategoryId INT,
 	IngredientName VARCHAR(400),
 	UnitOfMeasureShortcut VARCHAR(100),
@@ -43,13 +42,18 @@ BEGIN
 	SELECT	T.RecipeId AS [RecipeId],
 			Title AS [Title],
 			T.EstimatedTime AS [EstimatedTime],
-			T.DifficultyLevel AS [DifficultyLevel],
+			T.DifficultyLevel AS [DifficultyLevel],			
+			ISNULL((SELECT 
+						AVG(Cast(Stars as Float))
+				   FROM dbo.RecipeReviews
+				   WHERE RecipeId = T.RecipeId
+				   GROUP BY RecipeId), 0) AS [Stars],
 			T.CategoryId AS [CategoryId],
 			Ingredients.Name AS [IngredientName],
 			UnitOfMeasures.Shortcut AS [UnitShortcut],
 			RecipeIngredients.Quantity AS [Quantity],
 			CAST(ISNULL(IdTable.ID,0) AS BIT) AS [IsMatch],
-			IngredientsCount-MatchIngredientsCount AS [MissingIngredientsCount]
+			MatchIngredientsCount AS [MissingIngredientsCount]
 	FROM	(SELECT	(SELECT	COUNT(1)
 					FROM	dbo.RecipeIngredients AS RI
 					WHERE	RI.RecipeId = Recipes.Id) AS IngredientsCount,
@@ -87,4 +91,3 @@ BEGIN
     RETURN
 END
 
-GO
