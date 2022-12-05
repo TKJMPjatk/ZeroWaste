@@ -29,7 +29,7 @@
         </div>
     </div>
     <br/>
-    @foreach (var item in @Model.ShoppingListIngredients)
+    @foreach (var item in @Model.ShoppingListIngredients.OrderBy(x => x.Ingredient.Name))
     {
         <div class="row">
             <div class="col-md-12">

@@ -42,9 +42,9 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
         ShoppingListIngredientsVm shoppingListIngredientsVm = new ShoppingListIngredientsVm()
         {
             ShoppingListId = shoppingListId,
-            IngredientsToAddVm = await _ingredientsService.GetAddedIngredientsAsync(shoppingListId),
-            IngredientTypes = await _ingredientsTypesService.GetAllAsync(),
-            Ingredients = ingredientsList,
+            IngredientsToAddVm = (await _ingredientsService.GetAddedIngredientsAsync(shoppingListId)).OrderBy( x=> x.Name).ToList(),
+            IngredientTypes = (await _ingredientsTypesService.GetAllAsync()).OrderBy(x=>x.Name).ToList(),
+            Ingredients = ingredientsList.OrderBy(x => x.Name).ToList(),
             SelectedCategoryId = typeId is null ? 0 : (int)typeId
         };
         return shoppingListIngredientsVm;
