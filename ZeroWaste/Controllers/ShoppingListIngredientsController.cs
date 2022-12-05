@@ -16,9 +16,14 @@ public class ShoppingListIngredientsController : Controller
     {
         _shoppingListIngredientsHandler = shoppingListIngredientsHandler;
     }
-    public async Task<IActionResult> IngredientsToAdd(int id, string searchString)
+    public async Task<IActionResult> IngredientsToAdd(int id, string searchString, int ingredientTypeId)
     {
-        var item = await _shoppingListIngredientsHandler.GetShoppingListIngredientsVm(id, searchString);
+        var item = await _shoppingListIngredientsHandler.GetShoppingListIngredientsVm(id, searchString, ingredientTypeId);
+        return View(nameof(IngredientsToAdd), item);
+    }
+    public async Task<IActionResult> ChangeCategory(int shoppingListId, int ingredientTypeId)
+    {
+        var item = await _shoppingListIngredientsHandler.GetShoppingListIngredientsVm(shoppingListId, null, ingredientTypeId);
         return View(nameof(IngredientsToAdd), item);
     }
     public async Task<IActionResult> DeleteIngredientFromShoppingList(int id)
@@ -26,12 +31,19 @@ public class ShoppingListIngredientsController : Controller
         int shoppingListId = await _shoppingListIngredientsHandler.HandleDeleteIngredientFromShoppingList(id);
         return RedirectToAction( "Edit", "ShoppingLists", new {id = shoppingListId});
     }
-    public async Task<IActionResult> AddIngredientToShoppingList(int id, int shoppingListId)
+    public async Task<IActionResult> AddIngredientToShoppingList(int id, int shoppingListId, int categoryId)
     {
         //Todo: Poprawić argument z id na ingredientId
         await _shoppingListIngredientsHandler
             .AddIngredientToShoppingList(id, shoppingListId);
-        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId});
+        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId, ingredientTypeId = categoryId});
+    }
+    public async Task<IActionResult> DeleteIngredientFromShoppingList1(int id, int shoppingListId, int categoryId)
+    {
+        //Todo: Poprawić argument z id na ingredientId
+        await _shoppingListIngredientsHandler
+            .DeleteIngredientFromShoppingList(id, shoppingListId);
+        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId, ingredientTypeId = categoryId});
     }
     public async Task<IActionResult> EditQuantity(int shoppingListId)
     {

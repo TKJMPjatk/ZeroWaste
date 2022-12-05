@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.IngredientsTypes;
 using ZeroWaste.Data.Services.ShoppingListIngredients;
 using ZeroWaste.Data.Services.ShoppingLists;
 using ZeroWaste.Data.ViewModels.ShoppingList;
@@ -16,21 +17,42 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
     private readonly IShoppingListIngredientsService _shoppingListIngredientService;
     private readonly IShoppingListsService _shoppingListsService;
     private readonly IIngredientsService _ingredientsService;
-    private readonly IMapper _mapper;
-    private List<int> _idOfIngredientsInShoppingList = new List<int>();
-    public ShoppingListIngredientsHandler(IShoppingListIngredientsService shoppingListIngredientService, IIngredientsService ingredientsService, IShoppingListsService shoppingListsService, IMapper mapper)
+    private readonly IIngredientsTypesService _ingredientsTypesService ;
+    public ShoppingListIngredientsHandler(IShoppingListIngredientsService shoppingListIngredientService, IIngredientsService ingredientsService, IShoppingListsService shoppingListsService, IMapper mapper, IIngredientsTypesService ingredientsTypesService)
     {
         _shoppingListIngredientService = shoppingListIngredientService;
         _ingredientsService = ingredientsService;
         _shoppingListsService = shoppingListsService;
-        _mapper = mapper;
+        _ingredientsTypesService = ingredientsTypesService;
     }
-    public async Task<ShoppingListIngredientsVm> GetShoppingListIngredientsVm(int shoppingListId, string searchString)
+    public async Task<ShoppingListIngredientsVm> GetShoppingListIngredientsVm(int shoppingListId, string searchString, int? typeId)
     {
+        List<IngredientsToAddVm> ingredientsList;
+        if (typeId is null || typeId == 0)
+        {
+            if (string.IsNullOrEmpty(searchString))
+                ingredientsList = (await _ingredientsService.GetAddedIngredientsAsync(shoppingListId)).Where(x => x.IsAdded == false).ToList();
+            else
+                ingredientsList = (await _ingredientsService.GetIngredientsToAddVmAsync(shoppingListId, searchString)).Where(x =>x .IsAdded).ToList();
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(searchString))
+                ingredientsList = (await _ingredientsService.GetAddedIngredientsAsync(shoppingListId))
+                    .Where(x => x.IngredientTypeId == typeId && x.IsAdded == false)
+                    .ToList();
+            else
+                ingredientsList = (await _ingredientsService.GetIngredientsToAddVmAsync(shoppingListId, searchString))
+                    .Where(x => x.IngredientTypeId == typeId && x.IsAdded == false)
+                    .ToList();
+        }
         ShoppingListIngredientsVm shoppingListIngredientsVm = new ShoppingListIngredientsVm()
         {
             ShoppingListId = shoppingListId,
-            IngredientsToAddVm = await _ingredientsService.GetIngredientsToAddVmAsync(shoppingListId, searchString)
+            IngredientsToAddVm = await _ingredientsService.GetAddedIngredientsAsync(shoppingListId),
+            Categories = await _ingredientsTypesService.GetAllAsync(),
+            Ingredients = ingredientsList,
+            SelectedCategoryId = typeId is null ? 0 : (int)typeId
         };
         return shoppingListIngredientsVm;
     }
@@ -61,6 +83,10 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
         await _shoppingListIngredientService.AddAsync(shoppingListId, ingredientId);
     }
 
+    public async Task DeleteIngredientFromShoppingList(int ingredientId, int shoppingListId)
+    {
+        await _shoppingListIngredientService.DeleteAsync(shoppingListId, ingredientId);
+    }
     public async Task<EditQuantityVM> GetEditQuantity(int shoppingListId)
     {
         return new EditQuantityVM

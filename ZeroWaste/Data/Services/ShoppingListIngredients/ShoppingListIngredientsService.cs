@@ -35,6 +35,16 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
         await _context.ShoppingListIngredients.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteAsync(int shoppingListId, int ingredientId)
+    {
+        var entity = await _context.ShoppingListIngredients.FirstOrDefaultAsync(x =>
+            x.IngredientId == ingredientId && x.ShoppingListId == shoppingListId);
+        EntityEntry entityEntry = _context.Entry(entity);
+        entityEntry.State = EntityState.Deleted;
+        await _context.SaveChangesAsync();
+    }
+
     public async Task EditQuantityAsync(int ingredientId, double quantity)
     {
         var entity = await _context

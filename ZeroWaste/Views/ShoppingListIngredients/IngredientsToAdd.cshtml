@@ -14,6 +14,7 @@
                 <div class="col-md-10">
                     <input name="searchString" type="text" class="form-control" placeholder="Szukaj składnika..." aria-label="Recipient's username" aria-describedby="button-addon2">
                     <input name="id" type="number" class="form-control" style="visibility: hidden" value="@Model.ShoppingListId">
+                    <input name="ingredientTypeId" type="number" class="form-control" style="visibility: hidden" value="@Model.SelectedCategoryId">
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
@@ -23,38 +24,91 @@
     </div>
 </div>
 <br/>
-<div class="col-md-8 offset-md-2">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Nazwa</th>
-            <th>Jednostka</th>
-            <th>Typ</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.IngredientsToAddVm)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UnitOfMeasure.Shortcut)
-                </td>
-                <td>
-                   @Html.DisplayFor(modelItem => item.IngredientType.Name)
-                </td>
-                <td class="align-middle">
-                    @if (!(item.IsAdded))
+<div class="row">
+    <div class="col-md-2">
+        <div class="row">
+            <div class="col-md-7 offset-2">
+                @if (@Model.SelectedCategoryId == 0)
+                {
+                    <a class="btn btn-oxford-blue text-antique-white btn-oxford-border width-max" asp-action="ChangeCategory" asp-route-ingredientTypeId="0" asp-route-shoppingListId="@Model.ShoppingListId">Wszystkie</a>
+                }
+                else
+                {
+                    <a class="btn btn-antique-white text-oxford-blue btn-oxford-border width-max" asp-action="ChangeCategory" asp-route-ingredientTypeId="0" asp-route-shoppingListId="@Model.ShoppingListId">Wszystkie</a>    
+                }
+                @foreach (var category in @Model.Categories)
+                {
+                    @if (category.Id != @Model.SelectedCategoryId)
                     {
-                        <a class="btn btn-antique-white text-oxford-blue" asp-action="AddIngredientToShoppingList" asp-route-id="@item.Id" asp-route-shoppingListId="@Model.ShoppingListId">Dodaj</a>
+                        <a class="btn btn-antique-white text-oxford-blue btn-oxford-border width-max" asp-action="ChangeCategory" asp-route-ingredientTypeId="@category.Id" asp-route-shoppingListId="@Model.ShoppingListId">@category.Name</a>
                     }
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                    else
+                    {
+                        <a class="btn btn-oxford-blue text-antique-white btn-oxford-border width-max">@category.Name</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-5">
+            <p class="h4">Składniki</p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Jednostka</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Ingredients)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitOfMeasure.Shortcut)
+                        </td>
+                        <td class="align-middle">
+                            <a class="btn-default" asp-action="AddIngredientToShoppingList" asp-route-id="@item.Id" asp-route-shoppingListId="@Model.ShoppingListId" asp-route-categoryId="@Model.SelectedCategoryId"><i class="bi bi-box-arrow-right"></i></a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+            <div class="col-md-5 offset-1">
+                <p class="h4">Składniki dodane</p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Jednostka</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.IngredientsToAddVm.Where(x => x.IsAdded))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitOfMeasure.Shortcut)
+                            </td>
+                            <td class="align-middle">
+                                <a class="btn-default" asp-action="DeleteIngredientFromShoppingList1" asp-route-id="@item.Id" asp-route-shoppingListId="@Model.ShoppingListId" asp-route-categoryId="@Model.SelectedCategoryId"><i class="bi bi-box-arrow-left"></i></a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 @await Html.PartialAsync("_ShoppingListIngredientsConfirmButton", @Model);

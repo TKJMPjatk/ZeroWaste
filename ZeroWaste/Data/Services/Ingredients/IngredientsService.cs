@@ -63,6 +63,26 @@ namespace ZeroWaste.Data.Services
             return ingredientsToAddVmList.OrderBy(x => x.IsAdded).ToList();
         }
 
+        public async Task<List<IngredientsToAddVm>> GetAddedIngredientsAsync(int shoppingListId)
+        {
+            string searchString = null;
+            List<IngredientsToAddVm> ingredientsToAddVmList = new List<IngredientsToAddVm>();
+            using (var connection = _dbConnectionFactory.GetDbConnection())
+            {
+                string query = @"SELECT 
+                                  [Id]
+                                , [Name]
+                                , [Description]
+                                , [IngredientTypeId]
+                                , [UnitOfMeasureId]
+                                , [IsAdded]
+                            FROM dbo.GetIngredientsToAddToShoppingList(@ShoppingListId, @SearchString)";
+                var paramateres = new {@ShoppingListId = shoppingListId, @SearchString = searchString == null ? "" : searchString };
+                ingredientsToAddVmList = (await connection.QueryAsync<IngredientsToAddVm>(query, paramateres)).ToList();
+            }
+            return ingredientsToAddVmList.OrderBy(x => x.IsAdded).ToList();
+        }
+
         public async Task<List<Ingredient>> GetAllAsync()
         {
             return await _context.Ingredients

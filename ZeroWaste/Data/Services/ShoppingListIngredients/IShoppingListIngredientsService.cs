@@ -7,6 +7,7 @@ public interface IShoppingListIngredientsService
 {
     Task<ShoppingListIngredient> GetByIdAsync(int id);
     Task AddAsync(int shoppingListId, int ingredientId);
+    Task DeleteAsync(int shoppingListId, int ingredientId);
     Task EditQuantityAsync(int ingredientId, double quantity);
     Task<int> DeleteByIdAsync(int id);
     Task<List<ShoppingListIngredient>> GetByShoppingListIdAsync(int shoppingListId);

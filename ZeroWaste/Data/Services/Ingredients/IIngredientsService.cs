@@ -17,6 +17,7 @@ namespace ZeroWaste.Data.Services
         Task UpdateAsync(NewIngredientVM updatedIngredient);
         Task DeleteAsync(int? id);
         Task<List<IngredientsToAddVm>> GetIngredientsToAddVmAsync(int shoppingListId, string searchString);
+        Task<List<IngredientsToAddVm>> GetAddedIngredientsAsync(int shoppingListId);
         Task<bool> IngredientExistsAsync(string ingredientName);
         Task<Ingredient?> GetByNameAsync(string ingredientName);
     }
