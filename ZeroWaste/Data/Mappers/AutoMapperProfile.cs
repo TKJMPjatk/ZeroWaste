@@ -33,5 +33,14 @@ public class AutoMapperProfile : Profile
         CreateMap<Recipe, EditRecipeVM>();
         CreateMap<EditRecipeVM, Recipe>();
         CreateMap<Photo, PhotoVM>();
+        CreateMap<HarmlessIngredient, ExistingIngredient>()
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.IngredientId))
+            .ForMember(d => d.Name, o => o.MapFrom(s => s.IngredientName))
+            .ForMember(d => d.UnitOfMeasure, o => o.MapFrom(s => new ExistingUnitOfMeasure()
+                                                            {
+                                                                Id = s.UnitOfMeasureId,
+                                                                Name = s.UnitOfMeasureName,
+                                                                Shortcut = s.UnitOfMeasureShortcut
+                                                            }));
     }
 }
