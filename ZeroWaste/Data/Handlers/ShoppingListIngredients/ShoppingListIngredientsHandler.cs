@@ -18,7 +18,7 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
     private readonly IShoppingListsService _shoppingListsService;
     private readonly IIngredientsService _ingredientsService;
     private readonly IIngredientsTypesService _ingredientsTypesService ;
-    public ShoppingListIngredientsHandler(IShoppingListIngredientsService shoppingListIngredientService, IIngredientsService ingredientsService, IShoppingListsService shoppingListsService, IMapper mapper, IIngredientsTypesService ingredientsTypesService)
+    public ShoppingListIngredientsHandler(IShoppingListIngredientsService shoppingListIngredientService, IIngredientsService ingredientsService, IShoppingListsService shoppingListsService, IIngredientsTypesService ingredientsTypesService)
     {
         _shoppingListIngredientService = shoppingListIngredientService;
         _ingredientsService = ingredientsService;
@@ -30,27 +30,20 @@ public class ShoppingListIngredientsHandler : IShoppingListIngredientsHandler
         List<IngredientsToAddVm> ingredientsList;
         if (typeId is null || typeId == 0)
         {
-            if (string.IsNullOrEmpty(searchString))
-                ingredientsList = (await _ingredientsService.GetAddedIngredientsAsync(shoppingListId)).Where(x => x.IsAdded == false).ToList();
-            else
-                ingredientsList = (await _ingredientsService.GetIngredientsToAddVmAsync(shoppingListId, searchString)).Where(x =>x .IsAdded).ToList();
+            ingredientsList = (await _ingredientsService.GetIngredientsToAddVmAsync(shoppingListId, searchString))
+                .Where(x =>x .IsAdded == false).ToList();
         }
         else
         {
-            if (string.IsNullOrEmpty(searchString))
-                ingredientsList = (await _ingredientsService.GetAddedIngredientsAsync(shoppingListId))
-                    .Where(x => x.IngredientTypeId == typeId && x.IsAdded == false)
-                    .ToList();
-            else
-                ingredientsList = (await _ingredientsService.GetIngredientsToAddVmAsync(shoppingListId, searchString))
-                    .Where(x => x.IngredientTypeId == typeId && x.IsAdded == false)
-                    .ToList();
+            ingredientsList = (await _ingredientsService.GetIngredientsToAddVmAsync(shoppingListId, searchString))
+                .Where(x => x.IngredientTypeId == typeId && x.IsAdded == false)
+                .ToList();
         }
         ShoppingListIngredientsVm shoppingListIngredientsVm = new ShoppingListIngredientsVm()
         {
             ShoppingListId = shoppingListId,
             IngredientsToAddVm = await _ingredientsService.GetAddedIngredientsAsync(shoppingListId),
-            Categories = await _ingredientsTypesService.GetAllAsync(),
+            IngredientTypes = await _ingredientsTypesService.GetAllAsync(),
             Ingredients = ingredientsList,
             SelectedCategoryId = typeId is null ? 0 : (int)typeId
         };

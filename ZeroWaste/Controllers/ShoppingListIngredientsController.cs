@@ -26,24 +26,22 @@ public class ShoppingListIngredientsController : Controller
         var item = await _shoppingListIngredientsHandler.GetShoppingListIngredientsVm(shoppingListId, null, ingredientTypeId);
         return View(nameof(IngredientsToAdd), item);
     }
-    public async Task<IActionResult> DeleteIngredientFromShoppingList(int id)
+    public async Task<IActionResult> DeleteShoppingListIngredient(int id)
     {
         int shoppingListId = await _shoppingListIngredientsHandler.HandleDeleteIngredientFromShoppingList(id);
         return RedirectToAction( "Edit", "ShoppingLists", new {id = shoppingListId});
     }
-    public async Task<IActionResult> AddIngredientToShoppingList(int id, int shoppingListId, int categoryId)
+    public async Task<IActionResult> AddIngredientToShoppingList(int ingredientId, int shoppingListId, int typeId)
     {
-        //Todo: Poprawić argument z id na ingredientId
         await _shoppingListIngredientsHandler
-            .AddIngredientToShoppingList(id, shoppingListId);
-        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId, ingredientTypeId = categoryId});
+            .AddIngredientToShoppingList(ingredientId, shoppingListId);
+        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId, ingredientTypeId = typeId});
     }
-    public async Task<IActionResult> DeleteIngredientFromShoppingList1(int id, int shoppingListId, int categoryId)
+    public async Task<IActionResult> DeleteIngredientFromShoppingList(int ingredientId, int shoppingListId, int typeId)
     {
-        //Todo: Poprawić argument z id na ingredientId
         await _shoppingListIngredientsHandler
-            .DeleteIngredientFromShoppingList(id, shoppingListId);
-        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId, ingredientTypeId = categoryId});
+            .DeleteIngredientFromShoppingList(ingredientId, shoppingListId);
+        return RedirectToAction(nameof(IngredientsToAdd), new {id = shoppingListId, ingredientTypeId = typeId});
     }
     public async Task<IActionResult> EditQuantity(int shoppingListId)
     {

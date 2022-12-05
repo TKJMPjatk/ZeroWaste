@@ -24,11 +24,11 @@ public class ShoppingListIngredientsTests
     {
         //Arrange
         _shoppingListIngredientsHandlerMock
-            .Setup(x => x.GetShoppingListIngredientsVm(It.IsAny<int>(), It.IsAny<string>()))
+            .Setup(x => x.GetShoppingListIngredientsVm(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>()))
             .ReturnsAsync(GetShoppingListIngredientsVm);
         var controller = new ShoppingListIngredientsController(_shoppingListIngredientsHandlerMock.Object);
         //Act
-        var result = await controller.IngredientsToAdd(It.IsAny<int>(), It.IsAny<string>());
+        var result = await controller.IngredientsToAdd(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>());
         //Assert
         var viewResult = Assert.IsType<ViewResult>(result);
         var actionName = viewResult.ViewName;
@@ -53,7 +53,7 @@ public class ShoppingListIngredientsTests
         _shoppingListIngredientsHandlerMock.Setup(x => x.HandleDeleteIngredientFromShoppingList(It.IsAny<int>())).ReturnsAsync(It.IsAny<int>());
         var controller = new ShoppingListIngredientsController(_shoppingListIngredientsHandlerMock.Object);
         //Act
-        var result = await controller.DeleteIngredientFromShoppingList(It.IsAny<int>());
+        var result = await controller.DeleteShoppingListIngredient(It.IsAny<int>());
         var viewResult = Assert.IsType<RedirectToActionResult>(result);
         var actionName = viewResult.ActionName;
         var controllerName = viewResult.ControllerName;
@@ -71,7 +71,7 @@ public class ShoppingListIngredientsTests
         //Arrange
         var controller = new ShoppingListIngredientsController(_shoppingListIngredientsHandlerMock.Object);
         //Act
-        var result = await controller.AddIngredientToShoppingList(It.IsAny<int>(), It.IsAny<int>());
+        var result = await controller.AddIngredientToShoppingList(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>());
         //Assert
         var viewResult = Assert.IsType<RedirectToActionResult>(result);
         var actionName = viewResult.ActionName;

@@ -37,8 +37,6 @@ public class ServicesConfiguration
         ConfigureServices(services);
         ConfigureStrategy(services);
         ConfigureHelpers(services);
-        services.AddScoped<IUrlQueryHelper, UrlQueryHelper>();
-        services.AddScoped<IShoppingListIngredientsHelper, ShoppingListIngredientsHelper>();
         services.AddScoped<IIngredientMapperHelper, IngredientMapperHelper>();
         services.AddScoped<IShoppingListHandler, ShoppingListHandler>();
         services.AddScoped<IRecipeMapperHelper, RecipeMapperHelper>();

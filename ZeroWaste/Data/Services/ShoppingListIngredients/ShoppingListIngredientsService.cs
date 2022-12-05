@@ -17,13 +17,6 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
         _context = context;
         _dbConnectionFactory = dbConnectionFactory;
     }
-
-    public async Task<ShoppingListIngredient> GetByIdAsync(int id)
-    {
-        return await _context.ShoppingListIngredients
-            .FirstOrDefaultAsync(x => x.Id == id);
-    }
-
     public async Task AddAsync(int shoppingListId, int ingredientId)
     {
         ShoppingListIngredient entity = new ShoppingListIngredient
@@ -63,6 +56,11 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
         await _context.SaveChangesAsync();
         return entity.ShoppingListId;
     }
+    private async Task<ShoppingListIngredient> GetByIdAsync(int id)
+    {
+        return await _context.ShoppingListIngredients
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
     public async Task<List<ShoppingListIngredient>> GetByShoppingListIdAsync(int shoppingListId)
     {
         var list = await _context
@@ -72,16 +70,6 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
             .Where(x => x.ShoppingListId == shoppingListId)
             .ToListAsync();
         return list;
-    }
-    public async Task<List<ShoppingListIngredient>> GetAllWithZeroQuantityAsync()
-    {
-        var tmp =  await _context
-            .ShoppingListIngredients
-            .Include(x => x.Ingredient)
-            .ThenInclude(x => x.UnitOfMeasure)
-            .Where(x => x.Quantity == 0)
-            .ToListAsync();
-        return tmp;
     }
     public async Task<int> ChangeSelection(int shoppingListIngredientId)
     {
