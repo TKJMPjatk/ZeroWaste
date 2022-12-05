@@ -1,7 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.AspNetCore.Connections;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ZeroWaste.Data.DapperConnection;
 using ZeroWaste.Data.Helpers;
+using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
+using ZeroWaste.Data.ViewModels.ShoppingListIngredients;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.Data.Services.RecipeIngredients
@@ -11,10 +16,12 @@ namespace ZeroWaste.Data.Services.RecipeIngredients
 
         private readonly AppDbContext _context;
         private readonly IRecipeIngredientMapperHelper _mapperHelper;
-        public RecipeIngredientService(AppDbContext context, IRecipeIngredientMapperHelper mapperHelper)
+        private readonly IDbConnectionFactory _dbConnectionFactory;
+        public RecipeIngredientService(AppDbContext context, IRecipeIngredientMapperHelper mapperHelper, IDbConnectionFactory dbConnectionFactory)
         {
             _context = context;
             _mapperHelper = mapperHelper;
+            _dbConnectionFactory = dbConnectionFactory;
         }
 
         public async Task AddIngredientAsync(int recipeId, int ingredientId, double quantity)
@@ -51,6 +58,26 @@ namespace ZeroWaste.Data.Services.RecipeIngredients
                 .Include(c => c.Ingredient.UnitOfMeasure)
                 .ToListAsync();
             return ingredients;
+        }
+
+        public async Task<IEnumerable<ExistingIngredient>> GetDropdownIngredientsAsync(string? UserId)
+        {
+            using (var connection = _dbConnectionFactory.GetDbConnection())
+            {
+                string query = @"SELECT	IngredientId,
+		                                IngredientName,
+		                                IngredientDescription,
+		                                IngredientTypeId,
+		                                UnitOfMeasureId,
+		                                UnitOfMeasureName,
+		                                UnitOfMeasureShortcut
+                                FROM [dbo].[IngredientsWithoutHarmful] (@UserId)
+                                ORDER BY IngredientName";
+                var paramateres = new { UserId };
+                var harmlessIngredients = await connection.QueryAsync<HarmlessIngredient>(query, paramateres);
+                var mappedHarmlessIngredients = _mapperHelper.MapHarmless(harmlessIngredients);
+                return mappedHarmlessIngredients;
+            }
         }
 
         public async Task<RecipeIngredientsDropdownsVM> GetDropdownsValuesAsync()
