@@ -54,15 +54,25 @@ public class SearchRecipesController : Controller
     }
     public async Task<IActionResult> SearchByIngredientsAsync()
     {
-        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
-        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
+        string userId = null;
+        if (User.FindFirst(ClaimTypes.NameIdentifier) != null)
+        {
+            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownIngredientsAsync(userId);
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.ToList();
         return View(new SearchByIngredientsVm());
     }
     [HttpPost]
     public async Task<IActionResult> AddIngredientAsync(SearchByIngredientsVm searchByIngredientsVm)
     {
-        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
-        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
+        string userId = null;
+        if (User.FindFirst(ClaimTypes.NameIdentifier) != null)
+        {
+            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownIngredientsAsync(userId);
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.ToList();
         if (!(ModelState.IsValid))
         {
             return View("SearchByIngredients", searchByIngredientsVm);
@@ -74,8 +84,13 @@ public class SearchRecipesController : Controller
     [HttpPost]
     public async Task<IActionResult> DeleteIngredient(SearchByIngredientsVm searchByIngredientsVm)
     {
-        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
-        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
+        string userId = null;
+        if (User.FindFirst(ClaimTypes.NameIdentifier) != null)
+        {
+            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownIngredientsAsync(userId);
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.ToList();
         var searchByIngredientsResult = _searchRecipeHandler.DeleteIngredient(searchByIngredientsVm);
         ModelState.Clear();
         return View("SearchByIngredients", searchByIngredientsResult);
@@ -98,7 +113,6 @@ public class SearchRecipesController : Controller
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.PageTitle = "Wyszukiwanie po kategoriach";
-        //coś w tym stylu trzeba wszędzie zrobić
         var user = User.FindFirst(ClaimTypes.NameIdentifier);
         string userId = null;
         if (user is not null)
@@ -182,12 +196,17 @@ public class SearchRecipesController : Controller
         var result = await _searchRecipeHandler.GetSearchRecipeResultVmSorted(resultsVm);
         return View("SearchResult", resultsVm);
     }
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [HttpPost]
     public async Task<IActionResult> ReturnToSearchByIngredients(SearchRecipeResultsVm resultsVm)
-    {        
-        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownsValuesAsync();
-        ViewBag.Ingredients = recipeIngredientsDropdownsData.Ingredients.ToList();
-        SearchByIngredientsVm searchByIngredientsVm = new SearchByIngredientsVm()
+    {
+        string userId = null;
+        if (User.FindFirst(ClaimTypes.NameIdentifier) != null)
+        {
+            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+        var recipeIngredientsDropdownsData = await _recipeIngredientService.GetDropdownIngredientsAsync(userId);
+        ViewBag.Ingredients = recipeIngredientsDropdownsData.ToList();
+        SearchByIngredientsVm searchByIngredientsVm = new()
         {
             SingleIngredientToSearchVm = resultsVm.IngredientsLists
         };

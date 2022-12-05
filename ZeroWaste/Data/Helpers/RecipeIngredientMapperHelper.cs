@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.RecipeIngredients;
 using ZeroWaste.Models;
 
@@ -18,6 +19,11 @@ namespace ZeroWaste.Data.Helpers
         {
             IEnumerable<ExistingIngredient> existingIngredient = _mapper.Map<IEnumerable<ExistingIngredient>>(ingredient);
             return existingIngredient;
+        }
+        public IEnumerable<ExistingIngredient> MapHarmless(IEnumerable<HarmlessIngredient> harmlessIngredients)
+        {
+            var ingredientsMapped = _mapper.Map<IEnumerable<ExistingIngredient>>(harmlessIngredients);
+            return ingredientsMapped;
         }
     }
 }

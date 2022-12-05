@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ZeroWaste.Data.ViewModels;
 using ZeroWaste.Data.ViewModels.NewIngredient;
 using ZeroWaste.Models;
 
