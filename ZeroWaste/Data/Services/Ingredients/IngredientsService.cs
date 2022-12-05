@@ -88,6 +88,7 @@ namespace ZeroWaste.Data.Services
             return await _context.Ingredients
                 .Include(i => i.IngredientType)
                 .Include(i => i.UnitOfMeasure)
+                .OrderBy(i => i.Name)
                 .ToListAsync();
         }
 
@@ -97,6 +98,7 @@ namespace ZeroWaste.Data.Services
                 .Where(i => i.Name.Contains(searchString))
                 .Include(i => i.IngredientType)
                 .Include(i => i.UnitOfMeasure)
+                .OrderBy(i => i.Name)
                 .ToListAsync();
         }
 
