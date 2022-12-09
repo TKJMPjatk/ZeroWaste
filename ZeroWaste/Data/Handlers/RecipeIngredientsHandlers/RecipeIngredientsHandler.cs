@@ -49,7 +49,7 @@ namespace ZeroWaste.Data.Handlers.RecipeIngredientsHandlers
             int ingredientId;
             if (! await IngredientAlredyExists(newRecipeIngredient.NewIngredientName))
             {
-                ingredientId = await AddNewIngredient(newRecipeIngredient.NewIngredientName, newRecipeIngredient.ExistingIngredientUnitOfMeasureId, newRecipeIngredient.NewIngredientTypeId);
+                ingredientId = await AddNewIngredient(newRecipeIngredient.NewIngredientName, newRecipeIngredient.NewIngredientUnitOfMeasureId, newRecipeIngredient.NewIngredientTypeId);
             }
             else
             {
@@ -58,13 +58,13 @@ namespace ZeroWaste.Data.Handlers.RecipeIngredientsHandlers
             }
             await AddIngredientToRecipe(newRecipeIngredient.RecipeId, ingredientId, newRecipeIngredient.NewIngredientQuantity);
         }
-        private async Task<int> AddNewIngredient(string newIngredientName, int existingIngredientUnitOfMeasureId, int newIngredientTypeId)
+        private async Task<int> AddNewIngredient(string newIngredientName, int newIngredientUnitOfMeasureId, int newIngredientTypeId)
         {
             var ingredient = new NewIngredientVM()
             {
                 Name = newIngredientName,
                 Description = "",
-                UnitOfMeasureId = existingIngredientUnitOfMeasureId,
+                UnitOfMeasureId = newIngredientUnitOfMeasureId,
                 IngredientTypeId = newIngredientTypeId
             };
             int newIngredientId = await _ingredientsService.AddNewReturnsIdAsync(ingredient);
