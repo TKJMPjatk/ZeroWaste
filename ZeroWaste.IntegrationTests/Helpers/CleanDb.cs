@@ -67,10 +67,10 @@ ON DELETE CASCADE
 ALTER TABLE [dbo].[HarmfulIngredients] CHECK CONSTRAINT [FK_HarmfulIngredients_Ingredients_IngredientId]";
         //using var connection = new SqlConnection(_connectionString);
         //connection.Open();
-        /*using SqlConnection connection = new SqlConnection(connectionString);
+        using SqlConnection connection = new SqlConnection(connectionString);
         SqlCommand command = new SqlCommand(query, connection);
         command.Connection.Open();
-        command.ExecuteNonQuery();*/
+        command.ExecuteNonQuery();
 
     }
 }

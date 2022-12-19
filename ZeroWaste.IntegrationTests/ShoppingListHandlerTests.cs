@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Handlers.ShoppingListHandlers;
 using ZeroWaste.Data.Services.ShoppingLists;
+using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.IntegrationTests.Helpers;
 using ZeroWaste.Models;
 
@@ -41,8 +42,8 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         var serviceScope = _factory.Services.CreateScope();
         _shoppingListHandler = serviceScope.ServiceProvider.GetService<IShoppingListHandler>();
         _dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>();
+        //var con = _dbContext.Database.GetConnectionString();
     }
-
     [Fact]
     public async Task GetShoppingListById_forExistingShoppingList_ShouldReturnShoppingList()
     {
@@ -67,21 +68,24 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         await context.SaveChangesAsync();
         return shopppingList;
     }
+    [Fact]
     public async Task GetShoppingListByUserId_ForExistingShoppingLists_ShouldReturnShoppingList()
     {
         //Arrange
         var userId = await GetUserGuid();
-        var existedShoppingList = await SeedShoppingList(_dbContext);
+        var existedShoppingList = await SeedShoppingList(_dbContext, userId);
         //Act 
-        var shoppingList = await _shoppingListHandler.GetShoppingListsByUserId()
+        var shoppingLists = await _shoppingListHandler.GetShoppingListsByUserId(userId);
+        //Assert
+        Assert.Equal(2, shoppingLists.Count());
+        CleanDb.Clean(_connectionString);
     }
-
     private async Task<string> GetUserGuid()
     {
         var userGuid = await _dbContext.Users.Select(x => x.Id).FirstOrDefaultAsync();
         return userGuid;
     }
-    private async Task<ShoppingList> SeedShoppingList(AppDbContext context, string userId)
+    private async Task<List<ShoppingList>> SeedShoppingList(AppDbContext context, string userId)
     {
         var shopppingList = new ShoppingList()
         {
@@ -97,9 +101,38 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
             CreatedAt = System.DateTime.Now,
             UserId = userId
         };
-        await context.ShoppingLists.AddAsync(shopppingList1);
+        List<ShoppingList> shoppingLists = new List<ShoppingList>()
+        {
+            shopppingList,
+            shopppingList1
+        };
+        await context.ShoppingLists.AddRangeAsync(shopppingList1);
         await context.SaveChangesAsync();
-        return shopppingList;
+        return shoppingLists;
+    }
+    [Fact]
+    public async Task Create_ForValidModel_ShouldAddNewShoppingList()
+    {
+        //Arrange
+        var userId = await GetUserGuid();
+        var shoppingListVm = new NewShoppingListVM()
+        {
+            Note = Guid.NewGuid().ToString(),
+            Title = Guid.NewGuid().ToString()
+        };
+        //Act
+        var shoppingLists = await _shoppingListHandler.Create(shoppingListVm ,userId);
+        //Assert
+        Assert.Equal(1, await IsShoppingListExists(shoppingListVm));
+        CleanDb.Clean(_connectionString);
+    }
+    private async Task<int> IsShoppingListExists(NewShoppingListVM shoppingListVm)
+    {
+        return await _dbContext
+            .ShoppingLists
+            .CountAsync(x =>
+                x.Title == shoppingListVm.Title 
+            &&  x.Note == shoppingListVm.Note);
     }
 
 }
