@@ -65,12 +65,9 @@ ALTER TABLE [dbo].[HarmfulIngredients]  WITH CHECK ADD  CONSTRAINT [FK_HarmfulIn
 REFERENCES [dbo].[Ingredients] ([Id])
 ON DELETE CASCADE
 ALTER TABLE [dbo].[HarmfulIngredients] CHECK CONSTRAINT [FK_HarmfulIngredients_Ingredients_IngredientId]";
-        //using var connection = new SqlConnection(_connectionString);
-        //connection.Open();
-        /*using SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand(query, connection);
+        using SqlConnection connection = new(connectionString);
+        SqlCommand command = new(query, connection);
         command.Connection.Open();
-        command.ExecuteNonQuery();*/
-
+        command.ExecuteNonQuery();
     }
 }
