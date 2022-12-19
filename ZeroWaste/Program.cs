@@ -16,7 +16,7 @@ var servicesConfiguration = ServicesConfiguration.GetInstance();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TestConnectionString")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
@@ -64,6 +64,7 @@ if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images")
 
 if (bool.Parse(builder.Configuration.GetSection("SeedDatabase").Value))
 {
+    //AppDbInitializer.TruncateTables(app);
     AppDbInitializer.SeedRolesAndUsersAsync(app).Wait();
     AppDbInitializer.Seed(app);
 }

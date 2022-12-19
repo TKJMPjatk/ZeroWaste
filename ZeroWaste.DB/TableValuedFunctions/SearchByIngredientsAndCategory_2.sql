@@ -9,7 +9,7 @@ GO
 -- Create date: 2022.11.07
 -- Description:	function that returns a list of recipes based on the given ingredient id
 -- =============================================
-ALTER   FUNCTION [dbo].[SearchByIngredientsAndCategory_2]
+CREATE OR ALTER   FUNCTION [dbo].[SearchByIngredientsAndCategory_2]
 (
 	@IdsVarchar VARCHAR(MAX), @IdCategory INT, @UserId VARCHAR(450)
 )

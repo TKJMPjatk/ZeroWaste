@@ -8,6 +8,21 @@ namespace ZeroWaste.Data
     public class AppDbInitializer
     {
         public static List<String> userIds = new();
+        //public static void TruncateTables(IApplicationBuilder applicationBuilder)
+        //{
+        //    using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+        //    {
+        //        var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
+        //        var tableNames = context.Model.GetEntityTypes()
+        //                            .Select(t => t.GetTableName())
+        //                            .Distinct()
+        //                            .ToList();
+        //        foreach (string tableName in tableNames)
+        //        {
+        //            context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE [" + tableName + "]");
+        //        }
+        //    }
+        //}
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
@@ -119,6 +134,26 @@ namespace ZeroWaste.Data
                         new IngredientType()
                         {
                             Name = "Ziarno"
+                        },
+                        new IngredientType()
+                        {
+                            Name = "Olej"
+                        },
+                        new IngredientType()
+                        {
+                            Name = "Cukier"
+                        },
+                        new IngredientType()
+                        {
+                            Name = "Drób"
+                        },
+                        new IngredientType()
+                        {
+                            Name = "Grzyb"
+                        },
+                        new IngredientType()
+                        {
+                            Name = "Plyn"
                         }
                     });
                     context.SaveChanges();
@@ -502,6 +537,10 @@ namespace ZeroWaste.Data
                         new Category()
                         {
                             Name = "Obiady"
+                        },
+                        new Category()
+                        {
+                            Name = "Wszystkie"
                         }
                     });
                     context.SaveChanges();
