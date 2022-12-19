@@ -69,11 +69,11 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
     }
     public async Task GetShoppingListByUserId_ForExistingShoppingLists_ShouldReturnShoppingList()
     {
-        //Arrange
-        var userId = await GetUserGuid();
-        var existedShoppingList = await SeedShoppingList(_dbContext);
-        //Act 
-        var shoppingList = await _shoppingListHandler.GetShoppingListsByUserId()
+        ////Arrange
+        //var userId = await GetUserGuid();
+        //var existedShoppingList = await SeedShoppingList(_dbContext);
+        ////Act 
+        //var shoppingList = await _shoppingListHandler.GetShoppingListsByUserId()
     }
 
     private async Task<string> GetUserGuid()
