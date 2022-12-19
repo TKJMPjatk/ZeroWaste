@@ -31,12 +31,16 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
                     );
                     services.Remove(dbContextOptions);
                     services.AddDbContext<AppDbContext>(options => options.UseSqlServer(_connectionString));
-                    services.AddScoped<IShoppingListHandler, ShoppingListHandler>();
-                    var tmp = services.BuildServiceProvider();
-                    shoppingListsService = tmp.GetService<IShoppingListHandler>();
                 });
-                
             });
+    }
+
+    [Fact]
+    public async Task Test()
+    {
+        var ss = _factory.Services.CreateScope();
+        var h = ss.ServiceProvider.GetService<IShoppingListHandler>();
+        var test = await h.GetShoppingListById(2);
     }
 
     [Fact]

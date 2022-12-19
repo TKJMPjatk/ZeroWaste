@@ -64,7 +64,6 @@ if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images")
 
 if (bool.Parse(builder.Configuration.GetSection("SeedDatabase").Value))
 {
-    //AppDbInitializer.TruncateTables(app);
     AppDbInitializer.SeedRolesAndUsersAsync(app).Wait();
     AppDbInitializer.Seed(app);
 }
