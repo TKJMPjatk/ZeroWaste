@@ -48,7 +48,7 @@ namespace ZeroWaste.IntegrationTests
                         {
                             services.Remove(item);
                         }
-                        //...
+                        services.AddScoped<IDbConnectionFactory, TestDbConnectionFactory>();
                     });
                 });
             var serviceScope = _factory.Services.CreateScope();
@@ -142,6 +142,7 @@ namespace ZeroWaste.IntegrationTests
             string userId;
 
             // Act
+            CleanDb.Clean(_connectionString);
             recipeId = await AddSimpleRecipe();
             editRecipeVM = new EditRecipeVM()
             {
@@ -199,8 +200,8 @@ namespace ZeroWaste.IntegrationTests
         [Fact]
         public async Task GetRecipeIdList_ForOneRecipe_ShouldReturnOneRecipe()
         {
-
             // Act
+            CleanDb.Clean(_connectionString);
             _ = await AddSimpleConfirmedRecipe();
             var recipeIds = await _recipesService.GetRecipeIdList();
 
@@ -217,6 +218,7 @@ namespace ZeroWaste.IntegrationTests
             int recipeId;
 
             // Act
+            CleanDb.Clean(_connectionString);
             recipeId = await AddSimpleRecipe();
             userId = _dbContext.Users.First().Id;
             await _recipesService.AddNotLiked(recipeId, userId);
@@ -224,6 +226,70 @@ namespace ZeroWaste.IntegrationTests
 
             // Assert
             Assert.Empty(recipeIds);
+            CleanDb.Clean(_connectionString);
+        }
+
+        [Fact]
+        public async Task ConfirmRecipe_ForExistingRecipe_ShouldReturnConfirmStatus()
+        {
+            // Arrange
+            string userId;
+            int recipeId;
+
+            // Act
+            recipeId = await AddSimpleRecipe();
+            userId = _dbContext.Users.First().Id;
+            await _recipesService.ConfirmRecipe(recipeId);
+            var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
+            Assert.Equal(1, recipe.StatusId);
+            CleanDb.Clean(_connectionString);
+        }
+
+        [Fact]
+        public async Task RejectRecipe_ForExistingRecipe_ShouldReturnRejectStatus()
+        {
+            // Arrange
+            string userId;
+            int recipeId;
+
+            // Act
+            recipeId = await AddSimpleRecipe();
+            userId = _dbContext.Users.First().Id;
+            await _recipesService.RejectRecipe(recipeId);
+            var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
+            Assert.Equal(3, recipe.StatusId);
+            CleanDb.Clean(_connectionString);
+        }
+
+        [Fact]
+        public async Task UnconfirmRecipe_ForExistingRecipe_ShouldReturnUnconfirmStatus()
+        {
+            // Arrange
+            string userId;
+            int recipeId;
+
+            // Act
+            recipeId = await AddSimpleRecipe();
+            userId = _dbContext.Users.First().Id;
+            await _recipesService.UnconfirmRecipe(recipeId);
+            var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
+            Assert.Equal(2, recipe.StatusId);
+            CleanDb.Clean(_connectionString);
+        }
+
+        [Fact]
+        public async Task UpdateStateAsync_ForExistingRecipe_ShouldReturnUnconfirmStatus()
+        {
+            // Arrange
+            string userId;
+            int recipeId;
+
+            // Act
+            recipeId = await AddSimpleRecipe();
+            userId = _dbContext.Users.First().Id;
+            await _recipesService.UpdateStateAsync(recipeId,1);
+            var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
+            Assert.Equal(1, recipe.StatusId);
             CleanDb.Clean(_connectionString);
         }
 

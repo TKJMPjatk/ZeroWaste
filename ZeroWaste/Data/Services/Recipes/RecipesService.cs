@@ -138,7 +138,7 @@ namespace ZeroWaste.Data.Services.Recipes
         {
             return await _context
                 .Recipes
-                .Where(x => x.StatusId == 2)
+                .Where(x => x.StatusId == 1)
                 .Select(x => x.Id)
                 .ToListAsync();
         }        
