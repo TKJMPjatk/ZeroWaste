@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Handlers.ShoppingListHandlers;
 using ZeroWaste.Data.Services.ShoppingLists;
+using ZeroWaste.Data.ViewModels.ShoppingList;
 using ZeroWaste.IntegrationTests.Helpers;
 using ZeroWaste.Models;
 
@@ -17,9 +18,10 @@ namespace ZeroWaste.IntegrationTests;
 public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly string _connectionString;
-    private WebApplicationFactory<Program> _factory;
-    IShoppingListHandler _shoppingListHandler;
-    private AppDbContext _dbContext;
+    private WebApplicationFactory<Program>? _factory;
+    private readonly IShoppingListHandler? _shoppingListHandler;
+    private readonly AppDbContext? _dbContext;
+    private readonly ShoppingListHandlerHelper _shoppingListHandlerHelper;
     public ShoppingListHandlerTests(WebApplicationFactory<Program> factory)
     {
         IConfiguration configuration = new ConfigurationBuilder()
@@ -41,47 +43,35 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         var serviceScope = _factory.Services.CreateScope();
         _shoppingListHandler = serviceScope.ServiceProvider.GetService<IShoppingListHandler>();
         _dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>();
+        _shoppingListHandlerHelper = new ShoppingListHandlerHelper();
     }
-
     [Fact]
     public async Task GetShoppingListById_forExistingShoppingList_ShouldReturnShoppingList()
     {
         //Arrange
-        var existedShoppingList = await SeedShoppingList(_dbContext);
+        var existedShoppingList = await _shoppingListHandlerHelper.SeedShoppingList(_dbContext);
         //Act
         var shoppingList = await _shoppingListHandler.GetShoppingListById(existedShoppingList.Id);
         //Assert
         Assert.Equal(existedShoppingList.Id, shoppingList.Id);
         CleanDb.Clean(_connectionString);
     }
-    private async Task<ShoppingList> SeedShoppingList(AppDbContext context)
-    {
-        var shopppingList = new ShoppingList()
-        {
-            Note = Guid.NewGuid().ToString(),
-            Title = Guid.NewGuid().ToString(),
-            CreatedAt = System.DateTime.Now,
-            UserId = "0d442e09-d1a4-43ea-b1da-a60a7cd0c6a0"
-        };
-        await context.ShoppingLists.AddAsync(shopppingList);
-        await context.SaveChangesAsync();
-        return shopppingList;
-    }
+
+    [Fact]
     public async Task GetShoppingListByUserId_ForExistingShoppingLists_ShouldReturnShoppingList()
     {
-        ////Arrange
-        //var userId = await GetUserGuid();
-        //var existedShoppingList = await SeedShoppingList(_dbContext);
-        ////Act 
-        //var shoppingList = await _shoppingListHandler.GetShoppingListsByUserId()
+        CleanDb.Clean(_connectionString);
+        //Arrange
+        var userId = await _shoppingListHandlerHelper.GetUserGuid(_dbContext);
+        var existedShoppingList = await SeedShoppingList(_dbContext, userId);
+        //Act 
+        var shoppingLists = await _shoppingListHandler.GetShoppingListsByUserId(userId);
+        //Assert
+        Assert.Equal(existedShoppingList.Count, shoppingLists.Count());
+        CleanDb.Clean(_connectionString);
     }
 
-    private async Task<string> GetUserGuid()
-    {
-        var userGuid = await _dbContext.Users.Select(x => x.Id).FirstOrDefaultAsync();
-        return userGuid;
-    }
-    private async Task<ShoppingList> SeedShoppingList(AppDbContext context, string userId)
+    private async Task<List<ShoppingList>> SeedShoppingList(AppDbContext context, string userId)
     {
         var shopppingList = new ShoppingList()
         {
@@ -90,6 +80,8 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
             CreatedAt = System.DateTime.Now,
             UserId = userId
         };
+        await context.ShoppingLists.AddAsync(shopppingList);
+        await context.SaveChangesAsync();
         var shopppingList1 = new ShoppingList()
         {
             Note = Guid.NewGuid().ToString(),
@@ -97,9 +89,52 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
             CreatedAt = System.DateTime.Now,
             UserId = userId
         };
+        List<ShoppingList> shoppingLists = new List<ShoppingList>()
+        {
+            shopppingList,
+            shopppingList1
+        };
         await context.ShoppingLists.AddAsync(shopppingList1);
         await context.SaveChangesAsync();
-        return shopppingList;
+        return shoppingLists;
+    }
+    [Fact]
+    public async Task Create_ForValidModel_ShouldAddNewShoppingList()
+    {
+        //Arrange
+        var userId = await _shoppingListHandlerHelper.GetUserGuid(_dbContext);
+        var shoppingListVm = new NewShoppingListVM()
+        {
+            Note = Guid.NewGuid().ToString(),
+            Title = Guid.NewGuid().ToString()
+        };
+        //Act
+        var shoppingLists = await _shoppingListHandler.Create(shoppingListVm ,userId);
+        //Assert
+        Assert.Equal(1, await _shoppingListHandlerHelper.GetShoppingListsCount(shoppingListVm, _dbContext));
+        CleanDb.Clean(_connectionString);
+    }
+    [Fact]
+    public async Task Delete_ForExistingShoppingList_ShouldDeleteShoppingList()
+    {
+        //Arrange
+        var shoppingList = await _shoppingListHandlerHelper.SeedShoppingList(_dbContext); 
+        //Act
+        await _shoppingListHandler.DeleteAsync(shoppingList.Id);
+        //Assert
+        Assert.Equal(0, await _shoppingListHandlerHelper.GetShoppingListsCount(shoppingList.Id, _dbContext));
+        CleanDb.Clean(_connectionString);
     }
 
+    [Fact]
+    public async Task IsShoppingListExists_ForExistingShoppingList_ShouldReturnTrue()
+    {
+        //Arrange
+        var shoppingList = await _shoppingListHandlerHelper.SeedShoppingList(_dbContext); 
+        //Act
+        var result = await _shoppingListHandler.IsShoppingListExists(shoppingList.Id);
+        //Assert
+        Assert.True(result);
+        CleanDb.Clean(_connectionString);
+    }
 }
