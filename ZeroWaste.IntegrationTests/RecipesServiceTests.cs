@@ -20,6 +20,7 @@ using ZeroWaste.Models;
 
 namespace ZeroWaste.IntegrationTests
 {
+    [Collection("#1")]
     public class RecipesServiceTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly string _connectionString;
@@ -89,7 +90,7 @@ namespace ZeroWaste.IntegrationTests
 
             // Assert
             Assert.True(result > 0);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -117,7 +118,7 @@ namespace ZeroWaste.IntegrationTests
 
             // Assert
             Assert.NotNull(recipe);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -142,7 +143,6 @@ namespace ZeroWaste.IntegrationTests
             string userId;
 
             // Act
-            CleanDb.Clean(_connectionString);
             recipeId = await AddSimpleRecipe();
             editRecipeVM = new EditRecipeVM()
             {
@@ -158,7 +158,7 @@ namespace ZeroWaste.IntegrationTests
 
             var updatedRecipe = await _recipesService.GetByIdAsync(recipeId);
             Assert.True(updatedRecipe.Title == "def");
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -176,7 +176,7 @@ namespace ZeroWaste.IntegrationTests
 
             // Assert
             Assert.NotNull(likedRecipe);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -194,20 +194,19 @@ namespace ZeroWaste.IntegrationTests
 
             // Assert
             Assert.NotNull(likedRecipe);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
         public async Task GetRecipeIdList_ForOneRecipe_ShouldReturnOneRecipe()
         {
             // Act
-            CleanDb.Clean(_connectionString);
             _ = await AddSimpleConfirmedRecipe();
             var recipeIds = await _recipesService.GetRecipeIdList();
 
             // Assert
             Assert.Single(recipeIds);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -218,7 +217,6 @@ namespace ZeroWaste.IntegrationTests
             int recipeId;
 
             // Act
-            CleanDb.Clean(_connectionString);
             recipeId = await AddSimpleRecipe();
             userId = _dbContext.Users.First().Id;
             await _recipesService.AddNotLiked(recipeId, userId);
@@ -226,7 +224,7 @@ namespace ZeroWaste.IntegrationTests
 
             // Assert
             Assert.Empty(recipeIds);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -242,7 +240,7 @@ namespace ZeroWaste.IntegrationTests
             await _recipesService.ConfirmRecipe(recipeId);
             var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
             Assert.Equal(1, recipe.StatusId);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -258,7 +256,7 @@ namespace ZeroWaste.IntegrationTests
             await _recipesService.RejectRecipe(recipeId);
             var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
             Assert.Equal(3, recipe.StatusId);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -274,7 +272,7 @@ namespace ZeroWaste.IntegrationTests
             await _recipesService.UnconfirmRecipe(recipeId);
             var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
             Assert.Equal(2, recipe.StatusId);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         [Fact]
@@ -290,7 +288,7 @@ namespace ZeroWaste.IntegrationTests
             await _recipesService.UpdateStateAsync(recipeId,1);
             var recipe = await _dbContext.Recipes.Where(c => c.Id == recipeId).FirstAsync();
             Assert.Equal(1, recipe.StatusId);
-            CleanDb.Clean(_connectionString);
+            await CleanDb.Clean(_connectionString);
         }
 
         private async Task<int> AddSimpleRecipe()
