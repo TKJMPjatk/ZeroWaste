@@ -6,9 +6,11 @@ namespace ZeroWaste.IntegrationTests.Helpers;
 
 public class CleanDb
 {
-     public static void Clean(string connectionString)
+    private static readonly object SyncObject = new object();
+     public static async Task Clean(string connectionString)
     {
-        string query = @"ALTER TABLE [dbo].[RecipeReviews] DROP CONSTRAINT [FK_RecipeReviews_Recipes_RecipeId]
+            string query = @"BEGIN TRAN
+ALTER TABLE [dbo].[RecipeReviews] DROP CONSTRAINT [FK_RecipeReviews_Recipes_RecipeId]
 ALTER TABLE [dbo].[Photos] DROP CONSTRAINT [FK_Photos_Recipes_RecipeId]
 ALTER TABLE [dbo].[FavouriteRecipes] DROP CONSTRAINT [FK_FavouriteRecipes_Recipes_RecipeId]
 ALTER TABLE [dbo].[HatedRecipes] DROP CONSTRAINT [FK_HatedRecipes_Recipes_RecipeId]
@@ -64,13 +66,14 @@ ALTER TABLE [dbo].[RecipeIngredients] CHECK CONSTRAINT [FK_RecipeIngredients_Ing
 ALTER TABLE [dbo].[HarmfulIngredients]  WITH CHECK ADD  CONSTRAINT [FK_HarmfulIngredients_Ingredients_IngredientId] FOREIGN KEY([IngredientId])
 REFERENCES [dbo].[Ingredients] ([Id])
 ON DELETE CASCADE
-ALTER TABLE [dbo].[HarmfulIngredients] CHECK CONSTRAINT [FK_HarmfulIngredients_Ingredients_IngredientId]";
-        //using var connection = new SqlConnection(_connectionString);
-        //connection.Open();
-        using SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand(query, connection);
-        command.Connection.Open();
-        command.ExecuteNonQuery();
-
+ALTER TABLE [dbo].[HarmfulIngredients] CHECK CONSTRAINT [FK_HarmfulIngredients_Ingredients_IngredientId]
+COMMIT TRAN";
+            //using var connection = new SqlConnection(_connectionString);
+            //connection.Open();
+            using SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand command = new SqlCommand(query, connection);
+            await command.Connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
+        
     }
 }
