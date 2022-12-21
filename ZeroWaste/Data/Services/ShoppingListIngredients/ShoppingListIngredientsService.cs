@@ -31,6 +31,7 @@ public class ShoppingListIngredientsService : IShoppingListIngredientsService
 
     public async Task DeleteAsync(int shoppingListId, int ingredientId)
     {
+        var tmp = _context.Database.GetConnectionString();
         var entity = await _context.ShoppingListIngredients.FirstOrDefaultAsync(x =>
             x.IngredientId == ingredientId && x.ShoppingListId == shoppingListId);
         EntityEntry entityEntry = _context.Entry(entity);

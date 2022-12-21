@@ -30,7 +30,6 @@ public class AutomatedShoppingListHandler : IAutomatedShoppingListHandler
         await AddIngredientsToShoppingList(ingredientsList, shoppingList.Id);
         return shoppingList;
     }
-
     private async Task<Recipe> GetRecipe(int id)
     {
         var item = await _recipeService
