@@ -116,6 +116,7 @@ public class ShoppingListTests
         _shoppingListHandlerMock.Setup(x =>
             x.IsShoppingListExists(It.IsAny<int>())).ReturnsAsync(false);
         var controller = new ShoppingListsController(_shoppingListServiceMock.Object, _shoppingListHandlerMock.Object);
+        controller.ControllerContext.HttpContext = new DefaultHttpContext();
         //Act
         var result = await controller.Delete(It.IsAny<int>());
         //Assert
