@@ -46,7 +46,7 @@ namespace ZeroWaste.Data.Services
 
         public async Task<List<IngredientsToAddVm>> GetIngredientsToAddVmAsync(int shoppingListId, string searchString)
         {        
-            List<IngredientsToAddVm> ingredientsToAddVmList = new List<IngredientsToAddVm>();
+            List<IngredientsToAddVm> ingredientsToAddVmList = new();
             using (var connection = _dbConnectionFactory.GetDbConnection())
             {
                 string query = @"SELECT 

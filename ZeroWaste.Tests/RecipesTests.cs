@@ -55,8 +55,17 @@ namespace ZeroWaste.Tests
         public async Task GetDetails_WhenRecipeNotExists_ReturnsViewNotFound()
         {
             // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+            new Claim(ClaimTypes.NameIdentifier, userId)
+            }));
             _recipesServiceMock.Setup(c => c.GetDetailsByIdAsync(It.IsAny<int>())).ReturnsAsync(null as DetailsRecipeVM);
             var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
 
             // Act
             var result = await controller.Details(It.IsAny<int>(), null, null);
@@ -71,8 +80,17 @@ namespace ZeroWaste.Tests
         public async Task GetDetails_WhenRecipeNotAccepted_ReturnsViewUnauthorized()
         {
             // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+            new Claim(ClaimTypes.NameIdentifier, userId)
+            }));
             _recipesServiceMock.Setup(c => c.GetDetailsByIdAsync(It.IsAny<int>())).ReturnsAsync(GetRejectedRecipeDetails());
             var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
 
             // Act
             var result = await controller.Details(It.IsAny<int>(), null, null);
@@ -87,9 +105,16 @@ namespace ZeroWaste.Tests
         public async Task GetDetails_WhenRecipeIsAccepted_ReturnsViewDetailsWithViewData()
         {
             // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+            new Claim(ClaimTypes.NameIdentifier, userId)
+            }));
             _recipesServiceMock.Setup(c => c.GetDetailsByIdAsync(It.IsAny<int>())).ReturnsAsync(GetRecipeDetails());
             _statusesServiceMock.Setup(c => c.GetAllAsync()).ReturnsAsync(GetStatuses());
             var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
+            controller.ControllerContext = new ControllerContext();
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
             string errorDataMessage = "error";
             string successDataMessage = "success";
 
@@ -112,8 +137,17 @@ namespace ZeroWaste.Tests
         public async Task GetEdit_WhenRecipeIsNotFound_ReturnsViewNotFound()
         {
             // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId)
+            }));
             _recipesServiceMock.Setup(c => c.GetEditByIdAsync(It.IsAny<int>())).ReturnsAsync(null as EditRecipeVM);
             var controller = new RecipesController(_recipesServiceMock.Object, _photoServiceMock.Object, _accountHandlerMock.Object, _statusesServiceMock.Object);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
 
             // Act
             var result = await controller.Edit(It.IsAny<int>());
@@ -201,6 +235,7 @@ namespace ZeroWaste.Tests
             controller.ModelState.AddModelError("Photos", "Required");
             controller.ModelState.AddModelError("NewPhotosNamesToSkip", "Required");
             controller.ModelState.AddModelError("PhotosToDelete", "Required");
+            controller.ModelState.AddModelError("filesUpload", "Required");
 
             // Act
             var result = await controller.Edit(GetBlankObject());
