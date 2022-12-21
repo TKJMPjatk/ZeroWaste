@@ -13,13 +13,14 @@ using ZeroWaste.IntegrationTests.Helpers;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.IntegrationTests;
-
+[Collection("#1")]
 public class ShoppingListIngredientsHandlerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly string _connectionString;
     private readonly WebApplicationFactory<Program> _factory;
     private readonly IShoppingListIngredientsHandler _shoppingListIngredientsHandler;
     private readonly AppDbContext? _dbContext;
+    private static readonly object SyncObject = new object();
     public ShoppingListIngredientsHandlerTests(WebApplicationFactory<Program> factory)
     {
         IConfiguration configuration = new ConfigurationBuilder()
@@ -72,7 +73,7 @@ public class ShoppingListIngredientsHandlerTests : IClassFixture<WebApplicationF
             .Where(x => x.ShoppingListId == editQuantityVm.ShoppingListId)
             .FirstOrDefaultAsync();
         Assert.Equal(10, shoppingListIngredient.Quantity);
-        CleanDb.Clean(_connectionString);
+        await CleanDb.Clean(_connectionString);
     }
 
     [Fact]
@@ -90,31 +91,42 @@ public class ShoppingListIngredientsHandlerTests : IClassFixture<WebApplicationF
             .Select(x => x.Selected)
             .FirstOrDefaultAsync();
         Assert.Equal(!selection, itemAfter);
-        CleanDb.Clean(_connectionString);
+        await CleanDb.Clean(_connectionString);
+    }
+
+    [Fact]
+    public async Task HandleDeleteIngredientFromShoppingList_ForShoppingListIngredientId_ShouldDelete()
+    {
+        //Arrange
+        var newShoppingListIngredient = await SeedShopingListWithIngredients();
+        var countItemBefore = await _dbContext.ShoppingListIngredients.CountAsync(x => x.Id == newShoppingListIngredient.Id);
+        //Act
+        await _shoppingListIngredientsHandler.HandleDeleteIngredientFromShoppingList(newShoppingListIngredient.Id);
+        //Assert
+        var countItemAfter = await _dbContext.ShoppingListIngredients.CountAsync(x => x.Id == newShoppingListIngredient.Id);
+        Assert.Equal(1, countItemBefore); 
+        Assert.Equal(0, countItemAfter);
+        await CleanDb.Clean(_connectionString);
+    }
+
+    [Fact]
+    public async Task AddIngredientToShoppingList_ForShoppingListIdAndIngredientId_ShouldAddToShoppingListIngredient()
+    {
+        //Arrange
+        var ingredient = await SeedIngredient();
+        var shoppingList = await SeedShoppingList();
+        //Act
+         await _shoppingListIngredientsHandler.AddIngredientToShoppingList(ingredient.Id, shoppingList.Id);
+        //Assert
+        var count =  _dbContext.ShoppingListIngredients.Count(x =>
+            x.ShoppingListId == shoppingList.Id && x.IngredientId == ingredient.Id);
+        Assert.Equal(1, count);
+        await CleanDb.Clean(_connectionString);
     }
     private async Task<ShoppingListIngredient> SeedShopingListWithIngredients()
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync();
-        ShoppingList newShoppingList = new ShoppingList()
-        {
-            Title = Guid.NewGuid().ToString(),
-            Note = Guid.NewGuid().ToString(),
-            UserId = user.Id,
-            CreatedAt = DateTime.Now
-        };
-        await _dbContext.ShoppingLists.AddAsync(newShoppingList);
-        await _dbContext.SaveChangesAsync();
-        var unitOfMeasure = await _dbContext.UnitOfMeasures.FirstOrDefaultAsync();
-        var ingredientType = await _dbContext.IngredientTypes.FirstOrDefaultAsync();
-        Ingredient newIngredient = new Ingredient()
-        {
-            Name = Guid.NewGuid().ToString(),
-            Description = Guid.NewGuid().ToString(),
-            UnitOfMeasureId = unitOfMeasure.Id,
-            IngredientTypeId = ingredientType.Id
-        };
-        await _dbContext.Ingredients.AddAsync(newIngredient);
-        await _dbContext.SaveChangesAsync();
+        ShoppingList newShoppingList = await SeedShoppingList();
+        Ingredient newIngredient = await SeedIngredient();
         ShoppingListIngredient newShoppingListIngredient = new ShoppingListIngredient()
         {
             IngredientId = newIngredient.Id,
@@ -125,15 +137,36 @@ public class ShoppingListIngredientsHandlerTests : IClassFixture<WebApplicationF
         await _dbContext.ShoppingListIngredients.AddAsync(newShoppingListIngredient);
         await _dbContext.SaveChangesAsync();
         return newShoppingListIngredient;
-        /*EditQuantityVM editQuantityVm = new EditQuantityVM()
+    }
+
+    private async Task<ShoppingList> SeedShoppingList()
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(); 
+        ShoppingList newShoppingList = new ShoppingList() 
         {
-            ShoppingListId = newShoppingList.Id,
-            IngredientsToEditQuantity = new List<ShoppingListIngredient>()
-            {
-                newShoppingListIngredient
-            }
-        };
-        return editQuantityVm;
-        */
+            Title = Guid.NewGuid().ToString(), 
+            Note = Guid.NewGuid().ToString(), 
+            UserId = user.Id, 
+            CreatedAt = DateTime.Now
+        }; 
+        _dbContext.ShoppingLists.Add(newShoppingList); 
+        _dbContext.SaveChanges();
+        return newShoppingList;
+    }
+
+    private async Task<Ingredient> SeedIngredient()
+    {
+        var unitOfMeasure =  await _dbContext.UnitOfMeasures.FirstOrDefaultAsync();
+        var ingredientType =  await _dbContext.IngredientTypes.FirstOrDefaultAsync(); 
+        Ingredient newIngredient = new Ingredient()
+        {
+            Name = Guid.NewGuid().ToString(), 
+            Description = Guid.NewGuid().ToString(), 
+            UnitOfMeasureId = unitOfMeasure.Id, 
+            IngredientTypeId = ingredientType.Id
+        }; 
+        await _dbContext.Ingredients.AddAsync(newIngredient); 
+        await _dbContext.SaveChangesAsync(); 
+        return newIngredient;
     }
 }

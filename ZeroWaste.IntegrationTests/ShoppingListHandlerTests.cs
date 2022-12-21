@@ -14,7 +14,7 @@ using ZeroWaste.IntegrationTests.Helpers;
 using ZeroWaste.Models;
 
 namespace ZeroWaste.IntegrationTests;
-
+[Collection("#1")]
 public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly string _connectionString;
@@ -54,7 +54,7 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         var shoppingList = await _shoppingListHandler.GetShoppingListById(existedShoppingList.Id);
         //Assert
         Assert.Equal(existedShoppingList.Id, shoppingList.Id);
-        CleanDb.Clean(_connectionString);
+        await CleanDb.Clean(_connectionString);
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         var shoppingLists = await _shoppingListHandler.GetShoppingListsByUserId(userId);
         //Assert
         Assert.Equal(existedShoppingList.Count, shoppingLists.Count());
-        CleanDb.Clean(_connectionString);
+        await CleanDb.Clean(_connectionString);
     }
 
     private async Task<List<ShoppingList>> SeedShoppingList(AppDbContext context, string userId)
@@ -112,7 +112,7 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         var shoppingLists = await _shoppingListHandler.Create(shoppingListVm ,userId);
         //Assert
         Assert.Equal(1, await _shoppingListHandlerHelper.GetShoppingListsCount(shoppingListVm, _dbContext));
-        CleanDb.Clean(_connectionString);
+        await CleanDb.Clean(_connectionString);
     }
     [Fact]
     public async Task Delete_ForExistingShoppingList_ShouldDeleteShoppingList()
@@ -123,7 +123,7 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         await _shoppingListHandler.DeleteAsync(shoppingList.Id);
         //Assert
         Assert.Equal(0, await _shoppingListHandlerHelper.GetShoppingListsCount(shoppingList.Id, _dbContext));
-        CleanDb.Clean(_connectionString);
+        await CleanDb.Clean(_connectionString);
     }
 
     [Fact]
@@ -135,6 +135,6 @@ public class ShoppingListHandlerTests : IClassFixture<WebApplicationFactory<Prog
         var result = await _shoppingListHandler.IsShoppingListExists(shoppingList.Id);
         //Assert
         Assert.True(result);
-        CleanDb.Clean(_connectionString);
+        await CleanDb.Clean(_connectionString);
     }
 }
