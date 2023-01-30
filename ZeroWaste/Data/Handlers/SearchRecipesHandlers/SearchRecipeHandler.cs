@@ -87,18 +87,21 @@ public class SearchRecipeHandler : ISearchRecipeHandler
     }
     private List<RecipeResult> GetSortField(List<RecipeResult> recipeResults, int sortTypeId)
     {
-        if (sortTypeId == (int) SortTypes.ByTime)
-            return recipeResults.OrderBy(x => x.EstimatedTime).ToList();
-        if (sortTypeId== (int) SortTypes.ByDifficultyLevel) 
-            return recipeResults.OrderBy(x => x.DifficultyLevel).ToList();
-        if (sortTypeId == (int) SortTypes.FromAtoZ)
-            return recipeResults.OrderBy(x => x.Title).ToList();
-        if (sortTypeId == (int) SortTypes.FromZToA)
-            return recipeResults.OrderByDescending(x => x.Title).ToList();
-        if (sortTypeId == (int) SortTypes.ByGradesDesc)
-            return recipeResults.OrderByDescending(x => x.Stars).ToList();
-        if (sortTypeId == (int) SortTypes.ByGradesAsc)
-            return recipeResults.OrderBy(x => x.Stars).ToList();
+        if (!(recipeResults is null))
+        {
+            if (sortTypeId == (int)SortTypes.ByTime)
+                return recipeResults.OrderBy(x => x.EstimatedTime).ToList();
+            if (sortTypeId == (int)SortTypes.ByDifficultyLevel)
+                return recipeResults.OrderBy(x => x.DifficultyLevel).ToList();
+            if (sortTypeId == (int)SortTypes.FromAtoZ)
+                return recipeResults.OrderBy(x => x.Title).ToList();
+            if (sortTypeId == (int)SortTypes.FromZToA)
+                return recipeResults.OrderByDescending(x => x.Title).ToList();
+            if (sortTypeId == (int)SortTypes.ByGradesDesc)
+                return recipeResults.OrderByDescending(x => x.Stars).ToList();
+            if (sortTypeId == (int)SortTypes.ByGradesAsc)
+                return recipeResults.OrderBy(x => x.Stars).ToList();
+        }
         return recipeResults;
     }
     private async Task FillRecipesWithPhotos(List<RecipeResult> recipeResults)

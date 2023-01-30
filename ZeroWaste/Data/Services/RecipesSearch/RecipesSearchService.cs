@@ -88,7 +88,7 @@ public class RecipesSearchService : IRecipesSearchService
                             , IngredientQuantity 
                             , Match 
                             , MissingIngredientsCount 
-                        FROM [dbo].[SearchByIngredientsAndCategory_2] (@IdsIngredients, @IdCategory, @UserId)";
+                        FROM [dbo].[SearchByIngredientsAndCategory] (@IdsIngredients, @IdCategory, @UserId)";
         using var connection = new SqlConnection(_context.Database.GetConnectionString());
         var searchByIngredientsResult =
             await connection.QueryAsync<SearchByIngredientsResults>(querySql, new { @IdsIngredients = string.Join(",", listOfIds), @IdCategory = categoryId, @UserId = userId });
