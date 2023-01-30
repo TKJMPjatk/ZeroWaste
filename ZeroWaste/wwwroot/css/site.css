@@ -242,3 +242,14 @@ footer{
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     top: 3px !important;
 }
+
+.example .pagination > li.page-item.active > a,
+.example .pagination > li.page-item.active > span {
+    background: #02223C;
+    color: #FFD6D6;
+}
+
+.example .pagination > li > a,
+.example .pagination > li > span {
+    color: black;
+}

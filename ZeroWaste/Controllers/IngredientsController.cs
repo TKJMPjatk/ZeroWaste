@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 using ZeroWaste.Data;
 using ZeroWaste.Data.Services;
 using ZeroWaste.Data.Services.RecipeIngredients;
@@ -27,18 +28,23 @@ namespace ZeroWaste.Controllers
             _recipeIngredientsService = recipeIngredientsService;
         }
         [AllowAnonymous]
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int? page)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 10; //Show 10 rows every time
             List<Ingredient> ingredients;
             if (!string.IsNullOrEmpty(searchString))
             {
+                @TempData["Search"] = searchString;
                 ingredients = await _ingredientsService.GetAllAsync(searchString);
             }
             else
             {
+                @TempData["Search"] = "";
                 ingredients = await _ingredientsService.GetAllAsync();
             }
-            return View(ingredients);
+            var ingredients1 = ingredients.ToPagedList(pageNumber, pageSize);
+            return View(ingredients1);
         }
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
