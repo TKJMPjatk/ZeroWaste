@@ -6,10 +6,10 @@ namespace ZeroWaste.Data.ViewModels;
 
 public class SearchRecipeResultsVm
 {
-    public List<RecipeResult> RecipesList { get; set; }
-    public List<RecipeResult> RecipesListBase { get; set; }
+    public List<RecipeResult> RecipesList { get; set; } = new List<RecipeResult>();
+    public List<RecipeResult> RecipesListBase { get; set; } = new List<RecipeResult>();
     public List<Category> CategoryList { get; set; }
-    public List<IngredientForSearch> IngredientsLists { get; set; }
+    public List<IngredientForSearch> IngredientsLists { get; set; } = new List<IngredientForSearch>();
     public int CategoryId { get; set;  }
     public int SortTypeId { get; set; }
     public string PageTitle { get; set; }

@@ -244,7 +244,7 @@ public class SearchRecipesController : Controller
         //ViewBag.SortTypes = Enum.GetValues(typeof(SortTypes)).Cast<SortTypes>().ToList();
         ViewBag.SortTypes = _sortTypeDisplayVmList;
         ViewBag.Statuses = await _statusesService.GetAllAsync();
-        ViewBag.PageTitle = "Nieulubione przepisy";
+        ViewBag.PageTitle = "Nielubiane przepisy";
         var resultsVm = await _searchRecipeContext.GetSearchRecipeResultVm(new SearchRecipeResultsVm()
         {
             UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
