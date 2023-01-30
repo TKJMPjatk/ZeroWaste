@@ -159,7 +159,7 @@ public class SearchRecipesController : Controller
         {
             userId = user.Value;
         }
-        if(resultsVm.IngredientsLists != null)
+        if(resultsVm.IngredientsLists != null && resultsVm.SearchType != SearchType.Categories)
         {
             resultsVm.SearchType = SearchType.IngredientsFiltered;
             resultsVm.UserId = userId;
