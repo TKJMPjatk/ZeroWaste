@@ -7,6 +7,7 @@ using ZeroWaste.Data.Enums;
 using ZeroWaste.Data.Handlers.SearchRecipesHandlers;
 using ZeroWaste.Data.Handlers.SearchRecipeStrategy;
 using ZeroWaste.Data.Services;
+using ZeroWaste.Data.Services.Photo;
 using ZeroWaste.Data.Services.RecipeIngredients;
 using ZeroWaste.Data.Services.Statuses;
 using ZeroWaste.Data.Static;
@@ -26,10 +27,12 @@ public class SearchRecipesController : Controller
     private readonly IStatusesService _statusesService;
     private readonly ISearchRecipeContext _searchRecipeContext;
     private readonly IRecipeIngredientService _recipeIngredientService;
+    private readonly IPhotoService _photoService;
     private readonly AppDbContext _context;
-    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IStatusesService statusesService, ISearchRecipeContext searchRecipeContext, IRecipeIngredientService service)
+    public SearchRecipesController(AppDbContext context, ICategoryService categoryService, ISearchRecipeHandler searchRecipeHandler, IStatusesService statusesService, ISearchRecipeContext searchRecipeContext, IRecipeIngredientService service, IPhotoService photoService)
     {
         _context = context;
+        _photoService = photoService;
         _categoryService = categoryService;
         _statusesService = statusesService;
         _searchRecipeHandler = searchRecipeHandler;
@@ -175,7 +178,7 @@ public class SearchRecipesController : Controller
     }
 
     [HttpPost]
-    public IActionResult SearchRecipeSentenceResult(SearchRecipeResultsVm resultsVm)
+    public async Task<IActionResult> SearchRecipeSentenceResult(SearchRecipeResultsVm resultsVm)
     {
         ViewBag.PageTitle = resultsVm.PageTitle;
         ViewBag.SortTypes = _sortTypeDisplayVmList;
@@ -187,6 +190,14 @@ public class SearchRecipesController : Controller
             resultsVm.RecipesList = resultsVm.RecipesListBase.Where(x =>
                     x.Title.ToLower().Contains(resultsVm.SearchSentence.ToLower()))
                 .ToList();
+        //
+        if (resultsVm != null)
+        {
+            foreach (var item in resultsVm.RecipesList)
+            {
+                item.Photo = await _photoService.GetFirstByRecipeAsync(item.Id);
+            }
+        }
         return View("SearchResult", resultsVm);
     }
     public async Task<IActionResult> SearchRecipesSortedResult(SearchRecipeResultsVm resultsVm)
